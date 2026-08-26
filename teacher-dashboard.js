@@ -1160,6 +1160,7 @@ document.getElementById('announcementsLoadMore')?.addEventListener('click', asyn
 // ── Teacher Announcement Sending ──
 
 async function openAnnouncementModal() {
+  if (isDemoMode) { showPrivacyMsg('Announcements are not available in demo mode.'); return; }
   if (!planLimits.announcements_allowed) {
     showUpgradePrompt('announcements');
     return;

@@ -6,6 +6,7 @@
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
   if (!gl) {
     canvas.style.background = 'linear-gradient(135deg, #134E4A 0%, #0D9488 50%, #2DD4BF 100%)';
+    canvas.classList.add('ready');
     return;
   }
 
@@ -133,6 +134,7 @@
 
   if (!vertexShader || !fragmentShader) {
     canvas.style.background = 'linear-gradient(135deg, #134E4A 0%, #0D9488 50%, #2DD4BF 100%)';
+    canvas.classList.add('ready');
     return;
   }
 
@@ -143,6 +145,7 @@
 
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     console.error('Program link error:', gl.getProgramInfoLog(program));
+    canvas.classList.add('ready');
     return;
   }
 
@@ -171,6 +174,10 @@
     gl.uniform1f(timeLocation, time * 0.001);
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+    if (!canvas.classList.contains('ready')) {
+      canvas.classList.add('ready');
+    }
     
     if (!prefersReducedMotion) {
       animId = requestAnimationFrame(render);
@@ -184,6 +191,7 @@
     gl.uniform1f(timeLocation, 0);
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+    canvas.classList.add('ready');
   } else {
     animId = requestAnimationFrame(render);
   }

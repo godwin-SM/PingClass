@@ -3894,6 +3894,7 @@ function renderAnnouncements(announcements, hasMore = false) {
 }
 
 async function deleteAnnouncement(id) {
+  if (isDemoMode) { showPrivacyMsg('Announcements are not available in demo mode.'); return; }
   if (!confirm('Delete this announcement?')) return;
   if (isDemoMode) {
     const idx = demoAnnouncements.findIndex(a => a.id === id);
@@ -4314,6 +4315,7 @@ document.getElementById('attNextDay')?.addEventListener('click', () => {
 let editingAnnouncementId = null;
 
 function openAnnouncementModal() {
+  if (isDemoMode) { showPrivacyMsg('Announcements are not available in demo mode.'); return; }
   editingAnnouncementId = null;
   document.getElementById('announcementForm').reset();
   document.getElementById('announcementModalTitle').textContent = 'New Announcement';
@@ -4325,6 +4327,7 @@ function openAnnouncementModal() {
 }
 
 function editAnnouncement(id) {
+  if (isDemoMode) { showPrivacyMsg('Announcements are not available in demo mode.'); return; }
   const cached = pageDataCache['announcements'];
   const ann = cached && cached.list.find(a => a.id === id);
   if (!ann) return;
