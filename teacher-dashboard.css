@@ -1,0 +1,207 @@
+/* Teacher-specific styles (if any overrides needed) */
+
+/* ── Dashboard Skeleton ── */
+.dashboard-skel-kicker { width: 80px; height: 14px; margin-bottom: 10px; }
+.dashboard-skel-heading { width: 240px; height: 28px; margin-bottom: 8px; max-width: 100%; }
+.dashboard-skel-heading-accent { width: 180px; height: 28px; margin-bottom: 8px; max-width: 100%; }
+.dashboard-skel-subtitle { width: 320px; height: 16px; margin-bottom: 24px; max-width: 100%; }
+.dashboard-skel-pill { width: 120px; height: 32px; border-radius: 100px; }
+
+.dashboard-skel-stats { margin-bottom: 24px; }
+
+.dashboard-skel-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.dashboard-skel-icon { width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0; }
+
+.dashboard-skel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.dashboard-skel-value { width: 60px; height: 24px; }
+.dashboard-skel-label { width: 100px; height: 12px; }
+
+/* Gap between the stat cards and the analytics section below them */
+#dashboardStats {
+  margin-bottom: 28px;
+}
+
+/* "Needs Attention" stat card opens the at-risk popup */
+.stat-card[role="button"] {
+  cursor: pointer;
+}
+
+.stat-card[role="button"]:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.stat-card[role="button"]:focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.6);
+  outline-offset: 2px;
+}
+
+/* ── Mobile (max-width: 768px) ── */
+@media (max-width: 768px) {
+  /* Attendance Date Picker */
+  .attendance-date-picker {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .att-date-display {
+    min-width: auto;
+    font-size: 0.9rem;
+  }
+
+  /* Attendance Stats Row */
+  .attendance-stats-row {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .att-stat {
+    padding: 12px 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .att-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .att-stat-label {
+    font-size: 0.6875rem;
+  }
+
+  /* Attendance Table → Card Layout */
+  #page-attendance .page-table-wrap {
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  #page-attendance .page-table thead {
+    display: none;
+  }
+
+  #page-attendance .page-table,
+  #page-attendance .page-table tbody,
+  #page-attendance .page-table tr {
+    display: block;
+  }
+
+  #page-attendance .page-table tr {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #page-attendance .page-table td {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    font-size: 0.8125rem;
+    border: none;
+  }
+
+  #page-attendance .page-table td::before {
+    display: none;
+  }
+
+  /* Student name — full width */
+  #page-attendance .page-table td:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #page-attendance .page-table td:first-child .staff-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Batch badge — auto width */
+  #page-attendance .page-table td:nth-child(2) {
+    flex-shrink: 0;
+  }
+
+  /* Status toggle — full width below name */
+  #page-attendance .page-table td:last-child {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .att-toggle-group {
+    display: flex;
+    gap: 6px;
+  }
+
+  .att-toggle {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  /* Override admin's td:last-child hide — teacher has 2 cols, last is Status */
+  #attBatchDetail .page-table td:last-child {
+    display: flex;
+    width: 100%;
+    margin-top: 4px;
+  }
+}
+
+/* ── Extra small (max-width: 480px) ── */
+@media (max-width: 480px) {
+  .attendance-date-picker {
+    gap: 8px;
+  }
+
+  .att-nav-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .att-date-display {
+    font-size: 0.8125rem;
+  }
+
+  .att-stat {
+    padding: 10px 8px;
+  }
+
+  .att-stat-value {
+    font-size: 1.125rem;
+  }
+
+  #page-attendance .page-table tr {
+    padding: 12px;
+  }
+}
+
+/* Gated announcement button — override pointer-events:none so click shows upgrade prompt */
+#page-announcements .gated-btn.gated {
+  pointer-events: auto;
+  cursor: pointer;
+}
+#page-announcements .gated-btn.gated:hover {
+  opacity: 0.6;
+}

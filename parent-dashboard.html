@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <title>PingClass Parent Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.min.css?v=48">
+  <link rel="stylesheet" href="admin-dashboard.min.css?v=59">
+  <link rel="stylesheet" href="parent-dashboard.min.css?v=6">
+</head>
+<body>
+  <!-- Full-screen loading overlay -->
+  <div id="screenLoader" class="screen-loader">
+    <div class="screen-loader-inner">
+      <div class="screen-loader-logo-wrap">
+        <img src="logo-64.png" alt="PingClass" class="screen-loader-logo">
+        <div class="screen-loader-ring"></div>
+      </div>
+      <h1 class="screen-loader-title">PingClass</h1>
+      <p class="screen-loader-text" id="screenLoaderText">Loading your dashboard...</p>
+    </div>
+  </div>
+  <div class="dashboard">
+    <div class="demo-banner" id="demoBanner" style="display: none;">
+      <span>You're viewing a demo preview</span>
+      <a href="index.html" class="demo-cta">Sign up to get started</a>
+    </div>
+
+    <div class="dashboard-body">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer" aria-hidden="true"></div>
+        <div class="sidebar-header">
+          <a href="parent-dashboard.html" class="sidebar-logo">
+            <div class="logo-icon">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span>PingClass</span>
+          </a>
+          <div class="sidebar-header-actions">
+            <button type="button" class="sidebar-collapse" id="sidebarCollapse" aria-label="Minimize sidebar" data-tooltip="Close sidebar" data-tooltip-pos="right">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+              </svg>
+            </button>
+            <button type="button" class="sidebar-back" id="sidebarBack" aria-label="Close navigation and go back" data-tooltip="Back to previous page" data-tooltip-pos="right">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+              Back
+            </button>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-page="dashboard" data-tooltip="Dashboard" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" data-page="fees" data-tooltip="Fees" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+            </svg>
+            <span class="nav-label">Fees</span>
+          </a>
+          <a href="#" class="nav-item" data-page="attendance" data-tooltip="Attendance" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+            <span class="nav-label">Attendance</span>
+          </a>
+          <a href="#" class="nav-item" data-gate="announcements" data-page="announcements" data-tooltip="Announcements" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+            <span class="nav-label">Announcements</span>
+            <span class="gate-badge">BASIC</span>
+          </a>
+          <span class="nav-indicator" aria-hidden="true"></span>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-user" id="sidebarUser">
+            <span class="sidebar-user-name" id="sidebarUserName">Loading...</span>
+          </div>
+          <a href="#" class="nav-item" data-page="settings" data-tooltip="Settings" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="nav-label">Settings</span>
+          </a>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <button class="menu-toggle" id="menuToggle" data-tooltip="Open menu" data-tooltip-pos="bottom">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <span class="institute-name" id="instituteName"></span>
+          <div class="top-bar-right">
+            <span class="user-name" id="userName">Loading...</span>
+            <div class="alert-wrap" id="alertsWrap">
+              <button type="button" class="alert-bell" id="alertBell" aria-label="Notifications and alerts" aria-haspopup="true" aria-expanded="false" data-tooltip="Notifications" data-tooltip-pos="bottom">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" /></svg>
+                <span class="alert-badge" id="alertBadge" hidden>0</span>
+              </button>
+              <div class="alert-panel" id="alertPanel" hidden>
+                <div class="alert-panel-header">
+                  <span class="alert-panel-title">Notifications</span>
+                  <span class="alert-panel-meta" id="alertPanelMeta"></span>
+                </div>
+                <ul class="alert-list" id="alertList"></ul>
+                <div class="alert-empty" id="alertEmpty" hidden>You're all caught up</div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="content-scroll">
+        <div class="content">
+          <!-- DASHBOARD PAGE -->
+          <div class="page page-active" id="page-dashboard">
+            <!-- Skeleton visible on first paint, hidden by JS after data loads -->
+            <div id="dashboardSkeleton">
+              <div class="welcome">
+                <span class="skeleton dashboard-skel-kicker"></span>
+                <div class="skeleton dashboard-skel-heading"></div>
+                <div class="skeleton dashboard-skel-subtitle"></div>
+              </div>
+              <div class="stats-grid stats-grid--3 dashboard-skel-stats">
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                  </div>
+                </div>
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                  </div>
+                </div>
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                  </div>
+                </div>
+              </div>
+              <div style="display:grid;gap:20px">
+                <div class="skeleton" style="width:100%;height:200px;border-radius:var(--radius-lg)"></div>
+                <div class="skeleton" style="width:100%;height:200px;border-radius:var(--radius-lg)"></div>
+              </div>
+            </div>
+
+            <div class="welcome" id="dashboardWelcome" style="display:none">
+              <span class="welcome-kicker">Dashboard</span>
+              <h1>Welcome back, <span id="welcomeName">Parent</span></h1>
+              <p>Here's what's happening with your child today.</p>
+            </div>
+
+            <!-- Alert system: fee dues, overdue, absences, new announcements -->
+            <div class="parent-alerts" id="parentAlerts" style="display:none"></div>
+
+            <div class="stats-grid stats-grid--3" id="dashboardStats" style="display:none">
+              <div class="stat-card">
+                <div class="stat-icon pending" id="monthFeeIcon">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="parentMonthFee">\u20B90</span>
+                  <span class="stat-label" id="parentMonthFeeSub">This month's fee</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon pending" id="overdueIcon">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="parentOverdue">\u20B90</span>
+                  <span class="stat-label" id="parentOverdueSub">Overdue</span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="parentAttMonth">--</span>
+                  <span class="stat-label" id="parentAttMonthSub">Attendance this month</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="analytics-grid" style="display:none">
+              <article class="analytics-card">
+                <header class="analytics-card-head">
+                  <div>
+                    <h2>Attendance rate</h2>
+                    <p class="analytics-card-sub">Your child's attendance, month and year to date</p>
+                  </div>
+                </header>
+                <div class="att-rate" id="parentAttRate"></div>
+              </article>
+
+              <article class="analytics-card">
+                <header class="analytics-card-head">
+                  <div>
+                    <h2>Latest announcements</h2>
+                    <p class="analytics-card-sub">Recent updates from your child's institute</p>
+                  </div>
+                  <a href="#" class="analytics-card-link" onclick="navigateToPage('announcements'); return false;">View all</a>
+                </header>
+                <div id="parentAnnouncementBody"></div>
+              </article>
+            </div>
+          </div>
+
+          <!-- FEES PAGE -->
+          <div class="page" id="page-fees">
+            <div class="welcome">
+              <span class="welcome-kicker">Fee status</span>
+              <h1>Fees</h1>
+              <p>View your child's fee status and payment history.</p>
+            </div>
+            <div class="fees-summary">
+              <div class="fees-summary-card">
+                <span class="fees-summary-label">Pending</span>
+                <span class="fees-summary-value fees-pending" id="feesPendingTotal">\u20B90</span>
+              </div>
+              <div class="fees-summary-card">
+                <span class="fees-summary-label">Paid</span>
+                <span class="fees-summary-value fees-collected" id="feesPaidTotal">\u20B90</span>
+              </div>
+            </div>
+            <div class="page-table-wrap">
+              <table class="page-table">
+                <thead>
+                  <tr>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Paid On</th>
+                  </tr>
+                </thead>
+                <tbody id="feesTableBody"></tbody>
+              </table>
+              <div class="page-empty" id="feesEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+                <h3>No fees yet</h3>
+                <p>Your child's fee details will appear here once the admin sets up billing.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ATTENDANCE PAGE -->
+          <div class="page" id="page-attendance">
+            <div class="welcome">
+              <span class="welcome-kicker">Attendance record</span>
+              <h1>Attendance</h1>
+              <p>View your child's attendance record.</p>
+            </div>
+            <div class="attendance-stats-row">
+              <div class="att-stat">
+                <span class="att-stat-value" id="attPresentCount">0</span>
+                <span class="att-stat-label">Present</span>
+              </div>
+              <div class="att-stat">
+                <span class="att-stat-value" id="attAbsentCount">0</span>
+                <span class="att-stat-label">Absent</span>
+              </div>
+            </div>
+            <div class="page-table-wrap">
+              <table class="page-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceTableBody"></tbody>
+              </table>
+              <div class="page-empty" id="attendanceEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3>No attendance records</h3>
+                <p>Your child's attendance will appear here once tracked.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANNOUNCEMENTS PAGE -->
+          <div class="page" id="page-announcements">
+            <div class="welcome">
+              <span class="welcome-kicker">Stay informed</span>
+              <h1>Announcements</h1>
+              <p>View announcements from your child's institute.</p>
+            </div>
+            <div class="section-toolbar">
+              <div class="section-search">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                <input type="text" name="announcementsSearch" aria-label="Search announcements" class="section-search-input" data-filter="announcementsList" placeholder="Search announcements..." autocomplete="off" />
+              </div>
+            </div>
+            <div class="section-no-results" id="announcementsNoResults" style="display:none">No announcements match your search or filter.</div>
+            <div class="announcements-list" id="announcementsList"></div>
+            <button type="button" class="announcements-load-more" id="announcementsLoadMore" style="display:none" data-tooltip="Load more announcements">Load more</button>
+            <div class="page-empty" id="announcementsEmpty" style="display:none">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.111.413-.173.837-.173 1.272 0 .434.062.858.173 1.272m0 0a24.047 24.047 0 004.444 0m-4.444 0a23.897 23.897 0 00-1.015-5.395m0 0a23.74 23.74 0 00-3.347-2.584" />
+              </svg>
+              <h3>No announcements yet</h3>
+              <p>Announcements from the institute will appear here.</p>
+            </div>
+          </div>
+
+          <!-- SETTINGS PAGE -->
+          <div class="page" id="page-settings">
+            <div class="welcome">
+              <span class="welcome-kicker">Account</span>
+              <h1>Settings</h1>
+              <p>Manage your account and data.</p>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <div>
+                  <h2>Privacy &amp; Data</h2>
+                  <p>Your data rights under the Digital Personal Data Protection Act, 2023.</p>
+                </div>
+              </div>
+              <div class="settings-privacy">
+                <p class="settings-privacy-text">Read our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>. For privacy concerns or grievances, email <a href="mailto:pingclassoff@gmail.com">pingclassoff@gmail.com</a>.</p>
+                <p class="settings-privacy-text" style="margin-top:8px;font-size:0.85rem;color:#5B7B76;">Under the DPDP Act, 2023 you have the right to access, correct, and request erasure of your child's personal data.</p>
+                <div class="settings-form-actions settings-form-actions--left">
+                  <button type="button" class="settings-save-btn" id="exportDataBtn" data-tooltip="Download a copy of your data">Export my data</button>
+                  <button type="button" class="settings-save-btn settings-save-btn--danger" id="deleteAccountBtn" data-tooltip="Permanently delete your account and data">Delete my account</button>
+                </div>
+                <span class="settings-form-msg" id="privacyMsg"></span>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+                <div>
+                  <h2>Sign Out</h2>
+                  <p>Log out of your PingClass account.</p>
+                </div>
+              </div>
+              <div class="settings-form-actions settings-form-actions--left">
+                <button class="settings-save-btn settings-save-btn--danger" id="settingsLogoutBtn" data-tooltip="Log out of your account">Log out</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+
+  <!-- Export data confirmation modal -->
+  <div class="staff-modal-overlay" id="exportConfirmModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2>Export your data</h2>
+        <button class="staff-modal-close" aria-label="Close" id="exportConfirmModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p>Your data will be downloaded as a JSON file. This may take a moment for institutes with a lot of data.</p>
+      </div>
+      <div class="staff-modal-actions staff-modal-actions--padded">
+        <button class="staff-modal-cancel" id="exportConfirmCancel">Cancel</button>
+        <button class="staff-modal-submit" id="exportConfirmBtn">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete account confirmation modal -->
+  <div class="staff-modal-overlay" id="deleteConfirmModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2>Delete account</h2>
+        <button class="staff-modal-close" aria-label="Close" id="deleteConfirmModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p id="deleteConfirmDesc">This will permanently delete your account and your personal data. This cannot be undone.</p>
+      </div>
+      <div class="staff-modal-form">
+        <div class="staff-field">
+          <label for="deleteConfirmInput">Type <strong>DELETE</strong> to confirm permanent deletion</label>
+          <input type="text" id="deleteConfirmInput" placeholder="Type DELETE" autocomplete="off" />
+        </div>
+        <div class="staff-modal-actions">
+          <button class="staff-modal-cancel" id="deleteConfirmCancel">Cancel</button>
+          <button class="staff-modal-submit staff-modal-submit--danger" id="deleteConfirmBtn" disabled>Delete account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="plan-free.js"></script>
+  <script src="plan-basic.js"></script>
+  <script src="plan-pro.js"></script>
+  <script src="payment.js?v=7"></script>
+ <script src="shared.min.js?v=72"></script>
+<script src="onboarding.min.js?v=45"></script>
+ <script src="parent-dashboard.min.js?v=21"></script>
+</body>
+</html>

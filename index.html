@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <title>PingClass - Fee Management for Tuition Centers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span>PingClass</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">About</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="#login" class="nav-login">Log in</a>
+        <a href="#signup" class="nav-cta">Get Started</a>
+      </div>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#about">About</a>
+      <div class="mobile-divider"></div>
+      <a href="#login">Log in</a>
+      <a href="#signup" class="mobile-cta">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <canvas id="fluidCanvas"></canvas>
+    <div class="hero-scrim"></div>
+
+    <div class="hero-content">
+      <div class="hero-copy">
+        <div class="hero-chip">
+          <span class="hero-chip-dot"></span>
+          Built for tuition centers
+        </div>
+
+        <h1 class="hero-title">
+          Run your institute
+          <span class="hero-title-accent">
+            on autopilot
+            <svg class="hero-underline" viewBox="0 0 220 12" fill="none" aria-hidden="true">
+              <path d="M3 9C60 3 150 3 217 8" stroke="#2DD4BF" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Fee reminders, attendance, and parent updates handled automatically — so you can focus on teaching, not spreadsheets.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#signup" class="btn-primary">Get Started Free</a>
+          <a href="admin-dashboard.html?demo" class="btn-ghost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.9l10.5-6.86a1.05 1.05 0 000-1.8L9.56 4.24A1.05 1.05 0 008 5.14z"/>
+            </svg>
+            Watch Demo
+          </a>
+        </div>
+
+        <ul class="hero-proof">
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Free forever plan
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            No credit card
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Set up in 5 minutes
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <div class="dash-card-brand">
+              <div class="dash-card-mark">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              </div>
+              <span class="dash-card-name">PingClass</span>
+            </div>
+            <span class="dash-card-plan">Basic Plan</span>
+          </div>
+
+          <div class="dash-card-stats">
+            <div class="dash-stat">
+              <strong class="dash-stat-value">120</strong>
+              <span class="dash-stat-label">Students</span>
+            </div>
+            <div class="dash-stat">
+              <strong class="dash-stat-value">₹89,000</strong>
+              <span class="dash-stat-label">Collected</span>
+            </div>
+            <div class="dash-stat">
+              <strong class="dash-stat-value dash-stat-value--warn">₹12,500</strong>
+              <span class="dash-stat-label">Pending</span>
+            </div>
+          </div>
+
+          <div class="dash-card-progress">
+            <div class="dash-card-progress-head">
+              <span>Collection rate</span>
+              <strong>88%</strong>
+            </div>
+            <div class="dash-card-progress-track">
+              <div class="dash-card-progress-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-float dash-float--paid">
+          <span class="dash-float-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          Payment received · ₹1,500
+        </div>
+
+        <div class="dash-float dash-float--reminder">
+          <span class="dash-float-icon dash-float-icon--amber">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.17V11a6 6 0 00-4-5.66V4a2 2 0 10-4 0v1.34A6 6 0 006 11v3.17c0 .53-.21 1.04-.6 1.43L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          </span>
+          Fee reminder sent to 8 parents
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="bento-bg-grid"></div>
+    <div class="features-container">
+      <div class="features-header">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">Everything you need to run your institute</h2>
+        <p class="section-subtitle">One platform to manage fees, attendance, students, and parent communication — built specifically for small tuition centers.</p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Fee Reminders — large hero card -->
+        <div class="bento-item bento-large">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Fee Reminders</h3>
+            <p class="bento-desc">Automated push notifications sent to parents before the due date. No more chasing payments manually.</p>
+            <div class="bento-visual bento-visual-fee">
+              <div class="fee-bar"><div class="fee-bar-fill" style="width:78%"></div></div>
+              <div class="fee-labels"><span>Collected</span><span>₹89,000</span></div>
+              <div class="fee-bar fee-bar-pending"><div class="fee-bar-fill-pending" style="width:22%"></div></div>
+              <div class="fee-labels"><span>Pending</span><span>₹12,500</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance Tracking -->
+        <div class="bento-item">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Attendance Tracking</h3>
+            <p class="bento-desc">Mark attendance in seconds. Students and parents can view history anytime.</p>
+          </div>
+        </div>
+
+        <!-- Student & Batch Management -->
+        <div class="bento-item">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Student & Batch Management</h3>
+            <p class="bento-desc">Organize students into batches, assign teachers, and manage schedules — all from one dashboard.</p>
+          </div>
+        </div>
+
+        <!-- Parent Communication — tall card -->
+        <div class="bento-item bento-tall">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Parent Communication</h3>
+            <p class="bento-desc">Send announcements, progress updates, and absence alerts directly to parents through the app.</p>
+            <div class="bento-visual bento-visual-chat">
+              <div class="chat-bubble chat-left">Priya's attendance today: <strong>Present</strong></div>
+              <div class="chat-bubble chat-right">Thanks for the update!</div>
+              <div class="chat-bubble chat-left">Next fee due: <strong>1st Aug</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unpaid Fee Reports — wide card -->
+        <div class="bento-item bento-wide">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Unpaid Fee Reports</h3>
+            <p class="bento-desc">Admin dashboard shows a clear list of pending and overdue payments — know who owes what at a glance.</p>
+          </div>
+        </div>
+
+        <!-- Simple Subscription -->
+        <div class="bento-item">
+          <div class="bento-glow"></div>
+          <div class="bento-content">
+            <div class="bento-icon">
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+              </svg>
+            </div>
+            <h3 class="bento-title">Simple Subscription</h3>
+            <p class="bento-desc">Pay only for what you need. Start free, upgrade as your institute grows. No hidden charges.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="how-container">
+      <div class="how-header">
+        <span class="section-tag">How It Works</span>
+        <h2 class="section-title">Up and running in 4 steps</h2>
+        <p class="section-subtitle">No technical skills needed. Set up your institute in under 5 minutes.</p>
+      </div>
+
+      <div class="steps-grid">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Sign up your institute</h3>
+          <p class="step-desc">Create your account with basic details — institute name, your role, and contact info.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Add students & batches</h3>
+          <p class="step-desc">Import your students, organize them into batches, and assign teachers.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Set fee structure</h3>
+          <p class="step-desc">Define monthly or quarterly fees per batch. PingClass handles the rest.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-number">04</div>
+          <h3 class="step-title">Parents get notified</h3>
+          <p class="step-desc">Automatic push reminders before due dates. You track collections from your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="pricing-container">
+      <div class="pricing-header">
+        <span class="section-tag">Pricing</span>
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-subtitle">Start free with up to 20 students. Upgrade when you're ready. No hidden charges.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="pricing-card">
+          <div class="plan-name">Free</div>
+          <div class="plan-price">
+            <span class="price-amount">₹0</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="plan-desc">Free forever. No credit card needed.</p>
+          <ul class="plan-features">
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Up to 20 students
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              1 batch
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Fee reminders
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Attendance tracking
+            </li>
+          </ul>
+          <a href="#" class="plan-btn plan-btn-outline" data-plan="free">Get Started</a>
+        </div>
+
+        <!-- Basic Plan -->
+        <div class="pricing-card pricing-card-popular">
+          <div class="popular-badge">Most Popular</div>
+          <div class="plan-name">Basic</div>
+          <div class="plan-price">
+            <span class="price-amount">₹249</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="plan-desc">For growing tuition centers</p>
+          <ul class="plan-features">
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Up to 100 students
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              5 batches
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Everything in Free
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Parent app access
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Announcements
+            </li>
+          </ul>
+          <a href="#" class="plan-btn plan-btn-primary" data-plan="basic">Get Started</a>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="pricing-card">
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">
+            <span class="price-amount">₹599</span>
+            <span class="price-period">/month</span>
+          </div>
+          <p class="plan-desc">For established institutes</p>
+          <ul class="plan-features">
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Unlimited students
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Unlimited batches
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Everything in Basic
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Multiple teachers
+            </li>
+            <li>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Priority support
+            </li>
+          </ul>
+          <a href="#" class="plan-btn plan-btn-outline" data-plan="pro">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="faq-header">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Frequently asked questions</h2>
+      <p class="section-subtitle">Have questions? We've got answers.</p>
+    </div>
+
+    <div class="faq-scroller">
+      <!-- Row 1 - scrolls left -->
+      <div class="faq-row" data-direction="left">
+        <div class="faq-track">
+          <div class="faq-card">
+            <h4 class="faq-card-q">Who is PingClass for?</h4>
+            <p class="faq-card-a">Built for small tuition centers with 1-5 teachers and up to 200 students. If you manage fees or attendance manually, PingClass is for you.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">How do parents get notifications?</h4>
+            <p class="faq-card-a">Parents install the app and receive free push notifications before fee due dates. No SMS costs, no WhatsApp API needed.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can I try it for free?</h4>
+            <p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Who is PingClass for?</h4>
+            <p class="faq-card-a">Built for small tuition centers with 1-5 teachers and up to 200 students. If you manage fees or attendance manually, PingClass is for you.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">How do parents get notifications?</h4>
+            <p class="faq-card-a">Parents install the app and receive free push notifications before fee due dates. No SMS costs, no WhatsApp API needed.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can I try it for free?</h4>
+            <p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 - scrolls right -->
+      <div class="faq-row" data-direction="right">
+        <div class="faq-track">
+          <div class="faq-card">
+            <h4 class="faq-card-q">How does attendance work?</h4>
+            <p class="faq-card-a">Teachers mark attendance from the dashboard in seconds. Students and parents can view history anytime from the app.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Is my data safe?</h4>
+            <p class="faq-card-a">Yes. Data is stored on encrypted servers. Only you and authorized teachers can access your institute's data.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can I cancel anytime?</h4>
+            <p class="faq-card-a">Absolutely. No long-term contracts. No subscription based payments. Access continues until billing period ends.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">How does attendance work?</h4>
+            <p class="faq-card-a">Teachers mark attendance from the dashboard in seconds. Students and parents can view history anytime from the app.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Is my data safe?</h4>
+            <p class="faq-card-a">Yes. Data is stored on encrypted servers. Only you and authorized teachers can access your institute's data.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can I cancel anytime?</h4>
+            <p class="faq-card-a">Absolutely. No long-term contracts. No subscription based payments. Access continues until billing period ends.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 - scrolls left -->
+      <div class="faq-row" data-direction="left">
+        <div class="faq-track">
+          <div class="faq-card">
+            <h4 class="faq-card-q">What payment methods?</h4>
+            <p class="faq-card-a">We accept UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can multiple teachers use it?</h4>
+            <p class="faq-card-a">Yes! The Pro plan supports multiple teachers. Each teacher gets their own login with appropriate permissions.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Is there a mobile app?</h4>
+            <p class="faq-card-a">Yes. Parents and students use the mobile app. Teachers and admins use the web dashboard from any device.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">What payment methods?</h4>
+            <p class="faq-card-a">We accept UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Can multiple teachers use it?</h4>
+            <p class="faq-card-a">Yes! The Pro plan supports multiple teachers. Each teacher gets their own login with appropriate permissions.</p>
+          </div>
+          <div class="faq-card">
+            <h4 class="faq-card-q">Is there a mobile app?</h4>
+            <p class="faq-card-a">Yes. Parents and students use the mobile app. Teachers and admins use the web dashboard from any device.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <div class="logo-icon">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span>PingClass</span>
+          </a>
+          <p class="footer-tagline">Fee management made simple for tuition centers.</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a href="privacy.html">Privacy Policy</a>
+          </div>
+          <div class="footer-col">
+            <h4>Support</h4>
+            <a href="#help">Help Center</a>
+            <a href="terms.html">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 PingClass. All rights reserved.</p>
+        <p>Privacy concerns? Email <a href="mailto:pingclassoff@gmail.com">pingclassoff@gmail.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-modal">
+      <button class="auth-close" id="authClose" aria-label="Close">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Sign Up Form -->
+      <div class="auth-form" id="signupForm">
+        <h2 class="auth-title">Create your account</h2>
+        <p class="auth-subtitle">No credit card required. Start managing your institute today.</p>
+
+        <form id="signupSubmit">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" placeholder="John Doe" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+              <button type="button" class="toggle-pw" data-target="signup-password" aria-label="Show password">
+                <svg class="eye-open" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg class="eye-closed hidden" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-institute">Institute Name</label>
+            <input type="text" id="signup-institute" placeholder="Bright Academy" required autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label class="consent-label">
+              <input type="checkbox" id="signup-consent">
+              <span>I have read and agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>, and I consent to the processing of my personal data as described there, under the Digital Personal Data Protection Act, 2023.</span>
+            </label>
+          </div>
+          <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
+        </form>
+
+        <!-- OTP Verification (hidden by default) -->
+        <div class="otp-step hidden" id="otpStep">
+          <div class="otp-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="otp-title">Check your email</h3>
+          <p class="otp-desc">We sent a 6-digit code to <strong id="otpEmail"></strong></p>
+          <form id="otpSubmit">
+            <div class="form-group">
+              <input type="text" id="otp-code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
+            </div>
+            <button type="submit" class="auth-btn" id="otpBtn">Verify</button>
+          </form>
+          <p class="otp-resend">Didn't get it? <a href="#" id="otpResend">Resend code</a></p>
+        </div>
+
+        <p class="auth-switch">
+          Already have an account? <a href="#" id="showLogin">Log in</a>
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <div class="auth-form hidden" id="loginForm">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Log in to your PingClass dashboard</p>
+
+        <form id="loginSubmit">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password">
+              <button type="button" class="toggle-pw" data-target="login-password" aria-label="Show password">
+                <svg class="eye-open" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg class="eye-closed hidden" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="forgot-pw-row">
+            <a href="#" id="forgotPassword" class="forgot-pw">Forgot password?</a>
+          </div>
+          <button type="submit" class="auth-btn" id="loginBtn">Log In</button>
+        </form>
+
+        <p class="auth-switch">
+          Don't have an account? <a href="#" id="showSignup">Sign up</a>
+        </p>
+      </div>
+
+      <!-- Reset Password -->
+      <div class="auth-form hidden" id="resetForm">
+        <!-- Phase 1: request code -->
+        <div id="resetRequest">
+          <h2 class="auth-title">Reset your password</h2>
+          <p class="auth-subtitle">We'll send a 6-digit code to your email to verify it's you. The code expires in 10 minutes.</p>
+          <form id="resetRequestForm">
+            <div class="form-group">
+              <label for="reset-email">Email</label>
+              <input type="email" id="reset-email" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <button type="submit" class="auth-btn" id="resetRequestBtn">Send code</button>
+          </form>
+          <p class="auth-switch"><a href="#" id="resetBackLogin">&larr; Back to login</a></p>
+        </div>
+
+        <!-- Phase 2: enter code -->
+        <div class="otp-step hidden" id="resetOtp">
+          <div class="otp-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="otp-title">Enter the code</h3>
+          <p class="otp-desc">We sent a 6-digit code to <strong id="resetOtpEmail"></strong></p>
+          <form id="resetOtpForm">
+            <div class="form-group">
+              <input type="text" id="reset-otp" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
+            </div>
+            <button type="submit" class="auth-btn" id="resetOtpBtn">Verify</button>
+          </form>
+          <p class="otp-resend">Didn't get it? <a href="#" id="resetResend">Resend code</a></p>
+          <p class="auth-switch"><a href="#" id="resetOtpBackLogin">&larr; Back to login</a></p>
+        </div>
+
+        <!-- Phase 3: set new password -->
+        <div id="resetNewPw" class="hidden">
+          <h2 class="auth-title">Set a new password</h2>
+          <p class="auth-subtitle">Must be at least 6 characters with a mix of letters and numbers.</p>
+          <form id="resetNewPwForm">
+            <div class="form-group">
+              <label for="reset-pw">New password</label>
+              <input type="password" id="reset-pw" placeholder="New password" required autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label for="reset-pw-confirm">Confirm password</label>
+              <input type="password" id="reset-pw-confirm" placeholder="Repeat new password" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="auth-btn" id="resetNewPwBtn">Set New Password</button>
+          </form>
+          <p class="auth-switch"><a href="#" id="resetDoneLogin">&larr; Back to login</a></p>
+        </div>
+      </div>
+
+      <div class="auth-error hidden" id="authError"></div>
+    </div>
+  </div>
+
+  <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="plan-free.js"></script>
+  <script src="plan-basic.js"></script>
+  <script src="plan-pro.js"></script>
+  <script src="payment.js?v=7"></script>
+  <script src="fluid.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

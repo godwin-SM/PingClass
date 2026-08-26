@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="logo.png">
+  <title>PingClass Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Demo Banner -->
+    <div class="demo-banner" id="demoBanner" style="display: none;">
+      <span>You're viewing a demo preview</span>
+      <a href="index.html" class="demo-cta">Sign up to get started</a>
+    </div>
+
+    <div class="dashboard-body">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <span>PingClass</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-role="all" data-page="dashboard">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" data-role="admin,teacher" data-page="students">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+          </svg>
+          Students
+        </a>
+        <a href="#" class="nav-item" data-role="admin,teacher" data-page="batches">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+          </svg>
+          Batches
+        </a>
+        <a href="#" class="nav-item" data-role="admin,parent" data-page="fees">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+          </svg>
+          Fees
+        </a>
+        <a href="#" class="nav-item" data-role="admin,teacher,parent" data-page="attendance">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+          </svg>
+          Attendance
+        </a>
+        <a href="#" class="nav-item" data-role="admin,teacher,parent" data-gate="announcements" data-page="announcements">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          Announcements
+          <span class="gate-badge">BASIC</span>
+        </a>
+        <a href="#" class="nav-item" data-role="admin" data-page="staff">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+          </svg>
+          Staff
+        </a>
+        <a href="#" class="nav-item" data-role="admin" data-page="billing">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+          </svg>
+          Billing
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" id="logoutBtn">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+          </svg>
+          Log out
+        </button>
+      </div>
+      </aside>
+
+      <!-- Sidebar overlay for mobile -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <button class="menu-toggle" id="menuToggle">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+        <div class="top-bar-right">
+          <span class="plan-badge plan-badge-free" id="planBadge">Free Plan</span>
+          <span class="user-name" id="userName">Loading...</span>
+        </div>
+      </header>
+
+      <div class="content">
+
+        <!-- DASHBOARD PAGE -->
+        <div class="page page-active" id="page-dashboard">
+          <div class="welcome">
+            <h1>Welcome back, <span id="welcomeName">Admin</span></h1>
+            <p>Here's what's happening with your institute today.</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="totalStudents">0</span>
+                <span class="stat-label">Students</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="totalBatches">0</span>
+                <span class="stat-label">Batches</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon pending">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="pendingFees">₹0</span>
+                <span class="stat-label">Pending Fees</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon collected">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value" id="collectedFees">₹0</span>
+                <span class="stat-label">Collected</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BILLING PAGE (admin only) -->
+        <div class="page" id="page-billing">
+          <div class="welcome">
+            <h1>Billing & Plans</h1>
+            <p>Manage your subscription and payment details.</p>
+          </div>
+
+          <!-- Current Plan Card -->
+          <div class="billing-current" id="billingCurrent">
+            <div class="billing-current-left">
+              <span class="billing-label">Current Plan</span>
+              <h2 class="billing-plan-name" id="billingPlanName">Free</h2>
+              <p class="billing-plan-detail" id="billingPlanDetail">20 students &middot; 1 batch &middot; 1 teacher</p>
+            </div>
+            <div class="billing-current-right">
+              <div class="billing-status" id="billingStatus">
+                <span class="billing-dot"></span>
+                Active
+              </div>
+              <p class="billing-expiry" id="billingExpiry">Free forever</p>
+            </div>
+          </div>
+
+          <!-- Usage -->
+          <div class="billing-usage" id="billingUsage">
+            <h3>Usage This Month</h3>
+            <div class="billing-usage-grid">
+              <div class="billing-usage-item">
+                <div class="billing-usage-header">
+                  <span>Students</span>
+                  <span id="usageStudents">0 / 20</span>
+                </div>
+                <div class="billing-usage-bar">
+                  <div class="billing-usage-fill" id="usageStudentsBar" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="billing-usage-item">
+                <div class="billing-usage-header">
+                  <span>Batches</span>
+                  <span id="usageBatches">0 / 1</span>
+                </div>
+                <div class="billing-usage-bar">
+                  <div class="billing-usage-fill" id="usageBatchesBar" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plan Cards -->
+          <h3 class="billing-section-title">Upgrade Your Plan</h3>
+          <div class="billing-plans">
+            <div class="billing-plan-card" id="billingCard-free">
+              <div class="billing-plan-header">
+                <span class="billing-plan-tag">Free</span>
+                <span class="billing-plan-price">₹0<span>/mo</span></span>
+              </div>
+              <ul class="billing-plan-features">
+                <li>Up to 20 students</li>
+                <li>1 batch</li>
+                <li>1 teacher</li>
+                <li>Basic fee tracking</li>
+                <li>Attendance management</li>
+              </ul>
+              <button class="billing-plan-btn billing-plan-btn-current" disabled>Current Plan</button>
+            </div>
+
+            <div class="billing-plan-card billing-plan-card-featured" id="billingCard-basic">
+              <div class="billing-plan-badge">Popular</div>
+              <div class="billing-plan-header">
+                <span class="billing-plan-tag">Basic</span>
+                <span class="billing-plan-price">₹249<span>/mo</span></span>
+              </div>
+              <ul class="billing-plan-features">
+                <li>Up to 100 students</li>
+                <li>5 batches</li>
+                <li>5 teachers</li>
+                <li>Parent app access</li>
+                <li>WhatsApp announcements</li>
+                <li>Fee reports & export</li>
+              </ul>
+              <button class="billing-plan-btn billing-plan-btn-upgrade" data-plan="basic">Upgrade to Basic</button>
+            </div>
+
+            <div class="billing-plan-card" id="billingCard-pro">
+              <div class="billing-plan-header">
+                <span class="billing-plan-tag">Pro</span>
+                <span class="billing-plan-price">₹599<span>/mo</span></span>
+              </div>
+              <ul class="billing-plan-features">
+                <li>Unlimited students</li>
+                <li>Unlimited batches</li>
+                <li>Unlimited teachers</li>
+                <li>Everything in Basic</li>
+                <li>Priority support</li>
+                <li>Custom branding</li>
+              </ul>
+              <button class="billing-plan-btn billing-plan-btn-upgrade" data-plan="pro">Upgrade to Pro</button>
+            </div>
+          </div>
+
+          <!-- Payment History -->
+          <div class="billing-history" id="billingHistory">
+            <h3>Payment History</h3>
+            <div class="billing-history-empty" id="billingHistoryEmpty">
+              <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+              <p>No payments yet</p>
+            </div>
+            <div class="billing-history-list" id="billingHistoryList" style="display: none;"></div>
+          </div>
+        </div>
+
+        <!-- STAFF PAGE (admin only) -->
+        <div class="page" id="page-staff">
+          <div class="staff-header">
+            <div class="welcome" style="margin-bottom:0">
+              <h1>Staff & Access</h1>
+              <p>Manage teachers and parents at your institute.</p>
+            </div>
+            <button class="staff-invite-btn" id="staffInviteBtn">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Invite Staff
+            </button>
+          </div>
+
+          <!-- Filter Tabs -->
+          <div class="staff-filters">
+            <button class="staff-filter active" data-filter="all">All</button>
+            <button class="staff-filter" data-filter="teacher">Teachers</button>
+            <button class="staff-filter" data-filter="parent">Parents</button>
+          </div>
+
+          <!-- Staff Table -->
+          <div class="staff-table-wrap">
+            <table class="staff-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody">
+              </tbody>
+            </table>
+            <div class="staff-empty" id="staffEmpty">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+              </svg>
+              <h3>No staff members yet</h3>
+              <p>Invite teachers and parents to get started.</p>
+              <button class="staff-invite-btn staff-invite-btn-empty" id="staffInviteBtnEmpty">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Invite Staff
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+    </div>
+  </div>
+
+  <!-- Invite Staff Modal -->
+  <div class="staff-modal-overlay" id="inviteModal">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h2>Invite Staff Member</h2>
+        <button class="staff-modal-close" id="inviteModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="inviteForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="inviteName">Name</label>
+          <input type="text" id="inviteName" placeholder="e.g. Priya Sharma" required />
+        </div>
+
+        <div class="staff-field">
+          <label for="inviteEmail">Email</label>
+          <input type="email" id="inviteEmail" placeholder="priya@example.com" required />
+        </div>
+
+        <div class="staff-field">
+          <label for="inviteRole">Role</label>
+          <div class="staff-select-wrap">
+            <select id="inviteRole" required>
+              <option value="">Select role...</option>
+              <option value="teacher">Teacher</option>
+              <option value="parent">Parent</option>
+            </select>
+            <svg class="staff-select-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="staff-field staff-field-student" id="studentField" style="display:none">
+          <label for="inviteStudent">Link to Student</label>
+          <p class="staff-field-hint">Select which student this parent is linked to.</p>
+          <div class="staff-select-wrap">
+            <select id="inviteStudent">
+              <option value="">Select student...</option>
+            </select>
+            <svg class="staff-select-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="staff-modal-error" id="inviteError"></div>
+
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="inviteModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="inviteSubmit">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            </svg>
+            Send Invite
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Invite Link Modal -->
+  <div class="staff-modal-overlay" id="linkModal">
+    <div class="staff-modal staff-modal-link">
+      <div class="staff-modal-header">
+        <h2>Invite Link Ready</h2>
+        <button class="staff-modal-close" id="linkModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="staff-link-desc">Share this link with the person you invited. They'll set their own password on first login.</p>
+
+      <div class="staff-link-box">
+        <input type="text" id="inviteLinkInput" readonly />
+        <button class="staff-link-copy" id="inviteLinkCopy">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+          </svg>
+          Copy
+        </button>
+      </div>
+
+      <div class="staff-modal-actions">
+        <button class="staff-modal-cancel" id="linkModalDone">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="plan-free.js"></script>
+  <script src="plan-basic.js"></script>
+  <script src="plan-pro.js"></script>
+  <script src="payment.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

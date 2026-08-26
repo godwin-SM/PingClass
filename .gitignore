@@ -1,0 +1,23 @@
+# Secrets - never commit or serve
+.env
+.env.local
+.env.*
+!*.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+
+# Supabase local state
+supabase/.temp/
+supabase/.branches/
+supabase/.env.local
+supabase/.env
+
+# OS
+Thumbs.db
+.DS_Store

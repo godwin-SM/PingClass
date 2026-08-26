@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PingClass — Admin dashboard</title>
+<script src="chart.umd.min.js"></script>
+<style>
+/* ========== THEME TOKENS ========== */
+/* PingClass color theme — matches the existing dashboard design system */
+:root {
+  --primary: #0D9488;
+  --primary-hover: #0F766E;
+  --secondary: #2DD4BF;
+  --accent: #D97706;          /* brand accent (amber) */
+  --success: #22C55E;         /* paid / on-time */
+  --due: #F59E0B;             /* due soon */
+  --danger: #DC2626;          /* overdue / alerts */
+  --bg: #041a17;
+  --card-bg: rgba(10, 46, 42, 0.6);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --white: #FFFFFF;
+  --text: rgba(255, 255, 255, 0.95);
+  --text-2: rgba(255, 255, 255, 0.6);
+  --text-3: rgba(255, 255, 255, 0.4);
+  --radius: 12px;
+}
+
+/* ========== RESET & BASE ========== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 85% -10%, rgba(13, 148, 136, 0.12), transparent),
+    radial-gradient(ellipse 40% 30% at -10% 110%, rgba(45, 212, 191, 0.08), transparent);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+/* ========== TOP NAVIGATION ========== */
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 72px;
+  padding: 0 32px;
+  background: rgba(4, 26, 23, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topnav-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(380px, 100%);
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-2);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.topnav-search:focus-within {
+  border-color: rgba(13, 148, 136, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.topnav-search svg {
+  flex-shrink: 0;
+}
+
+.topnav-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 0.875rem;
+}
+
+.topnav-search input::placeholder {
+  color: var(--text-3);
+}
+
+.topnav-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.user-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #04201d;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ========== LAYOUT SHELL ========== */
+.shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ========== SUMMARY METRICS ========== */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+}
+
+.metric-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(13, 148, 136, 0.12);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  color: var(--secondary);
+  flex-shrink: 0;
+}
+
+.metric-label {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ========== GENERIC PANELS / CARDS ========== */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  min-width: 0;
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.card-head h2 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.card-sub {
+  font-size: 0.8125rem;
+  color: var(--text-3);
+  margin-top: 3px;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+}
+
+.panel-grid--bottom {
+  grid-template-columns: 1fr 1.4fr;
+}
+
+/* ========== CHARTS ========== */
+.chart-wrap {
+  position: relative;
+  height: 300px;
+}
+
+.chart-card--wide .chart-wrap {
+  height: 320px;
+}
+
+/* ========== ANNOUNCEMENTS ========== */
+.ann-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.ann-item {
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ann-item:last-child {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.ann-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ann-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-3);
+  margin-bottom: 6px;
+}
+
+.ann-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--secondary);
+}
+
+.ann-excerpt {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.btn-link:hover {
+  border-color: rgba(45, 212, 191, 0.5);
+  background: rgba(45, 212, 191, 0.08);
+}
+
+/* ========== TOP PERFORMING STUDENTS ========== */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.top-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 460px;
+}
+
+.top-table th {
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.top-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.top-table tr:last-child td {
+  border-bottom: none;
+}
+
+.top-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.top-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rank {
+  color: var(--text-3);
+  font-weight: 600;
+  font-size: 0.8125rem;
+}
+
+.student-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(13, 148, 136, 0.15);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  color: var(--secondary);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.batch-cell {
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+/* Mini attendance bar */
+.att-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.att-bar {
+  width: 60px;
+  height: 5px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.att-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.att-text {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* ========== FEE STATUS BADGES ========== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge--paid {
+  color: var(--success);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge--due {
+  color: var(--due);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge--overdue {
+  color: var(--danger);
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .panel-grid,
+  .panel-grid--bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .topnav {
+    padding: 0 16px;
+    height: 64px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .shell {
+    padding: 20px 16px 48px;
+    gap: 16px;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-card {
+    padding: 18px 20px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .chart-wrap,
+  .chart-card--wide .chart-wrap {
+    height: 260px;
+  }
+}
+
+/* ========== REDUCED MOTION ========== */
+@media (prefers-reduced-motion: reduce) {
+  .topnav-search,
+  .topnav-search input,
+  .btn-link,
+  .top-table tbody tr {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOP NAVIGATION ===================== -->
+<header class="topnav">
+  <div class="topnav-search">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    </svg>
+    <input type="search" id="globalSearch" placeholder="Search students, batches, teachers" autocomplete="off" aria-label="Search" />
+  </div>
+  <div class="topnav-user">
+    <span class="user-name" id="userName">Amit Deshmukh</span>
+    <span class="user-avatar" aria-hidden="true">AD</span>
+  </div>
+</header>
+
+<main class="shell">
+
+  <!-- ===================== SUMMARY METRICS ===================== -->
+  <section class="metrics" aria-label="Summary metrics">
+    <article class="metric-card">
+      <div class="metric-icon" aria-hidden="true">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+        </svg>
+      </div>
+      <div>
+        <p class="metric-label">Total students</p>
+        <p class="metric-value" id="metricStudents">47</p>
+      </div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-icon" aria-hidden="true">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+        </svg>
+      </div>
+      <div>
+        <p class="metric-label">Total batches</p>
+        <p class="metric-value" id="metricBatches">5</p>
+      </div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-icon" aria-hidden="true">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+        </svg>
+      </div>
+      <div>
+        <p class="metric-label">Total teachers</p>
+        <p class="metric-value" id="metricTeachers">6</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== CHARTS ===================== -->
+  <section class="panel-grid" aria-label="Charts">
+    <article class="card chart-card--wide">
+      <header class="card-head">
+        <div>
+          <h2>Attendance vs fee collection</h2>
+          <p class="card-sub">Last 6 months, percentage of monthly targets</p>
+        </div>
+      </header>
+      <div class="chart-wrap">
+        <canvas id="trendChart" aria-label="Attendance and fee collection trend chart" role="img"></canvas>
+      </div>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <div>
+          <h2>Batch comparison</h2>
+          <p class="card-sub">Student count vs average attendance</p>
+        </div>
+      </header>
+      <div class="chart-wrap">
+        <canvas id="batchChart" aria-label="Batch comparison chart" role="img"></canvas>
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================== ANNOUNCEMENTS & STUDENTS ===================== -->
+  <section class="panel-grid panel-grid--bottom" aria-label="Announcements and top students">
+    <article class="card">
+      <header class="card-head">
+        <div>
+          <h2>Latest announcements</h2>
+          <p class="card-sub">Recent updates from the institute</p>
+        </div>
+        <button class="btn-link" type="button">Show all</button>
+      </header>
+      <ul class="ann-list" id="announcementsList">
+        <!-- announcements injected by JS -->
+      </ul>
+    </article>
+
+    <article class="card">
+      <header class="card-head">
+        <div>
+          <h2>Top performing students</h2>
+          <p class="card-sub">Ranked by attendance and fee punctuality</p>
+        </div>
+      </header>
+      <div class="table-wrap">
+        <table class="top-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Batch</th>
+              <th>Attendance</th>
+              <th>Fee status</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
+</main>
+
+<script>
+/* ===================== MOCK DATA ===================== */
+// Realistic tuition-institute scenario data, hardcoded for the demo.
+const MOCK = {
+  // Summary metrics
+  metrics: { students: 47, batches: 5, teachers: 6 },
+
+  // Trend chart — last 6 months (Mar → Aug)
+  trendMonths: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  attendanceTrend: [82, 85, 79, 88, 91, 87],
+  feeTrend: [74, 78, 81, 77, 85, 83],
+
+  // Batch comparison
+  batchNames: ['Math — Evening', 'Science — Morning', 'English — Afternoon', 'Physics — Morning', 'Math — Weekend'],
+  batchStudents: [18, 22, 15, 20, 12],
+  batchAttendance: [87, 92, 78, 85, 90],
+
+  // Announcements (newest first)
+  announcements: [
+    {
+      title: 'Half-yearly exam schedule released',
+      date: 'Jul 28, 2026',
+      excerpt: 'Timetable for half-yearly exams is now available. Please check your batch schedule for slot details.'
+    },
+    {
+      title: 'Fee payment reminder for pending dues',
+      date: 'Jul 21, 2026',
+      excerpt: 'Fees for the current term are due by July 30. Late payments will be marked overdue after that date.'
+    },
+    {
+      title: 'New batch: advanced math — weekend',
+      date: 'Jul 15, 2026',
+      excerpt: 'We are opening a weekend batch for advanced math. Limited seats, so confirm your interest early.'
+    }
+  ],
+
+  // Top 5 students by combined attendance + fee punctuality
+  students: [
+    { name: 'Aarav Sharma', batch: 'Math — Evening', attendance: 95, fee: 'paid' },
+    { name: 'Priya Verma', batch: 'Science — Morning', attendance: 92, fee: 'paid' },
+    { name: 'Rohan Gupta', batch: 'Math — Evening', attendance: 88, fee: 'due' },
+    { name: 'Sneha Iyer', batch: 'English — Afternoon', attendance: 85, fee: 'paid' },
+    { name: 'Kabir Malhotra', batch: 'Physics — Morning', attendance: 82, fee: 'overdue' }
+  ]
+};
+
+/* ===================== HELPER: FEE BADGE ===================== */
+const FEE_META = {
+  paid:    { label: 'Paid',    cls: 'badge--paid' },
+  due:     { label: 'Due soon', cls: 'badge--due' },
+  overdue: { label: 'Overdue',  cls: 'badge--overdue' }
+};
+
+// Attendance bar color: strong = green, good = teal, low = amber
+function attColor(value) {
+  if (value >= 90) return '#22C55E';
+  if (value >= 80) return '#2DD4BF';
+  return '#F59E0B';
+}
+
+/* ===================== ANNOUNCEMENTS ===================== */
+function renderAnnouncements() {
+  const list = document.getElementById('announcementsList');
+  list.innerHTML = MOCK.announcements.map(ann => `
+    <li class="ann-item">
+      <h3 class="ann-title">${ann.title}</h3>
+      <p class="ann-meta"><span class="ann-dot" aria-hidden="true"></span>${ann.date}</p>
+      <p class="ann-excerpt">${ann.excerpt}</p>
+    </li>
+  `).join('');
+}
+
+/* ===================== TOP PERFORMING STUDENTS ===================== */
+function renderStudents() {
+  const body = document.getElementById('studentsTableBody');
+  body.innerHTML = MOCK.students.map((s, i) => {
+    const initials = s.name.split(' ').map(w => w[0]).join('');
+    const fee = FEE_META[s.fee];
+    return `
+      <tr data-name="${s.name.toLowerCase()}">
+        <td class="rank">${String(i + 1).padStart(2, '0')}</td>
+        <td>
+          <div class="student-cell">
+            <span class="student-avatar" aria-hidden="true">${initials}</span>
+            <span>${s.name}</span>
+          </div>
+        </td>
+        <td class="batch-cell">${s.batch}</td>
+        <td>
+          <div class="att-cell">
+            <span class="att-bar"><span style="width:${s.attendance}%;background:${attColor(s.attendance)}"></span></span>
+            <span class="att-text">${s.attendance}%</span>
+          </div>
+        </td>
+        <td><span class="badge ${fee.cls}">${fee.label}</span></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/* ===================== SEARCH FILTER ===================== */
+function initSearch() {
+  const input = document.getElementById('globalSearch');
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    document.querySelectorAll('#studentsTableBody tr').forEach(row => {
+      row.style.display = q && !row.dataset.name.includes(q) ? 'none' : '';
+    });
+  });
+}
+
+/* ===================== CHARTS ===================== */
+// Chart.js global dark-theme defaults
+Chart.defaults.color = 'rgba(255, 255, 255, 0.6)';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
+Chart.defaults.font.family = "'Inter', system-ui, -apple-system, sans-serif";
+
+function initTrendChart() {
+  const ctx = document.getElementById('trendChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MOCK.trendMonths,
+      datasets: [
+        {
+          type: 'line',
+          label: 'Attendance',
+          data: MOCK.attendanceTrend,
+          borderColor: '#2DD4BF',
+          backgroundColor: '#2DD4BF',
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: '#2DD4BF'
+        },
+        {
+          type: 'bar',
+          label: 'Fee collection',
+          data: MOCK.feeTrend,
+          backgroundColor: 'rgba(13, 148, 136, 0.55)',
+          borderColor: '#0D9488',
+          borderWidth: 1,
+          borderRadius: 6,
+          borderSkipped: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8 }
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { callback: v => v + '%' },
+          grid: { color: 'rgba(255, 255, 255, 0.06)' }
+        }
+      }
+    }
+  });
+}
+
+function initBatchChart() {
+  const ctx = document.getElementById('batchChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: MOCK.batchNames,
+      datasets: [
+        {
+          label: 'Students',
+          data: MOCK.batchStudents,
+          backgroundColor: '#0D9488',
+          hoverBackgroundColor: '#0F766E',
+          borderRadius: 6,
+          borderSkipped: false
+        },
+        {
+          type: 'line',
+          label: 'Attendance %',
+          data: MOCK.batchAttendance,
+          borderColor: '#2DD4BF',
+          backgroundColor: '#2DD4BF',
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 3,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8 }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { maxRotation: 20, autoSkip: false }
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Students' },
+          grid: { color: 'rgba(255, 255, 255, 0.06)' }
+        },
+        y1: {
+          beginAtZero: true,
+          max: 100,
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { callback: v => v + '%' },
+          title: { display: true, text: 'Attendance %' }
+        }
+      }
+    }
+  });
+}
+
+/* ===================== INIT ===================== */
+function init() {
+  renderAnnouncements();
+  renderStudents();
+  initSearch();
+  initTrendChart();
+  initBatchChart();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

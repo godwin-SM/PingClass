@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accept Invite — PingClass</title>
+  <link rel="icon" type="image/png" href="logo-64.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #0D9488;
+      --primary-hover: #0B7E73;
+      --primary-glow: rgba(13, 148, 136, 0.2);
+      --secondary: #2DD4BF;
+      --accent: #D97706;
+      --bg: #071A18;
+      --surface: #0A2E2A;
+      --border: rgba(255, 255, 255, 0.06);
+      --text: #F0FDF4;
+      --text-muted: #5A8A82;
+      --text-secondary: #8EACA5;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.06);
+      --success: #4ADE80;
+      --error: #FCA5A5;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    .invite-container { width: 100%; max-width: 440px; }
+
+    .invite-logo {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px; justify-content: center;
+    }
+
+    .invite-logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; color: white;
+    }
+
+    .invite-logo-text { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+
+    .invite-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 40px 32px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      position: relative; overflow: hidden;
+    }
+
+    .invite-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+
+    .invite-card h1 { font-size: 1.375rem; font-weight: 700; text-align: center; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .invite-card p { color: var(--text-secondary); font-size: 0.9375rem; text-align: center; line-height: 1.5; margin-bottom: 28px; }
+
+    .invite-detail {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 10px; margin-bottom: 20px;
+    }
+
+    .invite-detail-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .invite-detail-icon.teal { background: rgba(45,212,191,0.1); color: var(--secondary); }
+    .invite-detail-icon.violet { background: rgba(167,139,250,0.1); color: #A78BFA; }
+
+    .invite-detail-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2px; }
+    .invite-detail-value { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+
+    .invite-form-group { margin-bottom: 16px; }
+    .invite-form-group label {
+      display: block; font-size: 0.8125rem; font-weight: 600;
+      color: var(--text-secondary); margin-bottom: 6px;
+    }
+
+    .invite-form-group input {
+      width: 100%; padding: 12px 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-size: 0.9375rem;
+      font-family: inherit; outline: none; transition: border-color 0.2s ease;
+    }
+
+    .invite-form-group input::placeholder { color: var(--text-muted); }
+    .invite-form-group input:focus { border-color: var(--primary); }
+
+    .invite-form-group input[readonly] {
+      opacity: 0.7; cursor: default;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .invite-password-wrap { position: relative; }
+
+    .invite-password-input {
+      -webkit-text-security: disc; text-security: disc;
+      letter-spacing: 0.12em;
+    }
+
+    .invite-password-input.unmasked {
+      -webkit-text-security: none; text-security: none; letter-spacing: normal;
+    }
+
+    .invite-toggle-pw {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: var(--text-muted); cursor: pointer;
+      padding: 6px; border-radius: 6px; transition: color 0.2s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .invite-toggle-pw:hover { color: var(--text-secondary); }
+
+    .invite-error {
+      color: var(--error); font-size: 0.8125rem; margin-bottom: 12px;
+      display: none; text-align: center;
+    }
+
+    .invite-error.visible { display: block; }
+
+    .invite-submit {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      border: none; border-radius: 12px; color: white;
+      font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer;
+      transition: all 0.3s ease; box-shadow: 0 6px 24px var(--primary-glow); margin-top: 8px;
+    }
+
+    .invite-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 32px var(--primary-glow); }
+    .invite-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── OTP Input ── */
+    .otp-input {
+      width: 100%; padding: 16px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      font-size: 1.5rem; font-weight: 700;
+      font-family: 'Plus Jakarta Sans', monospace;
+      text-align: center; letter-spacing: 0.5em;
+      outline: none; transition: border-color 0.2s ease;
+    }
+
+    .otp-input:focus { border-color: var(--primary); }
+    .otp-input::placeholder { color: var(--text-muted); font-size: 0.9375rem; font-weight: 400; letter-spacing: normal; }
+
+    /* ── Password Strength ── */
+    .pw-hint {
+      font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;
+    }
+
+    .pw-match {
+      font-size: 0.75rem; margin-top: 4px; display: none;
+    }
+    .pw-match.ok { color: var(--success); display: block; }
+    .pw-match.no { color: var(--error); display: block; }
+
+    /* ── Resend Link ── */
+    .resend-row {
+      text-align: center; margin-top: 16px; font-size: 0.8125rem; color: var(--text-muted);
+    }
+
+    .resend-row a {
+      color: var(--secondary); text-decoration: none; cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .resend-row a:hover { color: var(--text); text-decoration: underline; }
+    .resend-row a.disabled { opacity: 0.4; pointer-events: none; }
+
+    /* ── States ── */
+    .invite-state { display: none; }
+    .invite-state.active { display: block; }
+
+    .invite-success-icon {
+      width: 64px; height: 64px; margin: 0 auto 20px;
+      background: rgba(74,222,128,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .invite-success { text-align: center; }
+    .invite-success h2 { font-size: 1.375rem; font-weight: 700; margin-bottom: 8px; }
+    .invite-success p { margin-bottom: 24px; }
+
+    .invite-success-btn {
+      display: inline-block; padding: 12px 28px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      border: none; border-radius: 10px; color: white;
+      font-size: 0.9375rem; font-weight: 600; font-family: inherit;
+      text-decoration: none; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 4px 16px var(--primary-glow);
+    }
+
+    .invite-success-btn:hover { transform: translateY(-1px); }
+
+    .invite-expired-icon {
+      width: 64px; height: 64px; margin: 0 auto 20px;
+      background: rgba(252,165,165,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .invite-expired { text-align: center; }
+    .invite-expired h2 { font-size: 1.375rem; font-weight: 700; margin-bottom: 8px; color: var(--error); }
+    .invite-expired p { margin-bottom: 24px; }
+
+    .invite-spinner {
+      width: 32px; height: 32px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .invite-loading { text-align: center; padding: 40px 0; }
+    .invite-loading p { color: var(--text-muted); font-size: 0.875rem; }
+
+    .step-indicator {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); transition: background 0.3s ease;
+    }
+
+    .step-dot.active { background: var(--primary); box-shadow: 0 0 8px var(--primary-glow); }
+    .step-dot.done { background: var(--success); }
+
+    .step-line {
+      width: 24px; height: 2px; background: var(--border); border-radius: 1px;
+      transition: background 0.3s ease;
+    }
+
+    .step-line.done { background: var(--success); }
+
+    @media (max-width: 480px) {
+      .invite-card { padding: 28px 20px; }
+      .otp-input { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="invite-container">
+    <div class="invite-logo">
+      <div class="invite-logo-icon">PC</div>
+      <span class="invite-logo-text">PingClass</span>
+    </div>
+
+    <div class="invite-card">
+      <!-- Loading -->
+      <div class="invite-state active" id="stateLoading">
+        <div class="invite-loading">
+          <div class="invite-spinner"></div>
+          <p>Validating your invite...</p>
+        </div>
+      </div>
+
+      <!-- Expired -->
+      <div class="invite-state" id="stateExpired">
+        <div class="invite-expired">
+          <div class="invite-expired-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <h2>Invite Expired</h2>
+          <p>This invite link has expired or has already been used.<br/>Please ask the admin for a new one.</p>
+        </div>
+      </div>
+
+      <!-- Step 1: Send OTP -->
+      <div class="invite-state" id="stateOtpRequest">
+        <div class="step-indicator">
+          <div class="step-dot active"></div>
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <h1 id="otpReqTitle">Welcome!</h1>
+        <p id="otpReqSubtitle">Verify your email to join the institute on PingClass.</p>
+
+        <div class="invite-detail">
+          <div class="invite-detail-icon teal">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <div>
+            <div class="invite-detail-label">Email</div>
+            <div class="invite-detail-value" id="otpEmailDisplay">—</div>
+          </div>
+        </div>
+
+        <div class="invite-detail">
+          <div class="invite-detail-icon violet">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+            </svg>
+          </div>
+          <div>
+            <div class="invite-detail-label">Role</div>
+            <div class="invite-detail-value" id="otpRoleDisplay">—</div>
+          </div>
+        </div>
+
+        <div class="invite-form-group">
+          <label for="inviteName">Your Name</label>
+          <input type="text" id="inviteName" placeholder="Enter your full name" autocomplete="name" />
+        </div>
+
+        <div class="invite-error" id="otpReqError"></div>
+
+        <button class="invite-submit" id="sendOtpBtn" onclick="sendOtp()">Send OTP</button>
+      </div>
+
+      <!-- Step 2: Verify OTP -->
+      <div class="invite-state" id="stateOtpVerify">
+        <div class="step-indicator">
+          <div class="step-dot done"></div>
+          <div class="step-line done"></div>
+          <div class="step-dot active"></div>
+          <div class="step-line"></div>
+          <div class="step-dot"></div>
+        </div>
+
+        <h1>Verify Email</h1>
+        <p>Enter the 6-digit code sent to<br/><strong id="otpVerifyEmail" style="color:var(--text)">—</strong></p>
+
+        <div class="invite-form-group">
+          <input type="text" id="otpInput" class="otp-input" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" />
+        </div>
+
+        <div class="invite-error" id="otpVerifyError"></div>
+
+        <button class="invite-submit" id="verifyOtpBtn" onclick="verifyOtp()">Verify OTP</button>
+
+        <div class="resend-row">
+          <span id="resendTimer">Resend OTP in 30s</span>
+          <a id="resendLink" class="disabled" onclick="resendOtp()">Resend OTP</a>
+        </div>
+      </div>
+
+      <!-- Step 3: Create Password -->
+      <div class="invite-state" id="statePassword">
+        <div class="step-indicator">
+          <div class="step-dot done"></div>
+          <div class="step-line done"></div>
+          <div class="step-dot done"></div>
+          <div class="step-line done"></div>
+          <div class="step-dot active"></div>
+        </div>
+
+        <h1>Create Password</h1>
+        <p>Email verified! Set your password to complete setup.</p>
+
+        <div class="invite-form-group">
+          <label for="newPassword">Password</label>
+          <div class="invite-password-wrap">
+            <input type="password" id="newPassword" class="invite-password-input" placeholder="Min 6 characters, include letters + numbers" required minlength="6" autocomplete="new-password" />
+            <button type="button" class="invite-toggle-pw" id="toggleNewPw" aria-label="Toggle password visibility">
+              <svg id="eyeIconNew" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <svg id="eyeOffIconNew" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            </button>
+          </div>
+          <div class="pw-hint">Must be at least 6 characters with at least one letter and one number.</div>
+        </div>
+
+        <div class="invite-form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="invite-password-wrap">
+            <input type="password" id="confirmPassword" class="invite-password-input" placeholder="Re-enter your password" required minlength="6" autocomplete="new-password" />
+            <button type="button" class="invite-toggle-pw" id="toggleConfirmPw" aria-label="Toggle password visibility">
+              <svg id="eyeIconConfirm" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <svg id="eyeOffIconConfirm" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
+            </button>
+          </div>
+          <div class="pw-match" id="pwMatch"></div>
+        </div>
+
+        <div class="invite-error" id="pwError"></div>
+
+        <button class="invite-submit" id="createAccountBtn" onclick="createAccount()">Create Account</button>
+      </div>
+
+      <!-- Success -->
+      <div class="invite-state" id="stateSuccess">
+        <div class="invite-success">
+          <div class="invite-success-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2>You're All Set!</h2>
+          <p>Your account has been created.<br/>Taking you to your dashboard...</p>
+          <p style="font-size:0.8125rem;color:var(--text-muted);margin-top:12px;">You can always log in again from <strong>pingclass.com</strong></p>
+          <a href="#" class="invite-success-btn" id="goToDashboardBtn">Go to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script>
+    const db = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+    const params = new URLSearchParams(window.location.search);
+    const tokenId = params.get('token');
+
+    const stateLoading = document.getElementById('stateLoading');
+    const stateExpired = document.getElementById('stateExpired');
+    const stateOtpRequest = document.getElementById('stateOtpRequest');
+    const stateOtpVerify = document.getElementById('stateOtpVerify');
+    const statePassword = document.getElementById('statePassword');
+    const stateSuccess = document.getElementById('stateSuccess');
+
+    const allStates = [stateLoading, stateExpired, stateOtpRequest, stateOtpVerify, statePassword, stateSuccess];
+
+    let inviteData = null;
+    let inviteRole = null;
+    let resendCooldown = null;
+
+    function showState(el) {
+      allStates.forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add('visible');
+    }
+
+    function hideError(id) {
+      document.getElementById(id).classList.remove('visible');
+    }
+
+    // ── Validate token on load ──
+    (async function() {
+      if (!tokenId) { showState(stateExpired); return; }
+
+      const { data, error } = await db.rpc('get_invite_token', { p_token_id: tokenId });
+      const row = Array.isArray(data) ? data[0] : data;
+
+      if (error || !row) { showState(stateExpired); return; }
+      if (row.used) { showState(stateExpired); return; }
+      if (new Date(row.expires_at) <= new Date()) { showState(stateExpired); return; }
+
+      inviteData = row;
+
+      // Fetch institute name (secure RPC — validated against the invite token)
+      let instituteName = 'your institute';
+      if (row.id) {
+        try {
+          const { data: instName } = await db.rpc('get_institute_name', { p_token_id: row.id });
+          if (instName) instituteName = instName;
+        } catch (e) {
+          console.warn('get_institute_name RPC failed:', e);
+        }
+      }
+
+      // Populate step 1
+      document.getElementById('otpEmailDisplay').textContent = row.email;
+      document.getElementById('otpRoleDisplay').textContent = row.role.charAt(0).toUpperCase() + row.role.slice(1);
+      document.getElementById('otpReqTitle').textContent = `Welcome, ${row.name || row.email.split('@')[0]}`;
+      document.getElementById('otpReqSubtitle').textContent = `You've been invited to join ${instituteName} on PingClass.`;
+      document.getElementById('inviteName').value = row.name || '';
+      document.getElementById('otpVerifyEmail').textContent = row.email;
+
+      showState(stateOtpRequest);
+    })();
+
+    // ── Step 1: Send OTP ──
+    async function sendOtp() {
+      const nameInput = document.getElementById('inviteName');
+      const name = nameInput.value.trim();
+      const btn = document.getElementById('sendOtpBtn');
+
+      hideError('otpReqError');
+
+      if (!name) {
+        showError('otpReqError', 'Please enter your name.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending OTP...';
+
+      // Check if email already registered (rate-limited edge function)
+      try {
+        const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/check-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': CONFIG.SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({ email: inviteData.email })
+        });
+        if (res.ok) {
+          const result = await res.json();
+          if (result?.exists === true) {
+            showError('otpReqError', 'This email is already registered. Please log in instead.');
+            btn.disabled = false;
+            btn.textContent = 'Send OTP';
+            return;
+          }
+        }
+      } catch (e) {
+        // Edge function might not be deployed yet — continue anyway
+        console.warn('check-email unavailable:', e);
+      }
+
+      // Send OTP via Supabase Auth
+      const { error } = await db.auth.signInWithOtp({
+        email: inviteData.email,
+        options: { shouldCreateUser: true }
+      });
+
+      if (error) {
+        console.error('Send OTP error:', error);
+        showError('otpReqError', 'Failed to send OTP. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+        return;
+      }
+
+      // Store name for later use
+      inviteData.name = name;
+
+      btn.disabled = false;
+      btn.textContent = 'Send OTP';
+
+      showState(stateOtpVerify);
+      startResendTimer();
+      document.getElementById('otpInput').focus();
+    }
+
+    // ── Step 2: Verify OTP ──
+    async function verifyOtp() {
+      const otp = document.getElementById('otpInput').value.replace(/\s/g, '');
+      const btn = document.getElementById('verifyOtpBtn');
+
+      hideError('otpVerifyError');
+
+      if (otp.length !== 6 || !/^\d{6}$/.test(otp)) {
+        showError('otpVerifyError', 'Please enter the 6-digit OTP.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+
+      const { data, error } = await db.auth.verifyOtp({
+        email: inviteData.email,
+        token: otp,
+        type: 'email'
+      });
+
+      if (error) {
+        console.error('Verify OTP error:', error);
+        let msg = 'Invalid OTP. Please check and try again.';
+        if (error.message?.includes('expired')) msg = 'OTP has expired. Please resend a new one.';
+        showError('otpVerifyError', msg);
+        btn.disabled = false;
+        btn.textContent = 'Verify OTP';
+        return;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Verify OTP';
+
+      // OTP verified — show password step
+      if (resendCooldown) { clearInterval(resendCooldown); resendCooldown = null; }
+      showState(statePassword);
+      document.getElementById('newPassword').focus();
+    }
+
+    // ── Resend OTP ──
+    async function resendOtp() {
+      const link = document.getElementById('resendLink');
+      if (link.classList.contains('disabled')) return;
+
+      hideError('otpVerifyError');
+      document.getElementById('otpInput').value = '';
+
+      const { error } = await db.auth.signInWithOtp({
+        email: inviteData.email,
+        options: { shouldCreateUser: true }
+      });
+
+      if (error) {
+        showError('otpVerifyError', 'Failed to resend OTP. Please try again.');
+        return;
+      }
+
+      startResendTimer();
+    }
+
+    function startResendTimer() {
+      const link = document.getElementById('resendLink');
+      const timer = document.getElementById('resendTimer');
+      let seconds = 30;
+
+      link.classList.add('disabled');
+      link.style.display = 'none';
+      timer.style.display = '';
+      timer.textContent = `Resend OTP in ${seconds}s`;
+
+      if (resendCooldown) clearInterval(resendCooldown);
+
+      resendCooldown = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+          clearInterval(resendCooldown);
+          resendCooldown = null;
+          timer.style.display = 'none';
+          link.style.display = '';
+          link.classList.remove('disabled');
+        } else {
+          timer.textContent = `Resend OTP in ${seconds}s`;
+        }
+      }, 1000);
+    }
+
+    // ── Step 3: Create Account ──
+    async function createAccount() {
+      const password = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const btn = document.getElementById('createAccountBtn');
+
+      hideError('pwError');
+      document.getElementById('pwMatch').className = 'pw-match';
+
+      // Validate
+      if (password.length < 6) {
+        showError('pwError', 'Password must be at least 6 characters.');
+        return;
+      }
+
+      if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+        showError('pwError', 'Password must include at least one letter and one number.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showError('pwError', 'Passwords do not match.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account...';
+
+      // 1) Set password + display name on the auth user
+      const { error: pwErr } = await db.auth.updateUser({
+        password,
+        data: { full_name: inviteData.name }
+      });
+      if (pwErr) {
+        console.error('Set password error:', pwErr);
+        showError('pwError', 'Failed to set password. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      // 2) Get current user
+      const { data: { user }, error: userErr } = await db.auth.getUser();
+      if (userErr || !user) {
+        console.error('Get user error:', userErr);
+        showError('pwError', 'Something went wrong. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      btn.textContent = 'Setting up your profile...';
+
+      // 3) Insert into users table
+      const { error: usersErr } = await db.from('users').upsert({
+        id: user.id,
+        institute_id: inviteData.institute_id,
+        full_name: inviteData.name,
+        email: inviteData.email,
+        role: inviteData.role
+      }, { onConflict: 'id' });
+
+      if (usersErr) {
+        console.error('Create profile error:', usersErr);
+        const msg = usersErr.message || '';
+        if (msg.includes('Teacher limit reached') || msg.includes('teacher limit')) {
+          showError('pwError', msg);
+        } else {
+          showError('pwError', 'Failed to create your profile. Please try again.');
+        }
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+        return;
+      }
+
+      // 4) Mark invite token as used (server-side, authorized)
+      const { data: { session } } = await db.auth.getSession();
+      const token = session?.access_token;
+      if (token) {
+        try {
+          await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/mark-token-used`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'apikey': CONFIG.SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({ token_id: inviteData.id })
+          });
+        } catch (e) {
+          console.error('mark-token-used failed:', e);
+        }
+      }
+
+      // 5) If parent, create parent_student_link
+      if (inviteData.role === 'parent' && inviteData.student_id) {
+        await db.from('parent_student_links').insert({
+          parent_id: user.id,
+          student_id: inviteData.student_id,
+          institute_id: inviteData.institute_id
+        });
+      }
+
+      // 6) Show success → auto-redirect
+      inviteRole = inviteData.role;
+      showSuccessRedirect();
+    }
+
+    // ── Password toggle helpers ──
+    function setupPwToggle(toggleId, inputId, eyeId, eyeOffId) {
+      const toggle = document.getElementById(toggleId);
+      const input = document.getElementById(inputId);
+      const eye = document.getElementById(eyeId);
+      const eyeOff = document.getElementById(eyeOffId);
+      let masked = true;
+
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        masked = !masked;
+        input.type = masked ? 'password' : 'text';
+        if (masked) {
+          input.classList.remove('unmasked');
+          eye.style.display = '';
+          eyeOff.style.display = 'none';
+        } else {
+          input.classList.add('unmasked');
+          eye.style.display = 'none';
+          eyeOff.style.display = '';
+        }
+        input.focus();
+      });
+    }
+
+    setupPwToggle('toggleNewPw', 'newPassword', 'eyeIconNew', 'eyeOffIconNew');
+    setupPwToggle('toggleConfirmPw', 'confirmPassword', 'eyeIconConfirm', 'eyeOffIconConfirm');
+
+    // ── Password match indicator ──
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+      const pw = document.getElementById('newPassword').value;
+      const confirm = this.value;
+      const matchEl = document.getElementById('pwMatch');
+
+      if (confirm.length === 0) {
+        matchEl.className = 'pw-match';
+        return;
+      }
+
+      if (pw === confirm) {
+        matchEl.textContent = 'Passwords match';
+        matchEl.className = 'pw-match ok';
+      } else {
+        matchEl.textContent = 'Passwords do not match';
+        matchEl.className = 'pw-match no';
+      }
+    });
+
+    // ── OTP input auto-advance (paste support) ──
+    document.getElementById('otpInput').addEventListener('input', function(e) {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+    });
+
+    // ── Keyboard: Enter to submit on each step ──
+    document.getElementById('inviteName').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); sendOtp(); }
+    });
+
+    document.getElementById('otpInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && this.value.length === 6) { e.preventDefault(); verifyOtp(); }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); createAccount(); }
+    });
+
+    // ── Success redirect ──
+    function showSuccessRedirect() {
+      const dashUrl = getDashboardUrl(inviteRole);
+      document.getElementById('goToDashboardBtn').href = dashUrl;
+      showState(stateSuccess);
+      setTimeout(() => { window.location.href = dashUrl; }, 2000);
+    }
+
+    function getDashboardUrl(role) {
+      switch (role) {
+        case 'admin':   return 'admin-dashboard.html';
+        case 'teacher': return 'teacher-dashboard.html';
+        case 'parent':  return 'parent-dashboard.html';
+        default:        return 'index.html';
+      }
+    }
+  </script>
+</body>
+</html>

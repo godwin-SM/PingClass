@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PingClass admin dashboard — manage students, batches, attendance, fees, and parent communication for your tuition center.">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <link rel="preload" href="chart.umd.min.js" as="script">
+  <title>PingClass Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
+  <link rel="stylesheet" href="shared.min.css?v=48">
+  <link rel="stylesheet" href="admin-dashboard.min.css?v=59">
+</head>
+<body>
+  <!-- Full-screen loading overlay -->
+  <div id="screenLoader" class="screen-loader">
+    <div class="screen-loader-inner">
+      <div class="screen-loader-logo-wrap">
+        <img src="logo-64.png" alt="PingClass" class="screen-loader-logo">
+        <div class="screen-loader-ring"></div>
+      </div>
+      <h1 class="screen-loader-title">PingClass</h1>
+      <p class="screen-loader-text" id="screenLoaderText">Loading your dashboard...</p>
+    </div>
+  </div>
+  <div class="dashboard">
+    <div class="demo-banner" id="demoBanner" style="display: none;">
+      <span>You're viewing a demo preview</span>
+      <a href="index.html" class="demo-cta">Sign up to get started</a>
+    </div>
+
+    <div class="dashboard-body">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-resizer" id="sidebarResizer" aria-hidden="true"></div>
+        <div class="sidebar-header">
+          <a href="admin-dashboard.html" class="sidebar-logo">
+            <div class="logo-icon">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span>PingClass</span>
+          </a>
+          <div class="sidebar-header-actions">
+            <button type="button" class="sidebar-collapse" id="sidebarCollapse" aria-label="Minimize sidebar" data-tooltip="Close sidebar" data-tooltip-pos="right">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+              </svg>
+            </button>
+            <button type="button" class="sidebar-back" id="sidebarBack" aria-label="Close navigation and go back" data-tooltip="Back to previous page" data-tooltip-pos="right">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+              Back
+            </button>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" data-page="dashboard" data-tooltip="Dashboard" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            <span class="nav-label">Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" data-page="students" data-tooltip="Students" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+            <span class="nav-label">Students</span>
+          </a>
+          <a href="#" class="nav-item" data-page="batches" data-tooltip="Batches" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+            </svg>
+            <span class="nav-label">Batches</span>
+          </a>
+          <a href="#" class="nav-item" data-page="fees" data-tooltip="Fees" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+            </svg>
+            <span class="nav-label">Fees</span>
+          </a>
+          <a href="#" class="nav-item" data-page="attendance" data-tooltip="Attendance" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="nav-label">Attendance</span>
+          </a>
+          <a href="#" class="nav-item" data-page="announcements" data-tooltip="Announcements" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.111.413-.173.837-.173 1.272 0 .434.062.858.173 1.272m0 0a24.047 24.047 0 004.444 0m-4.444 0a23.897 23.897 0 00-1.015-5.395m0 0a23.74 23.74 0 00-3.347-2.584" />
+            </svg>
+            <span class="nav-label">Announcements</span>
+          </a>
+          <a href="#" class="nav-item" data-page="staff" data-tooltip="Staff" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+            <span class="nav-label">Staff</span>
+          </a>
+          <a href="#" class="nav-item" data-page="parents" data-tooltip="Parents" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+            </svg>
+            <span class="nav-label">Parents</span>
+          </a>
+          <a href="#" class="nav-item" data-page="billing" data-tooltip="Billing &amp; plan" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+            </svg>
+            <span class="nav-label">Billing</span>
+          </a>
+          <span class="nav-indicator" aria-hidden="true"></span>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-user" id="sidebarUser">
+            <span class="sidebar-user-name" id="sidebarUserName">Loading...</span>
+            <span class="sidebar-user-plan plan-badge-free" id="sidebarUserPlan">Free Plan</span>
+          </div>
+          <a href="#" class="nav-item" data-page="settings" data-tooltip="Settings" data-tooltip-pos="right">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span class="nav-label">Settings</span>
+          </a>
+        </div>
+      </aside>
+
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <button class="menu-toggle" id="menuToggle" aria-label="Open menu" data-tooltip="Open menu" data-tooltip-pos="bottom">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <span class="institute-name" id="instituteName"></span>
+          <div class="top-bar-right">
+            <span class="plan-badge plan-badge-free" id="planBadge">Free Plan</span>
+            <span class="user-name" id="userName">Loading...</span>
+            <div class="alert-wrap" id="alertsWrap">
+              <button type="button" class="alert-bell" id="alertBell" aria-label="Notifications and alerts" aria-haspopup="true" aria-expanded="false" data-tooltip="Notifications" data-tooltip-pos="bottom">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" /></svg>
+                <span class="alert-badge" id="alertBadge" hidden>0</span>
+              </button>
+              <div class="alert-panel" id="alertPanel" hidden>
+                <div class="alert-panel-header">
+                  <span class="alert-panel-title">Notifications</span>
+                  <span class="alert-panel-meta" id="alertPanelMeta"></span>
+                </div>
+                <ul class="alert-list" id="alertList"></ul>
+                <div class="alert-empty" id="alertEmpty" hidden>You're all caught up</div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="content-scroll">
+        <div class="content">
+          <!-- DASHBOARD PAGE -->
+          <div class="page page-active" id="page-dashboard">
+            <!-- Skeleton visible on first paint, hidden by JS after data loads -->
+            <div id="dashboardSkeleton">
+              <div class="welcome">
+                <span class="skeleton dashboard-skel-kicker"></span>
+                <div class="skeleton dashboard-skel-heading"></div>
+                <div class="skeleton dashboard-skel-heading-accent"></div>
+                <div class="skeleton dashboard-skel-subtitle"></div>
+                <div class="skeleton dashboard-skel-pill"></div>
+              </div>
+              <div class="stats-grid dashboard-skel-stats">
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                    <div class="skeleton dashboard-skel-trend"></div>
+                  </div>
+                </div>
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                    <div class="skeleton dashboard-skel-trend"></div>
+                  </div>
+                </div>
+                <div class="dashboard-skel-card">
+                  <div class="skeleton dashboard-skel-icon"></div>
+                  <div class="dashboard-skel-info">
+                    <div class="skeleton dashboard-skel-value"></div>
+                    <div class="skeleton dashboard-skel-label"></div>
+                    <div class="skeleton dashboard-skel-trend"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="welcome" id="dashboardWelcome" style="display:none">
+              <span class="welcome-kicker">Dashboard</span>
+              <h1>Welcome back, <span id="welcomeName">Admin</span></h1>
+              <p>Here's what's happening with your institute today.</p>
+              <span class="welcome-updated" id="dashboardUpdated">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="dashboardUpdatedText">Updated just now</span>
+              </span>
+            </div>
+
+            <div class="stats-grid" id="dashboardStats" style="display:none">
+              <div class="stat-card">
+                <div class="stat-icon stat-icon--teal">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="totalStudents" data-demo="students">0</span>
+                  <span class="stat-label">Students</span>
+                  <span class="stat-trend" id="studentsTrend" data-demo="+12%">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+                    <span class="stat-trend-text">vs last month</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon stat-icon--amber">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="totalBatches" data-demo="batches">0</span>
+                  <span class="stat-label">Batches</span>
+                  <span class="stat-trend" id="batchesTrend" data-demo="+1">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+                    <span class="stat-trend-text">vs last month</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon stat-icon--emerald">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="totalTeachers" data-demo="teachers">0</span>
+                  <span class="stat-label">Teachers</span>
+                  <span class="stat-trend" id="teachersTrend" data-demo="+1">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+                    <span class="stat-trend-text">vs last month</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fee overview: dues & collections -->
+            <div class="stats-grid stats-grid--fees" id="dashboardFeeStats" style="display:none">
+              <div class="stat-card">
+                <div class="stat-icon pending">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="duesThisMonth" data-demo="pending">₹0</span>
+                  <span class="stat-label">Dues this month</span>
+                  <span class="stat-trend">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                    <span class="stat-trend-text" id="duesThisMonthTrendText">this month</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon collected">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="collectedThisMonth" data-demo="collected">₹0</span>
+                  <span class="stat-label">Collected this month</span>
+                  <span class="stat-trend">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                    <span class="stat-trend-text" id="collectedThisMonthTrendText">this month</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon stat-icon--rose">
+                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span class="stat-value" id="duesToday" data-demo="duesToday">₹0</span>
+                  <span class="stat-label">Dues today</span>
+                  <span class="stat-trend">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                    <span class="stat-trend-text" id="duesTodayTrendText">today</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard analytics: charts + announcements + top students -->
+            <div id="dashboardAnalytics" style="display:none">
+              <div class="analytics-grid">
+                <article class="analytics-card analytics-card--wide">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Attendance vs fee collection</h2>
+                      <p class="analytics-card-sub">Last 6 months · % of monthly targets</p>
+                    </div>
+                  </header>
+                  <div class="analytics-chart">
+                    <canvas id="trendChart" aria-label="Attendance and fee collection trend chart" role="img"></canvas>
+                    <div class="analytics-chart-empty" id="trendChartEmpty" style="display:none">
+                      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                      </svg>
+                      <p class="analytics-chart-empty-title">Not enough data yet</p>
+                      <p class="analytics-chart-empty-text">Add students and mark attendance to see the attendance vs fee collection trend.</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="analytics-card">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Batch comparison</h2>
+                      <p class="analytics-card-sub">Student count vs average attendance</p>
+                    </div>
+                  </header>
+                  <div class="analytics-chart">
+                    <canvas id="batchChart" aria-label="Batch comparison chart" role="img"></canvas>
+                    <div class="analytics-chart-empty" id="batchChartEmpty" style="display:none">
+                      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                      </svg>
+                      <p class="analytics-chart-empty-title">Not enough data yet</p>
+                      <p class="analytics-chart-empty-text">Add students to your batches and mark attendance to see a comparison here.</p>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="analytics-card">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Fee status</h2>
+                      <p class="analytics-card-sub">Collection breakdown by payment status</p>
+                    </div>
+                  </header>
+                  <div class="analytics-chart analytics-chart--pie">
+                    <canvas id="feeChart" aria-label="Fee status pie chart" role="img"></canvas>
+                    <div class="analytics-chart-empty" id="feeChartEmpty" style="display:none">
+                      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                      </svg>
+                      <p class="analytics-chart-empty-title">No fee data yet</p>
+                      <p class="analytics-chart-empty-text">Fee collections will appear here once you record payments.</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="analytics-grid analytics-grid--bottom">
+                <article class="analytics-card">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Latest announcements</h2>
+                      <p class="analytics-card-sub">Recent updates from the institute</p>
+                    </div>
+                    <button class="analytics-link" type="button" id="announcementsViewAll">Show all</button>
+                  </header>
+                  <ul class="analytics-ann-list" id="analyticsAnnouncements">
+                    <!-- announcements injected by JS -->
+                  </ul>
+                </article>
+
+                <article class="analytics-card analytics-card--students">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Top performing students</h2>
+                      <p class="analytics-card-sub">Ranked by attendance and fee punctuality</p>
+                    </div>
+                  </header>
+                  <div class="analytics-table-wrap">
+                    <table class="analytics-table analytics-table--students">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Student</th>
+                          <th>Batch</th>
+                          <th>Attendance</th>
+                          <th>Fee status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="analyticsStudentsBody">
+                        <!-- rows injected by JS -->
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+
+                <article class="analytics-card analytics-card--risk-span">
+                  <header class="analytics-card-head">
+                    <div>
+                      <h2>Students at risk</h2>
+                      <p class="analytics-card-sub">Critically low attendance or overdue fees — consider follow-up</p>
+                    </div>
+                  </header>
+                  <div class="analytics-table-wrap">
+                    <table class="analytics-table">
+                      <thead>
+                        <tr>
+                          <th>Student</th>
+                          <th>Batch</th>
+                          <th>Attendance</th>
+                          <th>Fee status</th>
+                          <th>Risk</th>
+                        </tr>
+                      </thead>
+                      <tbody id="analyticsAtRiskBody">
+                        <!-- rows injected by JS -->
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <!-- STUDENTS PAGE -->
+          <div class="page" id="page-students">
+            <div class="page-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Manage students</span>
+                <h1>Students</h1>
+                <p>Manage student enrollment and information.</p>
+              </div>
+              <div class="page-header-actions">
+                <input type="hidden" name="studentBatchFilter" value="">
+                <div class="custom-select section-filter-select" data-select-id="studentBatchFilter">
+                  <button type="button" class="custom-select-trigger"><span>All Batches</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="studentsSearch" aria-label="Search students" class="section-search-input" data-filter="studentsTableBody" placeholder="Search students..." autocomplete="off" />
+                </div>
+                <button class="page-action-btn" id="addStudentBtn" aria-label="Add a new student to your institute" data-tooltip="Add a new student to your institute">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Add Student
+                </button>
+              </div>
+            </div>
+            <div class="page-table-wrap">
+              <table class="page-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Batches</th>
+                    <th>Status</th>
+                    <th>Added</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTableBody"></tbody>
+              </table>
+              <div class="page-empty" id="studentsEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                </svg>
+                <h3>No students yet</h3>
+                <p>Add your first student to get started.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BATCHES PAGE -->
+          <div class="page" id="page-batches">
+            <div class="page-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Manage batches</span>
+                <h1>Batches</h1>
+                <p>Organize students into classes and schedules.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="batchesSearch" aria-label="Search batches" class="section-search-input" data-filter="batchesGrid" placeholder="Search batches..." autocomplete="off" />
+                </div>
+                <button class="page-action-btn" id="addBatchBtn" aria-label="Create a new batch" data-tooltip="Create a new batch">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Add Batch
+                </button>
+              </div>
+            </div>
+            <div class="batches-grid" id="batchesGrid"></div>
+            <div class="page-empty" id="batchesEmpty" style="display:none">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+              </svg>
+              <h3>No batches yet</h3>
+              <p>Create your first batch to organize students.</p>
+            </div>
+
+            <!-- Batch Detail View -->
+            <div id="batchDetail" style="display:none">
+              <button class="page-action-btn back-btn" id="batchDetailBack" aria-label="Back to batches list" data-tooltip="Back to batches list">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back to Batches
+              </button>
+              <div class="batch-detail-header" id="batchDetailHeader"></div>
+              <div class="page-table-wrap">
+                <table class="page-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Joined</th>
+                      <th>Attendance</th>
+                    </tr>
+                  </thead>
+                  <tbody id="batchDetailStudents"></tbody>
+                </table>
+                <div class="page-empty" id="batchDetailEmpty">
+                  <h3>No students in this batch</h3>
+                  <p>Add students to this batch from the Students page.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FEES PAGE -->
+          <div class="page" id="page-fees">
+            <div class="page-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Track payments</span>
+                <h1>Fees</h1>
+                <p>Track payments by batch.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="feesSearch" aria-label="Search payments" class="section-search-input" data-filter="feesTableBody" placeholder="Search payments..." autocomplete="off" />
+                </div>
+                <button class="page-action-btn" id="addFeeBtn" style="display:none" aria-label="Add a fee record for a batch" data-tooltip="Add a fee record for a batch">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Add Fee Record
+                </button>
+              </div>
+            </div>
+            <div class="fees-summary">
+              <div class="fees-summary-card">
+                <span class="fees-summary-label">Total Pending</span>
+                <span class="fees-summary-value fees-pending" id="feesPendingTotal">₹0</span>
+              </div>
+              <div class="fees-summary-card">
+                <span class="fees-summary-label">Total Collected</span>
+                <span class="fees-summary-value fees-collected" id="feesCollectedTotal">₹0</span>
+              </div>
+            </div>
+
+            <!-- Batch list view -->
+            <div id="feesBatchList">
+              <div class="batches-grid" id="feesBatchesGrid"></div>
+              <div class="page-empty" id="feesEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                </svg>
+                <h3>No batches yet</h3>
+                <p>Create a batch with a fee to start tracking payments.</p>
+              </div>
+            </div>
+
+            <!-- Batch detail view (hidden by default) -->
+            <div id="feesBatchDetail" style="display:none">
+              <button class="page-action-btn back-btn" id="feesBackBtn" aria-label="Back to batches" data-tooltip="Back to batches">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back to Batches
+              </button>
+              <div class="fees-batch-header" id="feesBatchHeader"></div>
+              <div class="fees-filter-bar">
+                <label class="fees-filter-label custom-select-label">Filter:
+                <input type="hidden" name="feesFilterSelect" value="all">
+                <div class="custom-select fees-filter-select" data-select-id="feesFilterSelect">
+                  <button type="button" class="custom-select-trigger"><span>All</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                </label>
+              </div>
+              <div class="page-table-wrap">
+                <table class="page-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Due Date</th>
+                      <th>Paid On</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="feesTableBody"></tbody>
+                </table>
+                <div class="page-empty" id="feesDetailEmpty">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                  </svg>
+                  <h3>No students in this batch</h3>
+                  <p>Add students to this batch to generate fee records.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ATTENDANCE PAGE -->
+          <div class="page" id="page-attendance">
+            <div class="page-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Mark & review</span>
+                <h1>Attendance</h1>
+                <p>Track attendance by batch.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="attendanceSearch" aria-label="Search batches" class="section-search-input" data-filter="attBatchesGrid" placeholder="Search batches..." autocomplete="off" />
+                </div>
+              </div>
+            </div>
+            <div class="attendance-date-picker">
+              <button class="att-nav-btn" id="attPrevDay" aria-label="Previous day" data-tooltip="Previous day">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+              </button>
+              <span class="att-date-display" id="attDateDisplay">Today</span>
+              <button class="att-nav-btn" id="attNextDay" aria-label="Next day" data-tooltip="Next day">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+              </button>
+            </div>
+            <div class="attendance-stats-row">
+              <div class="att-stat">
+                <span class="att-stat-value" id="attPresentCount">0</span>
+                <span class="att-stat-label">Present</span>
+              </div>
+              <div class="att-stat">
+                <span class="att-stat-value" id="attAbsentCount">0</span>
+                <span class="att-stat-label">Absent</span>
+              </div>
+              <div class="att-stat">
+                <span class="att-stat-value" id="attUnmarkedCount">0</span>
+                <span class="att-stat-label">Unmarked</span>
+              </div>
+            </div>
+
+            <!-- Batch list view -->
+            <div id="attBatchList">
+              <div class="batches-grid" id="attBatchesGrid"></div>
+              <div class="page-empty" id="attEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3>No batches yet</h3>
+                <p>Create a batch to start tracking attendance.</p>
+              </div>
+            </div>
+
+            <!-- Batch detail view (hidden by default) -->
+            <div id="attBatchDetail" style="display:none">
+              <button class="page-action-btn back-btn" id="attBackBtn" aria-label="Back to batches" data-tooltip="Back to batches">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back to Batches
+              </button>
+              <div class="fees-batch-header" id="attBatchHeader"></div>
+              <div class="fees-filter-bar">
+                <label class="fees-filter-label custom-select-label">Filter:
+                <input type="hidden" name="attFilterSelect" value="all">
+                <div class="custom-select fees-filter-select" data-select-id="attFilterSelect">
+                  <button type="button" class="custom-select-trigger"><span>All</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                </label>
+              </div>
+              <div class="page-table-wrap">
+                <table class="page-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Status</th>
+                      <th>Attendance</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="attTableBody"></tbody>
+                </table>
+                <div class="page-empty" id="attDetailEmpty">
+                  <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <h3>No students in this batch</h3>
+                  <p>Add students to this batch from the Students page.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANNOUNCEMENTS PAGE -->
+          <div class="page" id="page-announcements">
+            <div class="page-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Keep parents informed</span>
+                <h1>Announcements</h1>
+                <p>Send updates to teachers and parents.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="announcementsSearch" aria-label="Search announcements" class="section-search-input" data-filter="announcementsList" placeholder="Search announcements..." autocomplete="off" />
+                </div>
+                <input type="hidden" name="announcementFilter" value="all">
+                <div class="custom-select section-filter-select" data-select-id="announcementFilter" data-filter="announcementsList">
+                  <button type="button" class="custom-select-trigger"><span>Everyone</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                <button class="page-action-btn" id="addAnnouncementBtn" aria-label="Create a new announcement" data-tooltip="Create a new announcement">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  New Announcement
+                </button>
+              </div>
+            </div>
+            <div class="section-no-results" id="announcementsNoResults" style="display:none">No announcements match your search or filter.</div>
+            <div class="announcements-list" id="announcementsList"></div>
+            <button type="button" class="announcements-load-more" id="announcementsLoadMore" style="display:none" data-tooltip="Load more announcements">Load more</button>
+            <div class="page-empty" id="announcementsEmpty" style="display:none">
+              <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.111.413-.173.837-.173 1.272 0 .434.062.858.173 1.272m0 0a24.047 24.047 0 004.444 0m-4.444 0a23.897 23.897 0 00-1.015-5.395m0 0a23.74 23.74 0 00-3.347-2.584" />
+              </svg>
+              <h3>No announcements yet</h3>
+              <p>Create your first announcement to reach your staff.</p>
+            </div>
+          </div>
+
+          <!-- STAFF PAGE -->
+          <div class="page" id="page-staff">
+            <div class="staff-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Team & roles</span>
+                <h1>Staff & Access</h1>
+                <p>Manage teachers and parents at your institute.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="staffSearch" aria-label="Search staff" class="section-search-input" data-filter="staffTableBody" placeholder="Search staff..." autocomplete="off" />
+                </div>
+                <input type="hidden" name="staffStatusFilter" value="">
+                <div class="custom-select section-filter-select" data-select-id="staffStatusFilter" data-filter="staffTableBody">
+                  <button type="button" class="custom-select-trigger"><span>All</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                <button class="page-action-btn" id="staffInviteBtn" aria-label="Invite a teacher or parent" data-tooltip="Invite a teacher or parent">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Invite Staff
+                </button>
+              </div>
+            </div>
+
+            <div class="staff-table-wrap">
+              <table class="staff-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="staffTableBody"></tbody>
+              </table>
+              <div class="staff-empty" id="staffEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+                <h3>No staff members yet</h3>
+                <p>Invite teachers and parents to get started.</p>
+                <button class="page-action-btn" id="staffInviteBtnEmpty" aria-label="Invite a teacher or parent" data-tooltip="Invite a teacher or parent">
+                  Invite Staff
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PARENTS PAGE -->
+          <div class="page" id="page-parents">
+            <div class="staff-header">
+              <div class="welcome">
+                <span class="welcome-kicker">Parent directory</span>
+                <h1>Parents</h1>
+                <p>Manage parent accounts linked to students.</p>
+              </div>
+              <div class="page-header-actions">
+                <div class="section-search">
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                  <input type="text" name="parentsSearch" aria-label="Search parents" class="section-search-input" data-filter="parentsTableBody" placeholder="Search parents..." autocomplete="off" />
+                </div>
+                <input type="hidden" name="parentsStatusFilter" value="">
+                <div class="custom-select section-filter-select" data-select-id="parentsStatusFilter" data-filter="parentsTableBody">
+                  <button type="button" class="custom-select-trigger"><span>All</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+                  <div class="custom-select-options"></div>
+                </div>
+                <button class="page-action-btn" id="parentInviteBtn" aria-label="Invite a parent and link them to a student" data-tooltip="Invite a parent and link them to a student">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Invite Parent
+                </button>
+              </div>
+            </div>
+
+            <div class="staff-table-wrap">
+              <table class="staff-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Linked Student</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="parentsTableBody"></tbody>
+              </table>
+              <div class="staff-empty" id="parentsEmpty">
+                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+                <h3>No parents yet</h3>
+                <p>Invite parents to link them with their children.</p>
+                <button class="page-action-btn" id="parentInviteBtnEmpty" aria-label="Invite a parent and link them to a student" data-tooltip="Invite a parent and link them to a student">
+                  Invite Parent
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BILLING PAGE -->
+          <div class="page" id="page-billing">
+            <div class="welcome">
+              <span class="welcome-kicker">Subscription</span>
+              <h1>Billing & Plans</h1>
+              <p>Manage your subscription and payment details.</p>
+            </div>
+
+            <div class="billing-current" id="billingCurrent">
+              <div class="billing-current-left">
+                <span class="billing-label">Current Plan</span>
+                <h2 class="billing-plan-name" id="billingPlanName">Free</h2>
+                <p class="billing-plan-detail" id="billingPlanDetail">20 students &middot; 1 batch &middot; 1 teacher</p>
+              </div>
+              <div class="billing-current-right">
+                <div class="billing-status" id="billingStatus">
+                  <span class="billing-dot"></span>
+                  Active
+                </div>
+                <p class="billing-expiry" id="billingExpiry">Free forever</p>
+              </div>
+            </div>
+
+            <div class="billing-usage" id="billingUsage">
+              <h3>Usage This Month</h3>
+              <div class="billing-usage-grid">
+                <div class="billing-usage-item">
+                  <div class="billing-usage-header">
+                    <span>Students</span>
+                    <span id="usageStudents">0 / 20</span>
+                  </div>
+                  <div class="billing-usage-bar">
+                    <div class="billing-usage-fill" id="usageStudentsBar" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="billing-usage-item">
+                  <div class="billing-usage-header">
+                    <span>Batches</span>
+                    <span id="usageBatches">0 / 1</span>
+                  </div>
+                  <div class="billing-usage-bar">
+                    <div class="billing-usage-fill" id="usageBatchesBar" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="billing-usage-item">
+                  <div class="billing-usage-header">
+                    <span>Teachers</span>
+                    <span id="usageTeachers">0 / 1</span>
+                  </div>
+                  <div class="billing-usage-bar">
+                    <div class="billing-usage-fill" id="usageTeachersBar" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h3 class="billing-section-title">Upgrade Your Plan</h3>
+            <div class="billing-plans">
+              <div class="billing-plan-card" id="billingCard-free">
+                <div class="billing-plan-header">
+                  <span class="billing-plan-tag">Free</span>
+                  <span class="billing-plan-price">₹0<span>/mo</span></span>
+                </div>
+                <ul class="billing-plan-features">
+                  <li>Up to 20 students</li>
+                  <li>1 batch</li>
+                  <li>1 teacher</li>
+                  <li>Basic fee tracking</li>
+                  <li>Attendance management</li>
+                </ul>
+                <button class="billing-plan-btn billing-plan-btn-current" disabled>Current Plan</button>
+              </div>
+
+              <div class="billing-plan-card billing-plan-card-featured" id="billingCard-basic">
+                <div class="billing-plan-badge">Popular</div>
+                <div class="billing-plan-header">
+                  <span class="billing-plan-tag">Basic</span>
+                  <span class="billing-plan-price">₹249<span>/mo</span></span>
+                </div>
+                <ul class="billing-plan-features">
+                  <li>Up to 100 students</li>
+                  <li>5 batches</li>
+                  <li>5 teachers</li>
+                  <li>Parent app access</li>
+                  <li>Announcements</li>
+                  <li>Fee reports & export</li>
+                </ul>
+                <button class="billing-plan-btn billing-plan-btn-upgrade" data-plan="basic">Upgrade to Basic</button>
+              </div>
+
+              <div class="billing-plan-card" id="billingCard-pro">
+                <div class="billing-plan-header">
+                  <span class="billing-plan-tag">Pro</span>
+                  <span class="billing-plan-price">₹599<span>/mo</span></span>
+                </div>
+                <ul class="billing-plan-features">
+                  <li>Unlimited students</li>
+                  <li>Unlimited batches</li>
+                  <li>Unlimited teachers</li>
+                  <li>Everything in Basic</li>
+                  <li>Priority support</li>
+                  <li>Custom branding</li>
+                </ul>
+                <button class="billing-plan-btn billing-plan-btn-upgrade" data-plan="pro">Upgrade to Pro</button>
+              </div>
+            </div>
+
+            <div class="billing-history" id="billingHistory">
+              <h3>Payment History</h3>
+              <div class="billing-history-empty" id="billingHistoryEmpty">
+                <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+                <p>No payments yet</p>
+              </div>
+              <div class="billing-history-list" id="billingHistoryList" style="display: none;"></div>
+            </div>
+          </div>
+
+          <!-- SETTINGS PAGE -->
+          <div class="page" id="page-settings">
+            <div class="welcome">
+              <span class="welcome-kicker">Preferences</span>
+              <h1>Settings</h1>
+              <p>Manage your institute and profile settings.</p>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+                </svg>
+                <div>
+                  <h2>Institute Profile</h2>
+                  <p>Update your institute name, contact details, and address.</p>
+                </div>
+              </div>
+              <form class="settings-form" id="instituteSettingsForm">
+                <div class="settings-form-grid">
+                  <div class="settings-field">
+                    <label for="settingsInstName">Institute Name</label>
+                    <input type="text" id="settingsInstName" class="settings-input" required />
+                    <span class="settings-field-hint" id="instNameHint"></span>
+                  </div>
+                  <div class="settings-field">
+                    <label for="settingsInstEmail">Email</label>
+                    <input type="email" id="settingsInstEmail" class="settings-input" />
+                  </div>
+                  <div class="settings-field">
+                    <label for="settingsInstPhone">Phone</label>
+                    <input type="tel" id="settingsInstPhone" class="settings-input" />
+                  </div>
+                  <div class="settings-field settings-field-full">
+                    <label for="settingsInstAddress">Address</label>
+                    <textarea id="settingsInstAddress" class="settings-input settings-textarea" rows="2"></textarea>
+                  </div>
+                </div>
+                <div class="settings-form-actions">
+                  <span class="settings-form-msg" id="instSaveMsg"></span>
+                  <button type="submit" class="settings-save-btn">Save Changes</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                <div>
+                  <h2>Admin Profile</h2>
+                  <p>Your name and contact information.</p>
+                </div>
+              </div>
+              <form class="settings-form" id="adminProfileForm">
+                <div class="settings-form-grid">
+                  <div class="settings-field">
+                    <label for="settingsAdminName">Full Name</label>
+                    <input type="text" id="settingsAdminName" class="settings-input" required />
+                    <span class="settings-field-hint" id="adminNameHint"></span>
+                  </div>
+                  <div class="settings-field">
+                    <label for="settingsAdminEmail">Email</label>
+                    <input type="email" id="settingsAdminEmail" class="settings-input" readonly />
+                  </div>
+                  <div class="settings-field">
+                    <label for="settingsAdminRole">Role</label>
+                    <input type="text" id="settingsAdminRole" class="settings-input" readonly />
+                  </div>
+                </div>
+                <div class="settings-form-actions">
+                  <span class="settings-form-msg" id="adminSaveMsg"></span>
+                  <button type="submit" class="settings-save-btn">Update Profile</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                </svg>
+                <div>
+                  <h2>Notification Preferences</h2>
+                  <p>Choose which notifications to send to parents and teachers.</p>
+                </div>
+              </div>
+              <div class="settings-toggles" id="settingsToggles">
+                <label class="settings-toggle">
+                  <span class="settings-toggle-text">
+                    <strong>Fee Reminders</strong>
+                    <span>Send reminders to parents about pending fees</span>
+                  </span>
+                  <input type="checkbox" id="toggleFeeReminders" />
+                  <span class="settings-toggle-switch"></span>
+                </label>
+                <label class="settings-toggle">
+                  <span class="settings-toggle-text">
+                    <strong>Attendance Alerts</strong>
+                    <span>Notify parents when their child is marked absent</span>
+                  </span>
+                  <input type="checkbox" id="toggleAttendanceAlerts" />
+                  <span class="settings-toggle-switch"></span>
+                </label>
+                <label class="settings-toggle">
+                  <span class="settings-toggle-text">
+                    <strong>Announcements</strong>
+                    <span>Send announcement notifications to parents and teachers</span>
+                  </span>
+                  <input type="checkbox" id="toggleAnnouncements" />
+                  <span class="settings-toggle-switch"></span>
+                </label>
+              </div>
+              <div class="settings-form-actions">
+                <span class="settings-form-msg" id="notifSaveMsg"></span>
+                <button type="button" class="settings-save-btn" id="saveNotifBtn" data-tooltip="Save your notification preferences">Save Preferences</button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                </svg>
+                <div>
+                  <h2>Plan & Usage</h2>
+                  <p>Your current subscription plan and usage limits.</p>
+                </div>
+              </div>
+              <div class="settings-plan-info" id="settingsPlanInfo">
+                <div class="settings-plan-badge" id="settingsPlanBadge">Free</div>
+                <div class="settings-plan-details">
+                  <span id="settingsPlanDetail">20 students · 1 batch · 1 teacher</span>
+                  <a href="#" class="settings-plan-link" onclick="document.querySelector('[data-page=billing]').click(); return false;">View billing details →</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <div>
+                  <h2>Privacy &amp; Data</h2>
+                  <p>Your data rights under the Digital Personal Data Protection Act, 2023.</p>
+                </div>
+              </div>
+              <div class="settings-privacy">
+                <p class="settings-privacy-text">Read our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>. For privacy concerns or grievances, email <a href="mailto:pingclassoff@gmail.com">pingclassoff@gmail.com</a>.</p>
+                <p class="settings-privacy-text" style="margin-top:8px;font-size:0.85rem;color:#5B7B76;">Under the DPDP Act, 2023 you have the right to access, correct, and request erasure of your personal data. Student records are soft-deleted (retained with restricted access) to preserve audit trails. Full account deletion permanently removes all data except payment records (retained 6 years per Indian tax law).</p>
+                <div class="settings-form-actions settings-form-actions--left">
+                  <button type="button" class="settings-save-btn" id="exportDataBtn" data-tooltip="Download a copy of your data">Export my data</button>
+                  <button type="button" class="settings-save-btn settings-save-btn--danger" id="deleteAccountBtn" data-tooltip="Permanently delete your account and data">Delete my account</button>
+                </div>
+                <span class="settings-form-msg" id="privacyMsg"></span>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+                <div>
+                  <h2>Sign Out</h2>
+                  <p>Log out of your PingClass account.</p>
+                </div>
+              </div>
+              <div class="settings-form-actions settings-form-actions--left">
+                <button class="settings-save-btn settings-save-btn--danger" id="settingsLogoutBtn" data-tooltip="Log out of your account">Log out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </main>
+
+  <!-- Invite Modal -->
+  <div class="staff-modal-overlay" id="inviteModal">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h2 id="inviteModalTitle">Invite Staff Member</h2>
+        <button class="staff-modal-close" aria-label="Close" id="inviteModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="inviteForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="inviteName">Name</label>
+          <input type="text" id="inviteName" placeholder="e.g. Priya Sharma" required />
+        </div>
+
+        <div class="staff-field">
+          <label for="inviteEmail">Email</label>
+          <input type="email" id="inviteEmail" placeholder="priya@example.com" required />
+        </div>
+
+        <input type="hidden" id="inviteRole" value="teacher" />
+
+        <div class="staff-field staff-field-student" id="studentField" style="display:none">
+          <label class="custom-select-label">Link to Student
+          <p class="staff-field-hint">Select which student this parent is linked to.</p>
+          <input type="hidden" name="inviteStudent" value="">
+          <div class="custom-select" data-select-id="inviteStudent">
+            <button type="button" class="custom-select-trigger"><span>Select student...</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+
+        <div class="staff-modal-error" id="inviteError"></div>
+
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="inviteModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="inviteSubmit">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            </svg>
+            Send Invite
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Invite Link Modal -->
+  <div class="staff-modal-overlay" id="linkModal">
+    <div class="staff-modal staff-modal-link">
+      <div class="staff-modal-header">
+        <h2>Invite Link Ready</h2>
+        <button class="staff-modal-close" aria-label="Close" id="linkModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="staff-link-desc">Share this link with the person you invited. They'll set their own password on first login.</p>
+
+      <div class="staff-link-box">
+        <input type="text" id="inviteLinkInput" readonly aria-label="Invite link" />
+        <button class="staff-link-copy" id="inviteLinkCopy" aria-label="Copy the invite link" data-tooltip="Copy the invite link">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+          </svg>
+          Copy
+        </button>
+      </div>
+
+      <div class="staff-modal-actions">
+        <button class="staff-modal-cancel" id="linkModalDone">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Staff Confirmation Modal -->
+  <div class="staff-modal-overlay" id="deleteStaffModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2 id="deleteStaffModalTitle">Remove Staff Member</h2>
+        <button class="staff-modal-close" aria-label="Close" id="deleteStaffModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p>Are you sure you want to remove <strong id="deleteStaffName"></strong>?</p>
+        <p class="staff-modal-desc-note">They will lose access to the dashboard. This action cannot be undone.</p>
+      </div>
+      <div class="staff-modal-actions staff-modal-actions--padded">
+        <button class="staff-modal-cancel" id="deleteStaffCancel">Cancel</button>
+        <button class="staff-modal-submit staff-modal-submit--danger" id="deleteStaffConfirm">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Student Modal -->
+  <div class="staff-modal-overlay" id="studentModal">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h2 id="studentModalTitle">Add Student</h2>
+        <button class="staff-modal-close" aria-label="Close" id="studentModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="studentForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="studentName">Full Name</label>
+          <input type="text" id="studentName" placeholder="e.g. Aarav Patel" required />
+        </div>
+        <div class="staff-field">
+          <label for="studentPhone">Phone</label>
+          <input type="tel" id="studentPhone" placeholder="e.g. 9876543210" />
+        </div>
+        <div class="staff-field">
+          <label class="custom-select-label">Batch
+          <input type="hidden" name="studentBatch" value="">
+          <div class="custom-select" data-select-id="studentBatch">
+            <button type="button" class="custom-select-trigger"><span>Select batch...</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+        <div class="staff-field">
+          <label for="studentParentName">Parent/Guardian Name <span class="staff-field-opt">(optional)</span></label>
+          <input type="text" id="studentParentName" placeholder="e.g. Rakesh Patel" />
+        </div>
+        <div class="staff-field">
+          <label class="staff-consent-label">
+            <input type="checkbox" id="studentParentConsent" />
+            <span>Parent/guardian consent obtained to collect this student's data. Required for students below 18 years of age under the Digital Personal Data Protection Act, 2023.</span>
+          </label>
+        </div>
+        <div class="staff-modal-error" id="studentError"></div>
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="studentModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="studentSubmit">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Batch Modal -->
+  <div class="staff-modal-overlay" id="batchModal">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h2 id="batchModalTitle">Add Batch</h2>
+        <button class="staff-modal-close" aria-label="Close" id="batchModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="batchForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="batchName">Batch Name</label>
+          <input type="text" id="batchName" placeholder="e.g. Math Grade 10" required />
+        </div>
+        <div class="staff-field">
+          <label for="batchSchedule">Schedule</label>
+          <input type="text" id="batchSchedule" placeholder="e.g. Mon/Wed/Fri 4-5 PM" />
+        </div>
+        <div class="staff-field">
+          <label class="custom-select-label">Assign Teacher
+          <input type="hidden" name="batchTeacher" value="">
+          <div class="custom-select" data-select-id="batchTeacher">
+            <button type="button" class="custom-select-trigger"><span>No teacher</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+        <div class="staff-field">
+          <label for="batchFee">Monthly Fee (₹)</label>
+          <input type="number" id="batchFee" placeholder="e.g. 2000" min="0" />
+        </div>
+        <div class="staff-modal-error" id="batchError"></div>
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="batchModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="batchSubmit">Save Batch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Fee Modal -->
+  <div class="staff-modal-overlay" id="feeModal">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h2>Add Fee Record</h2>
+        <button class="staff-modal-close" aria-label="Close" id="feeModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="feeForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label class="custom-select-label">Batch
+          <input type="hidden" name="feeBatch" value="">
+          <div class="custom-select" data-select-id="feeBatch">
+            <button type="button" class="custom-select-trigger"><span>Select batch...</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+        <div class="staff-field">
+          <label class="custom-select-label">Student
+          <input type="hidden" name="feeStudent" value="">
+          <div class="custom-select" data-select-id="feeStudent">
+            <button type="button" class="custom-select-trigger"><span>Select student...</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+        <div class="staff-field">
+          <label for="feeAmount">Amount (₹)</label>
+          <input type="number" id="feeAmount" placeholder="e.g. 2000" min="0" required />
+        </div>
+        <div class="staff-field">
+          <label for="feeDueDate">Due Date</label>
+          <input type="date" id="feeDueDate" required />
+        </div>
+        <div class="staff-modal-error" id="feeError"></div>
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="feeModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="feeSubmit">Save Fee Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Announcement Modal -->
+  <div class="staff-modal-overlay" id="announcementModal">
+    <div class="staff-modal staff-modal--lg">
+      <div class="staff-modal-header">
+        <h2 id="announcementModalTitle">New Announcement</h2>
+        <button class="staff-modal-close" aria-label="Close" id="announcementModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="announcementForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="announcementTitle">Title</label>
+          <input type="text" id="announcementTitle" placeholder="e.g. Holiday Notice" required />
+        </div>
+        <div class="staff-field">
+          <label for="announcementBody">Message</label>
+          <textarea id="announcementBody" rows="4" placeholder="Write your announcement..." required></textarea>
+        </div>
+        <div class="staff-field">
+          <label class="custom-select-label">Send To
+          <input type="hidden" name="announcementAudience" value="all">
+          <div class="custom-select" data-select-id="announcementAudience">
+            <button type="button" class="custom-select-trigger"><span>Everyone</span><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg></button>
+            <div class="custom-select-options"></div>
+          </div>
+          </label>
+        </div>
+        <div class="staff-modal-error" id="announcementError"></div>
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="announcementModalCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="announcementSubmit">Send Announcement</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Staff/Parent Modal -->
+  <div class="staff-modal-overlay" id="editStaffModal">
+    <div class="staff-modal staff-modal--md">
+      <div class="staff-modal-header">
+        <h2 id="editStaffTitle">Edit Staff</h2>
+        <button class="staff-modal-close" aria-label="Close" id="editStaffModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form id="editStaffForm" class="staff-modal-form">
+        <div class="staff-field">
+          <label for="editStaffName">Full Name</label>
+          <input type="text" id="editStaffName" placeholder="e.g. Priya Sharma" required />
+        </div>
+        <div class="staff-field" id="editStaffEmailField" style="display:none;">
+          <label for="editStaffEmail">Email</label>
+          <input type="email" id="editStaffEmail" placeholder="e.g. priya@example.com" />
+        </div>
+        <div class="staff-modal-error" id="editStaffError"></div>
+        <div class="staff-modal-actions">
+          <button type="button" class="staff-modal-cancel" id="editStaffCancel">Cancel</button>
+          <button type="submit" class="staff-modal-submit" id="editStaffSubmit">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="supabase.min.js"></script>
+  <!-- Export data confirmation modal -->
+  <div class="staff-modal-overlay" id="exportConfirmModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2>Export your data</h2>
+        <button class="staff-modal-close" aria-label="Close" id="exportConfirmModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p>Your data will be downloaded as a JSON file. This may take a moment for institutes with a lot of data.</p>
+      </div>
+      <div class="staff-modal-actions staff-modal-actions--padded">
+        <button class="staff-modal-cancel" id="exportConfirmCancel">Cancel</button>
+        <button class="staff-modal-submit" id="exportConfirmBtn">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete account confirmation modal -->
+  <div class="staff-modal-overlay" id="deleteConfirmModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2>Delete account</h2>
+        <button class="staff-modal-close" aria-label="Close" id="deleteConfirmModalClose">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p id="deleteConfirmDesc">This will permanently delete your account and your personal data. This cannot be undone.</p>
+      </div>
+      <div class="staff-modal-form">
+        <div class="staff-field">
+          <label for="deleteConfirmInput">Type <strong>DELETE</strong> to confirm permanent deletion</label>
+          <input type="text" id="deleteConfirmInput" placeholder="Type DELETE" autocomplete="off" />
+        </div>
+        <div class="staff-modal-actions">
+          <button class="staff-modal-cancel" id="deleteConfirmCancel">Cancel</button>
+          <button class="staff-modal-submit staff-modal-submit--danger" id="deleteConfirmBtn" disabled>Delete account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mark Paid Confirmation Modal -->
+  <div class="staff-modal-overlay" id="confirmPaidModal">
+    <div class="staff-modal staff-modal--sm">
+      <div class="staff-modal-header">
+        <h2>Mark as Paid</h2>
+        <button class="staff-modal-close" aria-label="Close" id="confirmPaidModalClose" data-tooltip="Close" data-tooltip-pos="left">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="staff-modal-desc">
+        <p>Are you sure you want to mark this payment as <strong>paid</strong>?</p>
+        <p class="staff-modal-desc-note">This change cannot be undone.</p>
+      </div>
+      <div class="staff-modal-actions staff-modal-actions--padded">
+        <button class="staff-modal-cancel" id="confirmPaidCancel">No, Cancel</button>
+        <button class="staff-modal-submit staff-modal-submit--success" id="confirmPaidYes">Yes, Mark Paid</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js?v=5"></script>
+  <script src="plan-free.js?v=5"></script>
+  <script src="plan-basic.js?v=5"></script>
+  <script src="plan-pro.js?v=5"></script>
+  <script src="payment.js?v=7"></script>
+ <script src="shared.min.js?v=72"></script>
+<script src="onboarding.min.js?v=45"></script>
+<script src="admin-dashboard.min.js?v=65"></script>
+</body>
+</html>
