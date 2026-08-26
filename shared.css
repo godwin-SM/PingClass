@@ -95,7 +95,7 @@ html.is-scrolling ::-webkit-scrollbar-thumb {
   --color-slate: var(--color-slate);
 
   /* Surface colors */
-  --bg-page: var(--bg-page);
+  --bg-page: #051f1c;
   --bg-dropdown: #0D3D37;
   --bg-dropdown-alt: #0A2E2A;
   --bg-toast: var(--color-slate);
