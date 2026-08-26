@@ -80,11 +80,11 @@ html.is-scrolling ::-webkit-scrollbar-thumb {
   --text-muted: rgba(255, 255, 255, 0.5);
 
   /* Semantic colors */
-  --color-success: var(--color-success);
-  --color-warning: var(--color-warning);
-  --color-warning-dark: var(--color-warning-dark);
-  --color-danger: var(--color-danger);
-  --color-danger-soft: var(--color-danger-soft);
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-warning-dark: #D97706;
+  --color-danger: #DC2626;
+  --color-danger-soft: #EF4444;
   --color-danger-strong: #EF4444;
   --color-danger-dark: #DC2626;
   --color-danger-darker: #B91C1C;
@@ -92,7 +92,7 @@ html.is-scrolling ::-webkit-scrollbar-thumb {
   --color-rose-light: #FB7185;
   --color-purple: #A78BFA;
   --color-gold: #D4AF37;
-  --color-slate: var(--color-slate);
+  --color-slate: #475569;
 
   /* Surface colors */
   --bg-page: #051f1c;
