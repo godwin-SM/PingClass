@@ -6,6 +6,7 @@ const CONFIG = {
   RAZORPAY_KEY_ID: 'rzp_test_TA9d1aYSVLeGFh',
   SUPABASE_URL: 'https://evrqzgjksmidqhzvckhq.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2cnF6Z2prc21pZHFoenZja2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTE4MzksImV4cCI6MjEwMDEyNzgzOX0.UV4YLbfJwszr-zzzkpJgbLbQ4ZZhiGVYzlAHpst45mE',
+  VAPID_PUBLIC_KEY: 'BJtfhRDqtUWCSWIaJhZpjvhXHYGPUNJvqxPNyrMxKG_0AKRmEMpeuNp4fbYoFgqNg-kNP30rfRc0P7GGULChzn4',
 
   // Plan pricing (in INR paise for Razorpay)
   PLANS: {

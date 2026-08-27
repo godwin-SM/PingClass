@@ -2865,6 +2865,9 @@ function renderDemoSettings() {
   document.getElementById('toggleFeeReminders').checked = true;
   document.getElementById('toggleAttendanceAlerts').checked = true;
   document.getElementById('toggleAnnouncements').checked = true;
+  document.getElementById('toggleOverdueReminders').checked = true;
+  document.getElementById('reminderDaysSlider').value = 3;
+  document.getElementById('reminderDaysValue').textContent = '3 days';
 }
 
 function renderDemoBilling() {
@@ -4585,6 +4588,10 @@ async function populateSettingsPage() {
   document.getElementById('toggleFeeReminders').checked = settings?.notify_fee_reminders !== false;
   document.getElementById('toggleAttendanceAlerts').checked = settings?.notify_attendance_alerts !== false;
   document.getElementById('toggleAnnouncements').checked = settings?.notify_announcements !== false;
+  document.getElementById('toggleOverdueReminders').checked = settings?.overdue_reminder_enabled !== false;
+  const days = settings?.reminder_days_before || 3;
+  document.getElementById('reminderDaysSlider').value = days;
+  document.getElementById('reminderDaysValue').textContent = days + ' day' + (days > 1 ? 's' : '');
 }
 
 // Institute form save
@@ -4689,7 +4696,9 @@ document.getElementById('saveNotifBtn').addEventListener('click', async () => {
   const data = {
     notify_fee_reminders: document.getElementById('toggleFeeReminders').checked,
     notify_attendance_alerts: document.getElementById('toggleAttendanceAlerts').checked,
-    notify_announcements: document.getElementById('toggleAnnouncements').checked
+    notify_announcements: document.getElementById('toggleAnnouncements').checked,
+    overdue_reminder_enabled: document.getElementById('toggleOverdueReminders').checked,
+    reminder_days_before: parseInt(document.getElementById('reminderDaysSlider').value) || 3
   };
 
   try {
@@ -4718,6 +4727,12 @@ document.getElementById('saveNotifBtn').addEventListener('click', async () => {
     msg.classList.add('visible');
     setTimeout(() => { msg.classList.remove('visible'); msg.style.color = ''; }, 4000);
   }
+});
+
+// Reminder days slider UI update
+document.getElementById('reminderDaysSlider')?.addEventListener('input', (e) => {
+  const val = e.target.value;
+  document.getElementById('reminderDaysValue').textContent = val + ' day' + (val > 1 ? 's' : '');
 });
 
 // Settings page logout

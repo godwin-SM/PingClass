@@ -262,6 +262,16 @@ async function loadStats() {
       }
     ];
     renderParentAlerts(_parentBellAlerts);
+
+    // Demo mode: use ephemeral alerts for bell icon
+    _parentDbNotifications = _parentBellAlerts.map((a, i) => ({
+      id: 'demo-' + i,
+      type: a.severity === 'warning' ? 'fee_reminder' : 'fee_due_today',
+      title: a.title,
+      body: a.detail || '',
+      read_at: null,
+      created_at: new Date().toISOString()
+    }));
     renderParentBellAlerts();
 
     // Load announcements while skeleton is still visible.
@@ -322,6 +332,9 @@ async function loadStats() {
     r
   });
   renderParentAlerts(_parentBellAlerts);
+
+  // Fetch DB-backed notifications for bell icon
+  _parentDbNotifications = await fetchParentNotifications();
   renderParentBellAlerts();
 
   // Hide skeleton, show real content
@@ -643,10 +656,72 @@ function hideSkeletons(pageName) {
   });
 }
 
-// ── Bell icon alerts ──
-let _parentBellAlerts = [];
+// ── Bell icon alerts (DB-backed) ──
+let _parentDbNotifications = [];
 let _parentBellRead = false;
 let _lastBellCount = 0;
+
+const NOTIF_ICONS = {
+  fee_reminder: '💰',
+  fee_due_today: '⏰',
+  fee_overdue: '🔴',
+  payment_confirmed: '✅'
+};
+
+const NOTIF_PAGES = {
+  fee_reminder: 'fees',
+  fee_due_today: 'fees',
+  fee_overdue: 'fees',
+  payment_confirmed: 'fees'
+};
+
+async function fetchParentNotifications() {
+  if (isDemoMode || !currentUser?.id) return [];
+  try {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) return [];
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifications?limit=50`, {
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.notifications || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+async function markNotificationsRead(ids) {
+  if (isDemoMode || !currentUser?.id) return;
+  try {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) return;
+    await fetch(`${SUPABASE_URL}/functions/v1/notifications`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ids })
+    });
+  } catch (e) { /* ignore */ }
+}
+
+async function markAllNotificationsRead() {
+  if (isDemoMode || !currentUser?.id) return;
+  try {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) return;
+    await fetch(`${SUPABASE_URL}/functions/v1/notifications`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ markAll: true })
+    });
+  } catch (e) { /* ignore */ }
+}
 
 function renderParentBellAlerts() {
   const list = document.getElementById('alertList');
@@ -655,10 +730,9 @@ function renderParentBellAlerts() {
   const meta = document.getElementById('alertPanelMeta');
   if (!list) return;
 
-  const alerts = _parentBellAlerts;
+  const alerts = _parentDbNotifications;
   const count = alerts.length;
 
-  // Re-show badge if alert count changed since last read
   if (count > 0 && _parentBellRead && _lastBellCount !== count) {
     _parentBellRead = false;
   }
@@ -670,20 +744,50 @@ function renderParentBellAlerts() {
   }
   if (meta) meta.textContent = count > 0 ? `${count} alert${count !== 1 ? 's' : ''}` : '';
   if (empty) empty.hidden = count > 0;
-  list.innerHTML = alerts.map(a => `
-    <li class="alert-item alert-item--${a.severity || 'info'}" ${a.page ? `onclick="navigateToPage('${a.page}')"` : ''}>
-      <span class="alert-item-dot" aria-hidden="true"></span>
+  list.innerHTML = alerts.map(a => {
+    const page = NOTIF_PAGES[a.type] || 'dashboard';
+    const icon = NOTIF_ICONS[a.type] || '🔔';
+    const timeAgo = getTimeAgo(a.created_at);
+    return `
+    <li class="alert-item alert-item--${a.type === 'fee_overdue' ? 'danger' : a.type === 'fee_due_today' ? 'warning' : 'info'}"
+        onclick="navigateToPage('${page}'); window._notifMarkRead('${a.id}');">
+      <span class="alert-item-dot" aria-hidden="true">${icon}</span>
       <div class="alert-item-body">
         <div class="alert-item-title">${escapeHtml(a.title)}</div>
-        ${a.detail ? `<div class="alert-item-detail">${escapeHtml(a.detail)}</div>` : ''}
+        <div class="alert-item-detail">${escapeHtml(a.body)} · ${timeAgo}</div>
       </div>
-    </li>`).join('');
+    </li>`;
+  }).join('');
 }
 
-function initParentAlerts() {
+window._notifMarkRead = async function(id) {
+  await markNotificationsRead([id]);
+  _parentDbNotifications = _parentDbNotifications.filter(n => n.id !== id);
+  renderParentBellAlerts();
+};
+
+function getTimeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
+
+async function initParentAlerts() {
   const bell = document.getElementById('alertBell');
   const panel = document.getElementById('alertPanel');
   if (!bell || !panel) return;
+
+  // Load notifications from DB (skip in demo mode — already set by loadStats)
+  if (!isDemoMode) {
+    _parentDbNotifications = await fetchParentNotifications();
+  }
+  renderParentBellAlerts();
 
   bell.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -692,6 +796,9 @@ function initParentAlerts() {
     bell.setAttribute('aria-expanded', String(willShow));
     if (willShow) {
       _parentBellRead = true;
+      markAllNotificationsRead();
+      // Clear badge visually
+      _parentDbNotifications.forEach(n => n.read_at = n.read_at || new Date().toISOString());
       renderParentBellAlerts();
     }
   });
@@ -711,10 +818,139 @@ function initParentAlerts() {
   });
 }
 
+// ── Push notification subscription ──
+async function initPushSubscription() {
+  if (isDemoMode || !('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+  try {
+    const registration = await navigator.serviceWorker.register('/sw.js');
+
+    // Check if already subscribed
+    const subscription = await registration.pushManager.getSubscription();
+    if (subscription) return; // Already subscribed
+
+    // Check notification permission
+    if (Notification.permission === 'denied') return;
+
+    // Request permission if not yet determined
+    if (Notification.permission === 'default') {
+      const result = await Notification.requestPermission();
+      if (result !== 'granted') return;
+    }
+
+    // Subscribe to push
+    const vapidKey = CONFIG.VAPID_PUBLIC_KEY;
+    if (!vapidKey) return;
+
+    const applicationServerKey = urlBase64ToUint8Array(vapidKey);
+    const newSubscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey
+    });
+
+    // Store subscription in DB
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) return;
+
+    await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/push-subscribe`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        endpoint: newSubscription.endpoint,
+        p256dh: newSubscription.keys.p256dh,
+        auth: newSubscription.keys.auth
+      })
+    });
+  } catch (e) {
+    // Push subscription failed silently — not critical
+  }
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; i++) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+// ── Notification Preferences ──
+const NOTIF_PREF_FIELDS = [
+  'in_app_enabled', 'push_enabled', 'email_enabled',
+  'fee_reminders', 'fee_due_today', 'fee_overdue', 'payment_confirmed'
+];
+
+const NOTIF_PREF_MAP = {
+  prefInApp: 'in_app_enabled',
+  prefPush: 'push_enabled',
+  prefEmail: 'email_enabled',
+  prefFeeReminders: 'fee_reminders',
+  prefFeeDueToday: 'fee_due_today',
+  prefFeeOverdue: 'fee_overdue',
+  prefPaymentConfirmed: 'payment_confirmed'
+};
+
+async function loadNotifPrefs() {
+  if (isDemoMode || !currentUser?.id) return;
+  try {
+    const { data: { session } } = await db.auth.getSession();
+    if (!session) return;
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifications`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    });
+    // Use direct DB query instead
+    const { data } = await db.from('notification_preferences')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+
+    if (data) {
+      Object.entries(NOTIF_PREF_MAP).forEach(([elId, field]) => {
+        const el = document.getElementById(elId);
+        if (el) el.checked = data[field] !== false;
+      });
+    }
+  } catch (e) { /* ignore */ }
+}
+
+async function saveNotifPrefs() {
+  if (isDemoMode || !currentUser?.id) return;
+  const msgEl = document.getElementById('notifPrefsMsg');
+  try {
+    const prefs = {};
+    Object.entries(NOTIF_PREF_MAP).forEach(([elId, field]) => {
+      const el = document.getElementById(elId);
+      prefs[field] = el ? el.checked : true;
+    });
+
+    const { error } = await db.from('notification_preferences').upsert({
+      user_id: currentUser.id,
+      ...prefs,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+
+    if (error) throw error;
+    if (msgEl) { msgEl.textContent = 'Saved!'; msgEl.style.color = '#4ADE80'; }
+  } catch (e) {
+    if (msgEl) { msgEl.textContent = 'Error saving'; msgEl.style.color = '#F87171'; }
+  }
+}
+
 // ── Init ──
 setupPrivacyData(gatherExportPayload);
 sharedInit('parent');
 initParentAlerts();
+initPushSubscription();
+loadNotifPrefs();
+
+document.getElementById('saveNotifPrefs')?.addEventListener('click', saveNotifPrefs);
 
 // First-login onboarding tour. Runs after the dashboard has painted.
 if (typeof maybeStartOnboarding === 'function') {

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"></noscript>
-  <link rel="stylesheet" href="shared.min.css?v=50">
+  <link rel="stylesheet" href="shared.min.css?v=51">
   <link rel="stylesheet" href="admin-dashboard.min.css?v=60">
 </head>
 <body>
@@ -1106,6 +1106,26 @@
                   <input type="checkbox" id="toggleAnnouncements" />
                   <span class="settings-toggle-switch"></span>
                 </label>
+                <div style="padding:16px 0 0;border-top:1px solid rgba(255,255,255,0.06);margin-top:8px;">
+                  <label class="settings-toggle">
+                    <span class="settings-toggle-text">
+                      <strong>Overdue Fee Alerts</strong>
+                      <span>Daily email reminders for overdue fees (sent via Resend)</span>
+                    </span>
+                    <input type="checkbox" id="toggleOverdueReminders" checked />
+                    <span class="settings-toggle-switch"></span>
+                  </label>
+                  <div style="margin-top:16px;">
+                    <label style="display:block;font-size:0.9rem;color:#B0C9C5;margin-bottom:8px;">
+                      <strong>Reminder days before due date</strong>
+                    </label>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                      <input type="range" id="reminderDaysSlider" min="1" max="7" value="3" style="flex:1;accent-color:#2DD4BF;">
+                      <span id="reminderDaysValue" style="font-size:0.95rem;font-weight:600;min-width:40px;text-align:center;">3 days</span>
+                    </div>
+                    <p style="font-size:0.8rem;color:#5B7B76;margin-top:4px;">Send fee reminders this many days before the due date</p>
+                  </div>
+                </div>
               </div>
               <div class="settings-form-actions">
                 <span class="settings-form-msg" id="notifSaveMsg"></span>
@@ -1557,6 +1577,6 @@
   <script src="payment.js?v=7"></script>
  <script src="shared.min.js?v=72"></script>
 <script src="onboarding.min.js?v=45"></script>
-<script src="admin-dashboard.min.js?v=67"></script>
+<script src="admin-dashboard.min.js?v=68"></script>
 </body>
 </html>

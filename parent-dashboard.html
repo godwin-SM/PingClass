@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="shared.min.css?v=50">
+  <link rel="stylesheet" href="shared.min.css?v=51">
   <link rel="stylesheet" href="admin-dashboard.min.css?v=60">
   <link rel="stylesheet" href="parent-dashboard.min.css?v=6">
 </head>
@@ -350,6 +350,57 @@
             <div class="settings-section">
               <div class="settings-section-header">
                 <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                </svg>
+                <div>
+                  <h2>Notifications</h2>
+                  <p>Choose how you want to be notified about fees and updates.</p>
+                </div>
+              </div>
+              <div class="settings-privacy">
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                  <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:0.95rem;">In-app notifications</span>
+                    <input type="checkbox" id="prefInApp" class="settings-toggle" checked>
+                  </label>
+                  <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:0.95rem;">Push notifications</span>
+                    <input type="checkbox" id="prefPush" class="settings-toggle" checked>
+                  </label>
+                  <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <span style="font-size:0.95rem;">Email notifications (overdue fees only)</span>
+                    <input type="checkbox" id="prefEmail" class="settings-toggle" checked>
+                  </label>
+                  <div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.06);">
+                    <p style="font-size:0.85rem;color:#5B7B76;margin:0 0 12px;">Event preferences:</p>
+                    <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                      <span style="font-size:0.9rem;">Fee reminders</span>
+                      <input type="checkbox" id="prefFeeReminders" class="settings-toggle" checked>
+                    </label>
+                    <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                      <span style="font-size:0.9rem;">Fee due today</span>
+                      <input type="checkbox" id="prefFeeDueToday" class="settings-toggle" checked>
+                    </label>
+                    <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                      <span style="font-size:0.9rem;">Overdue fees</span>
+                      <input type="checkbox" id="prefFeeOverdue" class="settings-toggle" checked>
+                    </label>
+                    <label class="settings-toggle-row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+                      <span style="font-size:0.9rem;">Payment confirmations</span>
+                      <input type="checkbox" id="prefPaymentConfirmed" class="settings-toggle" checked>
+                    </label>
+                  </div>
+                  <div class="settings-form-actions settings-form-actions--left">
+                    <button type="button" class="settings-save-btn" id="saveNotifPrefs">Save preferences</button>
+                    <span class="settings-form-msg" id="notifPrefsMsg"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-section-header">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                 </svg>
                 <div>
@@ -447,6 +498,6 @@
   <script src="payment.js?v=7"></script>
  <script src="shared.min.js?v=72"></script>
 <script src="onboarding.min.js?v=45"></script>
- <script src="parent-dashboard.min.js?v=21"></script>
+ <script src="parent-dashboard.min.js?v=22"></script>
 </body>
 </html>
