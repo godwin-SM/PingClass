@@ -114,7 +114,7 @@ def index():
 @app.route('/config.js')
 def serve_config():
     config = {
-        'RAZORPAY_KEY_ID': os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_TA9d1aYSVLeGFh'),
+        'RAZORPAY_KEY_ID': os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_TOsCfA6By4dooF'),
         'SUPABASE_URL': os.environ.get('SUPABASE_URL', 'https://evrqzgjksmidqhzvckhq.supabase.co'),
         'SUPABASE_ANON_KEY': os.environ.get(
             'SUPABASE_ANON_KEY',
