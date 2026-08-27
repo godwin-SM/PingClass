@@ -250,9 +250,13 @@
         return loadCache[role];
       }
 
-      function activate(role) {
-        var nextQuery = '?role=' + role;
-        if (history.replaceState) history.replaceState(null, '', nextQuery);
+      function activate(role, fromInteraction) {
+        // Only write to the history on an explicit user gesture. Writing on
+        // page-load would mark the entry "skippable" (history manipulation
+        // intervention) and break back/forward.
+        if (fromInteraction && history.replaceState) {
+          history.replaceState(null, '', '?role=' + role);
+        }
 
         roles.forEach(function (r) {
           var active = r === role;
@@ -263,7 +267,7 @@
       }
 
       roles.forEach(function (r) {
-        tabs[r].addEventListener('click', function () { activate(r); });
+        tabs[r].addEventListener('click', function () { activate(r, true); });
 
         // Arrow-key navigation for the tab list.
         tabs[r].addEventListener('keydown', function (e) {
@@ -272,7 +276,7 @@
           var idx = roles.indexOf(r);
           var next = e.key === 'ArrowRight' ? (idx + 1) % roles.length : (idx - 1 + roles.length) % roles.length;
           tabs[roles[next]].focus();
-          activate(roles[next]);
+          activate(roles[next], true);
         });
       });
 
