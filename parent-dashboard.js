@@ -901,11 +901,6 @@ async function loadNotifPrefs() {
   try {
     const { data: { session } } = await db.auth.getSession();
     if (!session) return;
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifications`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${session.access_token}` }
-    });
-    // Use direct DB query instead
     const { data } = await db.from('notification_preferences')
       .select('*')
       .eq('user_id', currentUser.id)

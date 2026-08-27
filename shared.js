@@ -369,6 +369,13 @@ async function sharedInit(expectedRole) {
   isDemoMode = params.has('demo');
 
   if (isDemoMode) {
+    // Demo mode is only meant to run inside the hub's iframes. If a user
+    // opens one of the dashboards directly with ?demo (top-level window),
+    // send them to the hub instead so they get the switchable preview.
+    if (window.self === window.top) {
+      window.location.replace('demo-dashboard.html');
+      return;
+    }
     setScreenLoaderText('Demo mode');
     loadDemoMode();
     if (typeof loadStats === 'function') loadStats();
@@ -618,8 +625,14 @@ function showRateLimitMsg(msg, retryAfterMs) {
 }
 
 function loadDemoMode() {
+  // Lock overscroll/scroll-bounce in demo mode so no "excess" space shows
+  // behind the dashboard when the demo is embedded in the hub.
+  document.documentElement.classList.add('demo-mode');
   const demoBanner = document.getElementById('demoBanner');
-  if (demoBanner) demoBanner.style.display = 'flex';
+  // The demo hub renders its own banner above the embedded dashboard, so only
+  // show the inner banner when the dashboard is opened directly (?demo).
+  const embedded = window.self !== window.top;
+  if (demoBanner && !embedded) demoBanner.style.display = 'flex';
   const userName = document.getElementById('userName');
   if (userName) userName.textContent = 'Demo Mode';
   syncSidebarUser();
@@ -635,6 +648,8 @@ function loadDemoMode() {
 
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) logoutBtn.style.display = 'none';
+  const settingsLogoutBtn = document.getElementById('settingsLogoutBtn');
+  if (settingsLogoutBtn) settingsLogoutBtn.style.display = 'none';
 
   // Unlock all plan features for the demo preview
   planLimits = { plan_id: 'demo', max_students: 999999, max_batches: 999999, max_teachers: 999999, announcements_allowed: true };
@@ -696,6 +711,116 @@ function loadDemoMode() {
     clearTimeout(toast._t);
     toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 2200);
   }
+
+  lockDemoOverscroll();
+}
+
+// Kill the elastic/overscroll "bounce" in demo mode on any input type
+// (trackpad, touch, precision wheel). The dashboard's own scroll containers
+// (e.g. .content-scroll) must keep scrolling normally within their range — but
+// once one hits its top/bottom edge, the gesture is swallowed so the browser
+// never renders the rubber-band/pull beyond the limit.
+function lockDemoOverscroll() {
+  const lockState = { touchStart: new Map() };
+
+  function canScrollY(el) {
+    return el.scrollHeight > el.clientHeight + 1;
+  }
+
+  function canScrollX(el) {
+    return el.scrollWidth > el.clientWidth + 1;
+  }
+
+  // Find the nearest ancestor that can actually scroll on the given axis.
+  function nearestScroller(node, axis) {
+    let el = node && node.nodeType === 1 ? node : null;
+    while (el && el !== document.body) {
+      const cs = getComputedStyle(el);
+      if (axis === 'y') {
+        if (/(auto|scroll|overlay)/.test(cs.overflowY) && canScrollY(el)) return el;
+      } else {
+        if (/(auto|scroll|overlay)/.test(cs.overflowX) && canScrollX(el)) return el;
+      }
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  document.addEventListener('wheel', function (e) {
+    if (!isDemoMode) return;
+    const dx = e.deltaX;
+    const dy = e.deltaY;
+    if (dx === 0 && dy === 0) return;
+    // Only lock the dominant axis. Trackpad/mouse gestures carry a small
+    // amount of the other axis, so locking both would kill normal scrolling.
+    const horizontal = Math.abs(dx) > Math.abs(dy);
+
+    if (horizontal) {
+      const xScroller = nearestScroller(e.target, 'x');
+      if (!xScroller) {
+        e.preventDefault();
+        return;
+      }
+      const atLeft = xScroller.scrollLeft <= 0;
+      const atRight = xScroller.scrollLeft + xScroller.clientWidth >= xScroller.scrollWidth - 1;
+      if ((dx < 0 && atLeft) || (dx > 0 && atRight)) {
+        e.preventDefault();
+      }
+    } else {
+      const yScroller = nearestScroller(e.target, 'y');
+      if (!yScroller) {
+        e.preventDefault();
+        return;
+      }
+      const atTop = yScroller.scrollTop <= 0;
+      const atBottom = yScroller.scrollTop + yScroller.clientHeight >= yScroller.scrollHeight - 1;
+      if ((dy < 0 && atTop) || (dy > 0 && atBottom)) {
+        e.preventDefault();
+      }
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchmove', function (e) {
+    if (!isDemoMode) return;
+    const touch = e.touches && e.touches[0];
+    if (!touch) return;
+    const start = lockState.touchStart.get(touch.identifier);
+    if (!start) return;
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    const horizontal = Math.abs(dx) > Math.abs(dy);
+    const xScroller = horizontal ? nearestScroller(e.target, 'x') : null;
+    const yScroller = !horizontal ? nearestScroller(e.target, 'y') : null;
+
+    if (horizontal) {
+      if (!xScroller) {
+        e.preventDefault();
+        return;
+      }
+      const atLeft = xScroller.scrollLeft <= 0;
+      const atRight = xScroller.scrollLeft + xScroller.clientWidth >= xScroller.scrollWidth - 1;
+      if ((dx > 0 && atLeft) || (dx < 0 && atRight)) {
+        e.preventDefault();
+      }
+    } else {
+      if (!yScroller) {
+        e.preventDefault();
+        return;
+      }
+      const atTop = yScroller.scrollTop <= 0;
+      const atBottom = yScroller.scrollTop + yScroller.clientHeight >= yScroller.scrollHeight - 1;
+      if ((dy > 0 && atTop) || (dy < 0 && atBottom)) {
+        e.preventDefault();
+      }
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchstart', function (e) {
+    if (!isDemoMode) return;
+    Array.prototype.forEach.call(e.changedTouches || [], function (t) {
+      lockState.touchStart.set(t.identifier, { x: t.clientX, y: t.clientY });
+    });
+  }, { passive: true });
 }
 
 // Logout

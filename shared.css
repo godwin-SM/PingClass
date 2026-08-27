@@ -143,6 +143,25 @@ body::before {
   flex: 1;
 }
 
+/* ========== DEMO MODE ========== */
+/* Prevent scroll bounce / overscroll chaining when a dashboard is embedded in
+   the demo hub, so no empty "excess" space is revealed behind the iframe. */
+html.demo-mode,
+html.demo-mode body {
+  overscroll-behavior: none;
+}
+
+html.demo-mode .content-scroll,
+html.demo-mode .sidebar-nav,
+html.demo-mode .page-table-wrap,
+html.demo-mode .announcements-list,
+html.demo-mode main,
+html.demo-mode .dashboard,
+html.demo-mode .dashboard-body,
+html.demo-mode .main-content {
+  overscroll-behavior: none;
+}
+
 /* ========== DEMO BANNER ========== */
 .demo-banner {
   background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
@@ -711,6 +730,15 @@ body.page-locked .content-scroll {
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-behavior: smooth;
+  /* Breathing room so the last card on every page isn't flush with the
+     bottom edge, especially on mobile. */
+  padding-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .content-scroll {
+    padding-bottom: max(40px, env(safe-area-inset-bottom) + 16px);
+  }
 }
 
 .menu-toggle {
@@ -1762,7 +1790,9 @@ body.page-locked .content-scroll {
 }
 
 /* ========== TOGGLE SWITCH ========== */
-.settings-toggle {
+/* Always scoped to the input element — the admin dashboard uses the same
+   class name on its <label> row wrapper, which must not get pill styling. */
+input.settings-toggle {
   -webkit-appearance: none;
   appearance: none;
   width: 44px;
@@ -1776,7 +1806,7 @@ body.page-locked .content-scroll {
   flex-shrink: 0;
 }
 
-.settings-toggle::before {
+input.settings-toggle::before {
   content: '';
   position: absolute;
   top: 2px;
@@ -1788,15 +1818,15 @@ body.page-locked .content-scroll {
   transition: transform 0.2s;
 }
 
-.settings-toggle:checked {
+input.settings-toggle:checked {
   background: var(--secondary, #2DD4BF);
 }
 
-.settings-toggle:checked::before {
+input.settings-toggle:checked::before {
   transform: translateX(20px);
 }
 
-.settings-toggle:focus-visible {
+input.settings-toggle:focus-visible {
   outline: 2px solid var(--secondary, #2DD4BF);
   outline-offset: 2px;
 }

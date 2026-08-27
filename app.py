@@ -71,9 +71,17 @@ def maybe_gzip(response):
     response.headers['Content-Length'] = str(len(gz))
     return response
 
+# Demo-hub pages embed the dashboards in same-origin iframes; everything
+# else stays locked down (no framing at all).
+FRAMER_PAGES = {'demo-dashboard.html'}
+FRAMEABLE_PAGES = {'admin-dashboard.html', 'teacher-dashboard.html', 'parent-dashboard.html'}
+
 @app.after_request
 def security_headers(response):
-    response.headers['X-Frame-Options'] = 'DENY'
+    file = os.path.basename(request.path) or ''
+    frameable = file in FRAMEABLE_PAGES
+    framer = file in FRAMER_PAGES
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN' if frameable else 'DENY'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = (
@@ -81,16 +89,18 @@ def security_headers(response):
         'accelerometer=(), gyroscope=(), magnetometer=()'
     )
     response.headers['Strict-Transport-Security'] = 'max-age=63072000; includeSubDomains; preload'
-    response.headers['Content-Security-Policy'] = (
+    csp = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline' https://*.razorpay.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.razorpay.com; "
         "font-src 'self' https://fonts.gstatic.com https://*.razorpay.com; "
         "img-src 'self' data: https://*.razorpay.com; "
         "connect-src 'self' https://evrqzgjksmidqhzvckhq.supabase.co wss://evrqzgjksmidqhzvckhq.supabase.co https://*.razorpay.com; "
-        "frame-src https://*.razorpay.com; "
-        "object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
     )
+    csp += "frame-src 'self' https://*.razorpay.com; " if framer else "frame-src https://*.razorpay.com; "
+    csp += "object-src 'none'; base-uri 'self'; "
+    csp += "frame-ancestors 'self'" if frameable else "frame-ancestors 'none'"
+    response.headers['Content-Security-Policy'] = csp
     if request.path == '/' or request.path.endswith(('.js', '.css', '.html')):
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response.headers['Pragma'] = 'no-cache'

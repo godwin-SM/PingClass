@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore PingClass with an interactive demo — switch between the Admin, Teacher, and Parent dashboards.">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <title>PingClass Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    @supports (height: 100dvh) {
+      html, body { height: 100dvh; }
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #051f1c;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      overscroll-behavior: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(13, 148, 136, 0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 35% at 6% 45%, rgba(45, 212, 191, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 35% at 94% 88%, rgba(217, 119, 6, 0.05) 0%, transparent 55%);
+    }
+
+    /* ========== TOP BAR ========== */
+    .demo-hub-bar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 24px;
+      background: rgba(7, 30, 27, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 5;
+    }
+
+    .demo-hub-banner {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, rgba(13, 148, 136, 0.28), rgba(45, 212, 191, 0.18));
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .demo-hub-banner-text { color: #FFFFFF; }
+
+    .demo-hub-banner-cta {
+      flex: 0 0 auto;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #052e2b;
+      background: linear-gradient(135deg, #2DD4BF, #5EEAD4);
+      padding: 7px 14px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(45, 212, 191, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .demo-hub-banner-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(45, 212, 191, 0.45);
+    }
+
+    .demo-hub-banner-cta:focus-visible {
+      outline: 2px solid #2DD4BF;
+      outline-offset: 2px;
+    }
+
+    /* ========== ROLE SWITCHER ========== */
+    .demo-hub-switch {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 0 0 auto;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    .demo-hub-switch button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      background: transparent;
+      padding: 9px 22px;
+      border-radius: 9px;
+      transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .demo-hub-switch button:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .demo-hub-switch button[aria-selected="true"] {
+      color: #052e2b;
+      background: linear-gradient(135deg, #2DD4BF, #5EEAD4);
+      box-shadow: 0 6px 16px rgba(45, 212, 191, 0.35);
+    }
+
+    .demo-hub-switch button:focus-visible {
+      outline: 2px solid #2DD4BF;
+      outline-offset: 2px;
+    }
+
+    /* ========== STAGE ========== */
+    .demo-hub-stage {
+      flex: 1 1 auto;
+      min-height: 0;
+      position: relative;
+    }
+
+    .demo-hub-stage .demo-hub-panel {
+      position: absolute;
+      inset: 0;
+      display: none;
+    }
+
+    .demo-hub-stage .demo-hub-panel[hidden] { display: none; }
+
+    .demo-hub-stage .demo-hub-panel:not([hidden]) { display: block; }
+
+    .demo-hub-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #051f1c;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 720px) {
+      .demo-hub-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px 12px 12px;
+      }
+      .demo-hub-banner {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+      }
+      .demo-hub-banner-cta { padding: 6px 12px; font-size: 0.75rem; }
+      .demo-hub-switch {
+        width: 100%;
+        justify-content: center;
+        margin: 0;
+      }
+      .demo-hub-switch button {
+        flex: 1 1 0;
+        min-width: 0;
+        padding: 7px 6px;
+      }
+      .demo-hub-switch button { font-size: 0.8rem; }
+    }
+
+    @media (max-width: 380px) {
+      .demo-hub-banner-text { font-size: 0.7rem; }
+      .demo-hub-banner-cta { padding: 5px 10px; font-size: 0.7rem; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="demo-hub-bar">
+    <div class="demo-hub-banner">
+      <span class="demo-hub-banner-text">Viewing a demo preview</span>
+      <a href="index.html#signup" class="demo-hub-banner-cta">Get started</a>
+    </div>
+
+    <div class="demo-hub-switch" role="tablist" aria-label="Choose a demo dashboard">
+      <button type="button" role="tab" id="tab-admin" aria-selected="true" aria-controls="panel-admin" data-role="admin">Admin</button>
+      <button type="button" role="tab" id="tab-teacher" aria-selected="false" aria-controls="panel-teacher" data-role="teacher">Teacher</button>
+      <button type="button" role="tab" id="tab-parent" aria-selected="false" aria-controls="panel-parent" data-role="parent">Parent</button>
+    </div>
+  </header>
+
+  <main class="demo-hub-stage" id="demoHubStage">
+    <div class="demo-hub-panel" id="panel-admin" role="tabpanel" aria-labelledby="tab-admin" data-src="admin-dashboard.html?demo">
+      <iframe class="demo-hub-frame" data-frame title="Admin dashboard demo"></iframe>
+    </div>
+    <div class="demo-hub-panel" id="panel-teacher" role="tabpanel" aria-labelledby="tab-teacher" data-src="teacher-dashboard.html?demo">
+      <iframe class="demo-hub-frame" data-frame title="Teacher dashboard demo"></iframe>
+    </div>
+    <div class="demo-hub-panel" id="panel-parent" role="tabpanel" aria-labelledby="tab-parent" data-src="parent-dashboard.html?demo">
+      <iframe class="demo-hub-frame" data-frame title="Parent dashboard demo"></iframe>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var roles = ['admin', 'teacher', 'parent'];
+      var defaults = { admin: 'admin-dashboard.html?demo', teacher: 'teacher-dashboard.html?demo', parent: 'parent-dashboard.html?demo' };
+
+      var tabs = {};
+      roles.forEach(function (r) {
+        tabs[r] = document.getElementById('tab-' + r);
+      });
+
+      // Lazy-load a dashboard iframe on first activation, keeping it cached
+      // afterwards so switching roles is instant.
+      var loadCache = {};
+      function ensureLoaded(role) {
+        if (loadCache[role]) return loadCache[role];
+        var panel = document.getElementById('panel-' + role);
+        var frame = panel.querySelector('[data-frame]');
+        loadCache[role] = new Promise(function (resolve) {
+          frame.src = panel.getAttribute('data-src') || defaults[role];
+          frame.addEventListener('load', function onload() {
+            frame.removeEventListener('load', onload);
+            resolve();
+          });
+        });
+        return loadCache[role];
+      }
+
+      function activate(role) {
+        var nextQuery = '?role=' + role;
+        if (history.replaceState) history.replaceState(null, '', nextQuery);
+
+        roles.forEach(function (r) {
+          var active = r === role;
+          tabs[r].setAttribute('aria-selected', active ? 'true' : 'false');
+          document.getElementById('panel-' + r).hidden = !active;
+          if (active) ensureLoaded(r);
+        });
+      }
+
+      roles.forEach(function (r) {
+        tabs[r].addEventListener('click', function () { activate(r); });
+
+        // Arrow-key navigation for the tab list.
+        tabs[r].addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+          e.preventDefault();
+          var idx = roles.indexOf(r);
+          var next = e.key === 'ArrowRight' ? (idx + 1) % roles.length : (idx - 1 + roles.length) % roles.length;
+          tabs[roles[next]].focus();
+          activate(roles[next]);
+        });
+      });
+
+      // Deep link support: ?role=teacher
+      var params = new URLSearchParams(window.location.search);
+      var initial = params.get('role');
+      initial = roles.indexOf(initial) !== -1 ? initial : 'admin';
+      activate(initial);
+    })();
+  </script>
+</body>
+</html>

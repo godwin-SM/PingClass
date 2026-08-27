@@ -303,51 +303,15 @@ document.getElementById('otpSubmit').addEventListener('submit', async (e) => {
     localStorage.removeItem('pcSignupExpiry');
     closeAuth();
 
-    // Create user profile + institute so name shows correctly
+    // Create user profile + institute so name shows correctly (idempotent —
+    // no-op if the profile already exists). Re-run on login/reset/page-load so
+    // accounts that missed this step during signup self-heal.
     const { data: { session: otpSession } } = await db.auth.getSession();
+    await ensureProfileForSession(otpSession);
+
+    // Check if user should go to dashboard (teacher/parent always, admin if paid)
     if (otpSession) {
-      const user = otpSession.user;
-      const fullName = user.user_metadata?.full_name || user.email.split('@')[0];
-      const instituteName = user.user_metadata?.institute_name || 'My Institute';
-
-      // Try to find existing institute
-      let { data: inst } = await db
-        .from('institutes')
-        .select('*')
-        .eq('owner_id', user.id)
-        .maybeSingle();
-
-      // Create institute if missing
-      if (!inst) {
-        try {
-          const { data: newInst } = await db.from('institutes').insert({
-            name: instituteName,
-            owner_id: user.id,
-            email: user.email
-          }).select().single();
-          inst = newInst;
-        } catch (e) {
-          console.warn('Could not create institute:', e);
-        }
-      }
-
-      // Create user profile if missing
-      if (inst) {
-        try {
-          await db.from('users').insert({
-            id: user.id,
-            institute_id: inst.id,
-            full_name: fullName,
-            email: user.email,
-            role: 'admin'
-          });
-        } catch (e) {
-          // Profile may already exist — ignore
-        }
-      }
-
-      // Check if user should go to dashboard (teacher/parent always, admin if paid)
-      const dashUrl = await shouldGoToDashboard(user.id);
+      const dashUrl = await shouldGoToDashboard(otpSession.user.id);
       if (dashUrl) {
         window.location.href = dashUrl;
         return;
@@ -406,9 +370,11 @@ document.getElementById('loginSubmit').addEventListener('submit', async (e) => {
     // Logged in — close modal, stay on landing page
     window._pendingPlan = null;
     closeAuth();
-    // Check if user should go to dashboard (teacher/parent always, admin if paid)
+    // Self-heal a missing profile (old accounts created before profile
+    // creation was reliable) before deciding where to send the user.
     const { data: { session: freshSession } } = await db.auth.getSession();
     if (freshSession) {
+      await ensureProfileForSession(freshSession);
       const dashUrl = await shouldGoToDashboard(freshSession.user.id);
       if (dashUrl) {
         window.location.href = dashUrl;
@@ -581,6 +547,7 @@ document.getElementById('resetNewPwForm').addEventListener('submit', async (e) =
     // Same post-login path as the signup OTP flow
     const { data: { session } } = await db.auth.getSession();
     if (session) {
+      await ensureProfileForSession(session);
       const dashUrl = await shouldGoToDashboard(session.user.id);
       if (dashUrl) { window.location.href = dashUrl; return; }
     }
@@ -666,6 +633,64 @@ function getDashboardUrl(role) {
   return null;
 }
 
+// Idempotent profile self-heal for any authenticated session. Signups create
+// the users row only after OTP verification; if that step was skipped (e.g. the
+// session wasn't persisted yet) the account has no profile and later logins
+// 406 on users?select=role. This re-runs the creation whenever it's missing.
+async function ensureProfileForSession(session) {
+  if (!session?.user) return;
+  const user = session.user;
+
+  // Already has a profile? Nothing to do.
+  try {
+    const { data: existing } = await db
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .maybeSingle();
+    if (existing) return;
+  } catch (e) { /* fall through and try to create */ }
+
+  const fullName = user.user_metadata?.full_name || (user.email || '').split('@')[0] || 'User';
+  const instituteName = user.user_metadata?.institute_name || 'My Institute';
+
+  // Try to find existing institute
+  let { data: inst } = await db
+    .from('institutes')
+    .select('*')
+    .eq('owner_id', user.id)
+    .maybeSingle();
+
+  // Create institute if missing
+  if (!inst) {
+    try {
+      const { data: newInst } = await db.from('institutes').insert({
+        name: instituteName,
+        owner_id: user.id,
+        email: user.email
+      }).select().single();
+      inst = newInst;
+    } catch (e) {
+      console.warn('Could not create institute:', e);
+    }
+  }
+
+  // Create user profile if missing
+  if (inst) {
+    try {
+      await db.from('users').insert({
+        id: user.id,
+        institute_id: inst.id,
+        full_name: fullName,
+        email: user.email,
+        role: 'admin'
+      });
+    } catch (e) {
+      console.warn('Could not create user profile:', e);
+    }
+  }
+}
+
 // Helper: should this user be redirected to dashboard? Returns dashboard URL or null
 async function shouldGoToDashboard(userId) {
   try {
@@ -688,6 +713,7 @@ async function shouldGoToDashboard(userId) {
 if (db) {
   db.auth.getSession().then(async ({ data: { session } }) => {
     if (!session) return;
+    await ensureProfileForSession(session);
     const dashUrl = await shouldGoToDashboard(session.user.id);
     if (dashUrl) {
       window.location.href = dashUrl;
