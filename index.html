@@ -3,574 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#051f1c">
+  <meta name="description" content="PingClass helps tuition centers manage students, batches, attendance, fees, teachers and parents from one simple dashboard.">
   <link rel="icon" type="image/png" href="logo-64.png">
-  <title>PingClass - Fee Management for Tuition Centers</title>
+  <title>PingClass — Run your institute. Not the chaos.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="landing-v2.css?v=2">
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">
-        <div class="logo-icon">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <span>PingClass</span>
-      </a>
-
+      <a href="index.html" class="logo"><img src="logo-64.png" alt="PingClass" class="brand-logo"><span>PingClass</span></a>
       <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#about">About</a>
+        <a href="#features">Product</a><a href="#roles">Who it's for</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
       </div>
-
-      <div class="nav-actions">
-        <a href="#login" class="nav-login">Log in</a>
-        <a href="#signup" class="nav-cta">Get Started</a>
-      </div>
-
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      <div class="nav-actions"><a href="#login" class="nav-login">Log in</a><a href="#signup" class="nav-cta">Start free</a></div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     </div>
-
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#about">About</a>
-      <div class="mobile-divider"></div>
-      <a href="#login">Log in</a>
-      <a href="#signup" class="mobile-cta">Get Started</a>
-    </div>
+    <div class="mobile-menu" id="mobileMenu"><a href="#features">Product</a><a href="#roles">Who it's for</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><div class="mobile-divider"></div><a href="#login">Log in</a><a href="#signup" class="mobile-cta">Start free</a></div>
   </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <canvas id="fluidCanvas"></canvas>
-    <div class="hero-scrim"></div>
-
-    <div class="hero-content">
-      <div class="hero-parallax hero-parallax--copy">
-      <div class="hero-copy">
-        <div class="hero-chip">
-          <span class="hero-chip-dot"></span>
-          Built for tuition centers
-        </div>
-
-        <h1 class="hero-title">
-          Run your institute
-          <span class="hero-title-accent">
-            on autopilot
-            <svg class="hero-underline" viewBox="0 0 220 12" fill="none" aria-hidden="true">
-              <path d="M3 9C60 3 150 3 217 8" stroke="#2DD4BF" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-          </span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Fee reminders, attendance, and parent updates handled automatically — so you can focus on teaching, not spreadsheets.
-        </p>
-
-        <div class="hero-buttons">
-          <a href="#signup" class="btn-primary">Get Started Free</a>
-          <a href="demo-dashboard.html" class="btn-ghost">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.9l10.5-6.86a1.05 1.05 0 000-1.8L9.56 4.24A1.05 1.05 0 008 5.14z"/>
-            </svg>
-            Watch Demo
-          </a>
-        </div>
-
-        <ul class="hero-proof">
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Free forever plan
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            No credit card
-          </li>
-          <li>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Set up in 5 minutes
-          </li>
-        </ul>
-
-        <!-- Local-proof trust strip — crossfades between real institutes.
-             Names/figures are placeholders; swap at go-live. -->
-        <div class="hero-trust-strip" aria-hidden="true">
-          <span class="hero-trust-line">Kumaran Tuitions, Coimbatore · ₹89,000 collected this term</span>
+  <main>
+    <section class="story-hero" id="top">
+      <canvas id="fluidCanvas"></canvas><div class="hero-scrim"></div><div class="hero-grid"></div>
+      <div class="story-hero-copy reveal"><div class="eyebrow"><span class="pulse-dot"></span> Built for tuition & coaching institutes</div>
+        <h1>Run your institute.<br><span>Not the chaos.</span></h1>
+        <p>Students, batches, attendance, fees, teachers and parents — finally working together in one place.</p>
+        <div class="hero-actions"><a href="#signup" class="btn-primary">Start for free <span>→</span></a><a href="demo-dashboard.html" class="btn-ghost"><span class="play-dot">▶</span> Explore the demo</a></div>
+        <div class="micro-proof"><span>✓ Free forever plan</span><span>✓ No credit card</span><span>✓ Setup in minutes</span></div>
+      </div>
+      <div class="hero-stage" aria-label="PingClass dashboard preview">
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+        <div class="floating-pill pill-paid">✓ Payment received <b>₹1,500</b></div><div class="floating-pill pill-alert">8 parents need a reminder</div>
+        <div class="dashboard-window hero-dashboard">
+          <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>PingClass / Dashboard</span><b>Admin</b></div>
+          <div class="dash-shell"><aside><div class="mini-brand"><img src="logo-64.png" alt=""><b>PingClass</b></div><span class="side-active">Overview</span><span>Students</span><span>Batches</span><span>Attendance</span><span>Fees</span><span>Announcements</span></aside>
+            <div class="dash-main"><div class="dash-top"><div><small>Good evening, Admin</small><h3>Your institute at a glance</h3></div><span class="live-chip">● Live</span></div>
+              <div class="metric-row"><div class="metric"><small>Students</small><strong data-count="120">120</strong><em>+12 this month</em></div><div class="metric"><small>Attendance</small><strong>92.4%</strong><em class="positive">↑ 4.2%</em></div><div class="metric"><small>Collected</small><strong>₹89K</strong><em class="positive">88% of dues</em></div><div class="metric"><small>Needs attention</small><strong class="warning">8</strong><em>students</em></div></div>
+              <div class="dash-panels"><div class="panel chart-panel"><div class="panel-head"><b>Institute performance</b><span>Last 6 months</span></div><svg viewBox="0 0 520 170" preserveAspectRatio="none"><path class="chart-fill" d="M0,135 C45,125 70,128 105,105 S165,120 205,88 S270,100 305,68 S370,84 410,52 S465,60 520,28 L520,170 L0,170 Z"></path><path class="chart-line" d="M0,135 C45,125 70,128 105,105 S165,120 205,88 S270,100 305,68 S370,84 410,52 S465,60 520,28"></path></svg><div class="chart-labels"><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span></div></div><div class="panel fee-panel"><div class="panel-head"><b>Fee collection</b><span>88%</span></div><div class="ring"><span>88<small>%</small></span></div><div class="legend"><span><i></i> Paid ₹89K</span><span><i></i> Pending ₹12.5K</span></div></div></div>
+            </div></div>
         </div>
       </div>
-    </div><!-- /hero-parallax--copy -->
+      <div class="scroll-cue"><span>Scroll to see PingClass in action</span><i></i></div>
+    </section>
 
-      <div class="hero-parallax hero-parallax--visual">
-        <div class="hero-visual" aria-hidden="true">
-        <div class="dash-card">
-          <div class="dash-card-head">
-            <div class="dash-card-brand">
-              <div class="dash-card-mark">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-              </div>
-              <span class="dash-card-name">PingClass</span>
-            </div>
-            <span class="dash-card-plan">Basic Plan</span>
-          </div>
-
-          <div class="dash-card-stats">
-            <div class="dash-stat">
-              <strong class="dash-stat-value">120</strong>
-              <span class="dash-stat-label">Students</span>
-            </div>
-            <div class="dash-stat">
-              <strong class="dash-stat-value">₹89,000</strong>
-              <span class="dash-stat-label">Collected</span>
-            </div>
-            <div class="dash-stat">
-              <strong class="dash-stat-value dash-stat-value--warn">₹12,500</strong>
-              <span class="dash-stat-label">Pending</span>
-            </div>
-          </div>
-
-          <div class="dash-card-progress">
-            <div class="dash-card-progress-head">
-              <span>Collection rate</span>
-              <strong>88%</strong>
-            </div>
-            <div class="dash-card-progress-track">
-              <div class="dash-card-progress-fill"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="dash-float dash-float--paid">
-          <span class="dash-float-icon">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          </span>
-          Payment received · ₹1,500
-        </div>
-
-        <div class="dash-float dash-float--reminder">
-          <span class="dash-float-icon dash-float-icon--amber">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.17V11a6 6 0 00-4-5.66V4a2 2 0 10-4 0v1.34A6 6 0 006 11v3.17c0 .53-.21 1.04-.6 1.43L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-          </span>
-          Fee reminder sent to 8 parents
-        </div>
+    <section class="chaos-scene story-section" id="problem">
+      <div class="sticky-scene"><div class="scene-copy reveal"><span class="section-kicker">THE OLD WAY</span><h2>Too many tabs.<br><span>Too many follow-ups.</span></h2><p>Attendance in one place. Fees somewhere else. Parent messages buried in chats. PingClass replaces the patchwork with one connected system.</p></div>
+        <div class="chaos-board"><div class="chaos-card sheet"><b>Attendance.xlsx</b><div class="fake-lines"></div></div><div class="chaos-card chat"><span>Parent: “Fee due?”</span><span>Teacher: “Who was absent?”</span><span>Admin: “Send reminder.”</span></div><div class="chaos-card fee-note"><b>₹12,500</b><small>pending fees</small></div><div class="chaos-card register"><b>CLASS IX · 4:30 PM</b><div class="student-dots"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="chaos-card tab-stack"><span>Google Sheets</span><span>WhatsApp</span><span>Notebook</span><span>Bank App</span></div><div class="chaos-core"><img src="logo-64.png" alt="PingClass"><span>One system.</span></div></div>
       </div>
-      </div><!-- /hero-parallax--visual -->
-    </div>
-  </section>
+    </section>
 
-  <!-- Features Section -->
-  <section class="features" id="features">
-    <div class="bento-bg-grid"></div>
-    <div class="features-container">
-      <div class="features-header">
-        <span class="section-tag">Features</span>
-        <h2 class="section-title">Everything you need to run your institute</h2>
-        <p class="section-subtitle">One platform to manage fees, attendance, students, and parent communication — built specifically for small tuition centers.</p>
+    <section class="transform-scene story-section" id="features">
+      <div class="sticky-scene"><div class="transform-header reveal"><span class="section-kicker">THE PINGCLASS WAY</span><h2>Everything connects.</h2><p>One action updates the right people, the right numbers, and the right view.</p></div>
+        <div class="product-explosion"><div class="product-card pc-students"><small>STUDENTS</small><strong>120</strong><span>+12 this month</span></div><div class="product-card pc-attendance"><small>ATTENDANCE</small><strong>92.4%</strong><div class="tiny-bars"><i></i><i></i><i></i><i></i><i></i></div></div><div class="product-card pc-fees"><small>FEES</small><strong>₹89,000</strong><span class="good">88% collected</span></div><div class="product-card pc-batches"><small>BATCHES</small><strong>8</strong><span>3 teachers assigned</span></div><div class="product-card pc-center"><img src="logo.png" alt="PingClass"><b>PingClass</b><span>Your institute, connected.</span></div></div>
       </div>
+    </section>
 
-      <div class="bento-grid">
-        <!-- Fee Reminders — large hero card -->
-        <div class="bento-item bento-large">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Fee Reminders</h3>
-            <p class="bento-desc">Automated push notifications sent to parents before the due date. No more chasing payments manually.</p>
-            <div class="bento-visual bento-visual-fee">
-              <div class="fee-bar"><div class="fee-bar-fill" style="width:78%"></div></div>
-              <div class="fee-labels"><span>Collected</span><span>₹89,000</span></div>
-              <div class="fee-bar fee-bar-pending"><div class="fee-bar-fill-pending" style="width:22%"></div></div>
-              <div class="fee-labels"><span>Pending</span><span>₹12,500</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Attendance Tracking -->
-        <div class="bento-item">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Attendance Tracking</h3>
-            <p class="bento-desc">Mark attendance in seconds. Students and parents can view history anytime.</p>
-          </div>
-        </div>
-
-        <!-- Student & Batch Management -->
-        <div class="bento-item">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Student & Batch Management</h3>
-            <p class="bento-desc">Organize students into batches, assign teachers, and manage schedules — all from one dashboard.</p>
-          </div>
-        </div>
-
-        <!-- Parent Communication — tall card -->
-        <div class="bento-item bento-tall">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Parent Communication</h3>
-            <p class="bento-desc">Send announcements, progress updates, and absence alerts directly to parents through the app.</p>
-            <div class="bento-visual bento-visual-chat">
-              <div class="chat-bubble chat-left">Priya's attendance today: <strong>Present</strong></div>
-              <div class="chat-bubble chat-right">Thanks for the update!</div>
-              <div class="chat-bubble chat-left">Next fee due: <strong>1st Aug</strong></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Unpaid Fee Reports — wide card -->
-        <div class="bento-item bento-wide">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Unpaid Fee Reports</h3>
-            <p class="bento-desc">Admin dashboard shows a clear list of pending and overdue payments — know who owes what at a glance.</p>
-          </div>
-        </div>
-
-        <!-- Simple Subscription -->
-        <div class="bento-item">
-          <div class="bento-glow"></div>
-          <div class="bento-content">
-            <div class="bento-icon">
-              <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-              </svg>
-            </div>
-            <h3 class="bento-title">Simple Subscription</h3>
-            <p class="bento-desc">Pay only for what you need. Start free, upgrade as your institute grows. No hidden charges.</p>
-          </div>
-        </div>
+    <section class="feature-story story-section" id="attendance">
+      <div class="sticky-scene split-scene"><div class="scene-copy reveal"><span class="section-kicker">ATTENDANCE</span><h2>Mark it once.<br><span>See it everywhere.</span></h2><p>Teachers mark attendance in seconds. Admins see the bigger picture. Parents can check history without calling.</p><div class="mini-benefits"><span>✓ Batch-wise tracking</span><span>✓ At-risk visibility</span><span>✓ Role-based access</span></div></div>
+        <div class="phone-stack attendance-stack"><div class="phone-card"><div class="phone-top"><b>Class IX — Today</b><span>4:30 PM</span></div><div class="att-row"><span>Arun K.</span><b class="present">Present</b></div><div class="att-row"><span>Meera S.</span><b class="present">Present</b></div><div class="att-row"><span>Rahul P.</span><b class="absent">Absent</b></div><div class="att-row"><span>Divya R.</span><b class="present">Present</b></div><div class="att-footer"><strong>24 / 26 present</strong><span>92.3%</span></div></div><div class="floating-mini mini-rate"><small>Attendance rate</small><b>92.4%</b><span>↑ 4.2%</span></div><div class="floating-mini mini-alert"><b>2 students</b><span>need attention</span></div></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- How It Works Section -->
-  <section class="how-it-works" id="how-it-works">
-    <div class="how-container">
-      <div class="how-header">
-        <span class="section-tag">How It Works</span>
-        <h2 class="section-title">Up and running in 4 steps</h2>
-        <p class="section-subtitle">No technical skills needed. Set up your institute in under 5 minutes.</p>
-      </div>
+    <section class="feature-story fees-story story-section" id="fees">
+      <div class="sticky-scene split-scene reverse"><div class="payment-visual"><div class="payment-card"><div class="payment-head"><span>MONTHLY FEES</span><b>August</b></div><strong>₹1,500</strong><small>Arun Kumar · Class IX</small><div class="payment-status"><i>✓</i><span>Payment received</span><b>PAID</b></div></div><div class="receipt-card"><span>Razorpay</span><b>Payment verified</b><small>Today · 6:42 PM</small></div><div class="payment-line"></div></div><div class="scene-copy reveal"><span class="section-kicker">FEES</span><h2>Stop chasing payments.<br><span>Start seeing collections.</span></h2><p>Track paid, pending and overdue fees at a glance, with payment links and a clear collection picture for every batch.</p><div class="collection-stat"><strong>₹89K</strong><span>collected this period</span><em>88% collection rate</em></div></div></div>
+    </section>
 
-      <div class="steps-grid">
-        <!-- Step 1 -->
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <h3 class="step-title">Sign up your institute</h3>
-          <p class="step-desc">Create your account with basic details — institute name, your role, and contact info.</p>
-        </div>
+    <section class="roles-story story-section" id="roles">
+      <div class="sticky-scene"><div class="roles-copy reveal"><span class="section-kicker">ONE INSTITUTE · THREE EXPERIENCES</span><h2>Everyone sees<br><span>what they need.</span></h2><p>PingClass keeps one source of truth while giving admins, teachers and parents the right experience.</p></div><div class="role-stage"><div class="role-card role-admin"><span class="role-badge">ADMIN</span><h3>Command center</h3><div class="role-ui"><i></i><i></i><i></i><i></i></div><small>Students · Fees · Analytics</small></div><div class="role-card role-teacher"><span class="role-badge">TEACHER</span><h3>Focus on the class</h3><div class="role-ui rows"><i></i><i></i><i></i><i></i></div><small>Attendance · Batches · Students</small></div><div class="role-card role-parent"><span class="role-badge">PARENT</span><h3>Stay in the loop</h3><div class="role-ui notif"><i>✓</i><i>₹</i><i>!</i></div><small>Attendance · Fees · Updates</small></div><div class="role-connector"></div></div></div>
+    </section>
 
-        <!-- Step 2 -->
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <h3 class="step-title">Add students & batches</h3>
-          <p class="step-desc">Import your students, organize them into batches, and assign teachers.</p>
-        </div>
+    <section class="outcome-section" id="about"><div class="outcome-grid"></div><div class="outcome-inner"><span class="section-kicker">THE RESULT</span><h2>Less admin.<br><span>More teaching.</span></h2><p>PingClass turns everyday institute operations into a simple, repeatable workflow — so you spend less time managing the machine and more time growing it.</p><div class="outcome-metrics"><div><strong>1</strong><span>connected system</span></div><div><strong>3</strong><span>role experiences</span></div><div><strong>0</strong><span>spreadsheet chaos</span></div></div><a href="#signup" class="btn-primary large">Start running your institute smarter <span>→</span></a></div></section>
 
-        <!-- Step 3 -->
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <h3 class="step-title">Set fee structure</h3>
-          <p class="step-desc">Define monthly or quarterly fees per batch. PingClass handles the rest.</p>
-        </div>
+    <section class="pricing pricing-v2" id="pricing"><div class="pricing-container"><div class="section-center reveal"><span class="section-kicker">SIMPLE PRICING</span><h2>Start free. Grow when you need to.</h2><p>No contracts. No surprise charges. Just the tools your institute needs.</p></div><div class="pricing-grid"><div class="pricing-card"><div class="plan-name">Free</div><div class="plan-price"><span class="price-amount">₹0</span><span class="price-period">/month</span></div><p class="plan-desc">For getting started.</p><ul class="plan-features"><li>Up to 20 students</li><li>1 batch</li><li>Fee reminders</li><li>Attendance tracking</li></ul><a href="#" class="plan-btn plan-btn-outline" data-plan="free">Start free</a></div><div class="pricing-card pricing-card-popular"><div class="popular-badge">Most Popular</div><div class="plan-name">Basic</div><div class="plan-price"><span class="price-amount">₹249</span><span class="price-period">/month</span></div><p class="plan-desc">For growing tuition centers.</p><ul class="plan-features"><li>Up to 100 students</li><li>5 batches</li><li>Parent access</li><li>Announcements</li><li>Everything in Free</li></ul><a href="#" class="plan-btn plan-btn-primary" data-plan="basic">Start Basic</a></div><div class="pricing-card"><div class="plan-name">Pro</div><div class="plan-price"><span class="price-amount">₹599</span><span class="price-period">/month</span></div><p class="plan-desc">For established institutes.</p><ul class="plan-features"><li>Unlimited students</li><li>Unlimited batches</li><li>Multiple teachers</li><li>Priority support</li><li>Everything in Basic</li></ul><a href="#" class="plan-btn plan-btn-outline" data-plan="pro">Go Pro</a></div></div></div></section>
 
-        <!-- Step 4 -->
-        <div class="step-card">
-          <div class="step-number">04</div>
-          <h3 class="step-title">Parents get notified</h3>
-          <p class="step-desc">Automatic push reminders before due dates. You track collections from your dashboard.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <section class="faq faq-v2" id="faq"><div class="faq-header"><span class="section-kicker">FAQ</span><h2>Still deciding?</h2><p>A few answers before you start.</p></div><div class="faq-grid"><details open><summary>Who is PingClass for?</summary><p>PingClass is built for tuition and coaching institutes that need a simple way to manage students, batches, attendance, fees and parent communication.</p></details><details><summary>Can I try it for free?</summary><p>Yes. The Free plan supports up to 20 students and 1 batch with no time limit.</p></details><details><summary>Can teachers and parents have their own access?</summary><p>Yes. PingClass supports role-based experiences for admins, teachers and parents.</p></details><details><summary>How do payments work?</summary><p>Paid plans use Razorpay for checkout. Your institute can track payment status and collection information from the dashboard.</p></details></div></section>
 
-  <!-- Pricing Section -->
-  <section class="pricing" id="pricing">
-    <div class="pricing-container">
-      <div class="pricing-header">
-        <span class="section-tag">Pricing</span>
-        <h2 class="section-title">Simple, transparent pricing</h2>
-        <p class="section-subtitle">Start free with up to 20 students. Upgrade when you're ready. No hidden charges.</p>
-      </div>
+    <section class="final-cta"><div class="final-glow"></div><img src="logo.png" alt="PingClass"><span class="section-kicker">READY WHEN YOU ARE</span><h2>Your institute deserves<br><span>a calmer way to run.</span></h2><p>Start with 20 students for free. Upgrade when your institute grows.</p><a href="#signup" class="btn-primary large">Create your institute <span>→</span></a><small>No credit card · Free forever plan</small></section>
+  </main>
 
-      <div class="pricing-grid">
-        <!-- Free Plan -->
-        <div class="pricing-card">
-          <div class="plan-name">Free</div>
-          <div class="plan-price">
-            <span class="price-amount">₹0</span>
-            <span class="price-period">/month</span>
-          </div>
-          <p class="plan-desc">Free forever. No credit card needed.</p>
-          <ul class="plan-features">
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Up to 20 students
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              1 batch
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Fee reminders
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Attendance tracking
-            </li>
-          </ul>
-          <a href="#" class="plan-btn plan-btn-outline" data-plan="free">Get Started</a>
-        </div>
-
-        <!-- Basic Plan -->
-        <div class="pricing-card pricing-card-popular">
-          <div class="popular-badge">Most Popular</div>
-          <div class="plan-name">Basic</div>
-          <div class="plan-price">
-            <span class="price-amount">₹249</span>
-            <span class="price-period">/month</span>
-          </div>
-          <p class="plan-desc">For growing tuition centers</p>
-          <ul class="plan-features">
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Up to 100 students
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              5 batches
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Everything in Free
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Parent app access
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Announcements
-            </li>
-          </ul>
-          <a href="#" class="plan-btn plan-btn-primary" data-plan="basic">Get Started</a>
-        </div>
-
-        <!-- Pro Plan -->
-        <div class="pricing-card">
-          <div class="plan-name">Pro</div>
-          <div class="plan-price">
-            <span class="price-amount">₹599</span>
-            <span class="price-period">/month</span>
-          </div>
-          <p class="plan-desc">For established institutes</p>
-          <ul class="plan-features">
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Unlimited students
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Unlimited batches
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Everything in Basic
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Multiple teachers
-            </li>
-            <li>
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-              Priority support
-            </li>
-          </ul>
-          <a href="#" class="plan-btn plan-btn-outline" data-plan="pro">Get Started</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="faq" id="faq">
-    <div class="faq-header">
-      <span class="section-tag">FAQ</span>
-      <h2 class="section-title">Frequently asked questions</h2>
-      <p class="section-subtitle">Have questions? We've got answers.</p>
-    </div>
-
-    <div class="faq-scroller">
-      <!-- Row 1 - scrolls left -->
-      <div class="faq-row" data-direction="left">
-        <div class="faq-track">
-          <div class="faq-card">
-            <h4 class="faq-card-q">Who is PingClass for?</h4>
-            <p class="faq-card-a">Built for small tuition centers with 1-5 teachers and up to 200 students. If you manage fees or attendance manually, PingClass is for you.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">How do parents get notifications?</h4>
-            <p class="faq-card-a">Parents install the app and receive free push notifications before fee due dates. No SMS costs, no WhatsApp API needed.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can I try it for free?</h4>
-            <p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Who is PingClass for?</h4>
-            <p class="faq-card-a">Built for small tuition centers with 1-5 teachers and up to 200 students. If you manage fees or attendance manually, PingClass is for you.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">How do parents get notifications?</h4>
-            <p class="faq-card-a">Parents install the app and receive free push notifications before fee due dates. No SMS costs, no WhatsApp API needed.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can I try it for free?</h4>
-            <p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 2 - scrolls right -->
-      <div class="faq-row" data-direction="right">
-        <div class="faq-track">
-          <div class="faq-card">
-            <h4 class="faq-card-q">How does attendance work?</h4>
-            <p class="faq-card-a">Teachers mark attendance from the dashboard in seconds. Students and parents can view history anytime from the app.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Is my data safe?</h4>
-            <p class="faq-card-a">Yes. Data is stored on encrypted servers. Only you and authorized teachers can access your institute's data.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can I cancel anytime?</h4>
-            <p class="faq-card-a">Absolutely. No long-term contracts. No subscription based payments. Access continues until billing period ends.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">How does attendance work?</h4>
-            <p class="faq-card-a">Teachers mark attendance from the dashboard in seconds. Students and parents can view history anytime from the app.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Is my data safe?</h4>
-            <p class="faq-card-a">Yes. Data is stored on encrypted servers. Only you and authorized teachers can access your institute's data.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can I cancel anytime?</h4>
-            <p class="faq-card-a">Absolutely. No long-term contracts. No subscription based payments. Access continues until billing period ends.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 3 - scrolls left -->
-      <div class="faq-row" data-direction="left">
-        <div class="faq-track">
-          <div class="faq-card">
-            <h4 class="faq-card-q">What payment methods?</h4>
-            <p class="faq-card-a">We accept UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can multiple teachers use it?</h4>
-            <p class="faq-card-a">Yes! The Pro plan supports multiple teachers. Each teacher gets their own login with appropriate permissions.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Is there a mobile app?</h4>
-            <p class="faq-card-a">Yes. Parents and students use the mobile app. Teachers and admins use the web dashboard from any device.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">What payment methods?</h4>
-            <p class="faq-card-a">We accept UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Can multiple teachers use it?</h4>
-            <p class="faq-card-a">Yes! The Pro plan supports multiple teachers. Each teacher gets their own login with appropriate permissions.</p>
-          </div>
-          <div class="faq-card">
-            <h4 class="faq-card-q">Is there a mobile app?</h4>
-            <p class="faq-card-a">Yes. Parents and students use the mobile app. Teachers and admins use the web dashboard from any device.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <a href="index.html" class="footer-logo">
-            <div class="logo-icon">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <span>PingClass</span>
-          </a>
-          <p class="footer-tagline">Fee management made simple for tuition centers.</p>
-        </div>
-
-        <div class="footer-links">
-          <div class="footer-col">
-            <h4>Product</h4>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#faq">FAQ</a>
-          </div>
-          <div class="footer-col">
-            <h4>Company</h4>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-            <a href="privacy.html">Privacy Policy</a>
-          </div>
-          <div class="footer-col">
-            <h4>Support</h4>
-            <a href="#help">Help Center</a>
-            <a href="terms.html">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2026 PingClass. All rights reserved.</p>
-        <p>Privacy concerns? Email <a href="mailto:pingclassoff@gmail.com">pingclassoff@gmail.com</a></p>
-      </div>
-    </div>
-  </footer>
+  <footer class="footer footer-v2"><div class="footer-container"><div class="footer-top"><div class="footer-brand"><a href="index.html" class="footer-logo"><img src="logo-64.png" alt="PingClass"><span>PingClass</span></a><p class="footer-tagline">A simpler way to run your tuition institute.</p></div><div class="footer-links"><div class="footer-col"><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div><div class="footer-col"><h4>Company</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div><div class="footer-col"><h4>Account</h4><a href="#login">Log in</a><a href="#signup">Start free</a></div></div></div><div class="footer-bottom"><p>© 2026 PingClass. All rights reserved.</p><p>pingclassoff@gmail.com</p></div></div></footer>
 
   <!-- Auth Modal -->
   <div class="auth-overlay" id="authOverlay">
@@ -737,7 +252,8 @@
   <script src="plan-pro.js"></script>
   <script src="payment.js?v=7"></script>
   <script src="fluid.js?v=3"></script>
-<script src="hero3d.js?v=5"></script>
+<script src="hero3d.js?v=6"></script>
   <script src="main.js?v=5"></script>
+  <script src="landing-v2.js?v=1"></script>
 </body>
 </html>

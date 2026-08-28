@@ -14,7 +14,7 @@
 
   var THREE = null;
 
-  var hero = document.querySelector('.hero');
+  var hero = document.querySelector('.hero, .story-hero');
   if (!hero) return;
 
   var fine = window.matchMedia('(pointer: fine)').matches;
@@ -101,8 +101,9 @@
     // the LIVE collection percentage read straight off the card next to it.
     // Amber pulses are fee payments arriving on autopilot. Every element maps
     // to the product — nothing here is abstract decoration.
+    var coreX = 1.0, coreY = 0;
     var coreGroup = new THREE.Group();
-    coreGroup.position.set(1.0, 0, 0);
+    coreGroup.position.set(coreX, coreY, 0);
     group.add(coreGroup);
 
     var halo = new THREE.Mesh(
@@ -160,7 +161,8 @@
 
     // Collection gauge — the bright arc mirrors the card's real percentage.
     var gaugeFrac = 0.88;
-    var gaugeLabel = document.querySelector('.dash-card-progress-head strong');
+    var gaugeLabel = document.querySelector('.dash-card-progress-head strong') ||
+      document.querySelector('.fee-panel .ring span');
     if (gaugeLabel) {
       var gaugeVal = parseFloat(String(gaugeLabel.textContent || '').replace(/[^0-9.]/g, ''));
       if (isFinite(gaugeVal)) gaugeFrac = Math.min(1, Math.max(0, gaugeVal / 100));
@@ -215,6 +217,24 @@
     }
     scrub();
 
+    function anchorCore() {
+      // Sit the 3D scene exactly behind the dashboard window (v2 hero) or the
+      // dash-card (v1 hero), whatever the layout is at this breakpoint.
+      var anchor = hero.querySelector('.hero-stage .dashboard-window') || hero.querySelector('.hero-stage');
+      if (!anchor) { coreX = 1.0; coreY = 0; }
+      else {
+        var wr = hero.getBoundingClientRect();
+        var ar = anchor.getBoundingClientRect();
+        var fx = (ar.left + ar.width / 2 - wr.left) / (wr.width || 1);
+        var fy = (ar.top + ar.height / 2 - wr.top) / (wr.height || 1);
+        var visH = 2 * Math.tan((55 * Math.PI / 180) / 2) * 11;
+        var visW = visH * (camera.aspect || 1);
+        coreX = (fx - 0.5) * visW;
+        coreY = -(fy - 0.5) * visH;
+      }
+      coreGroup.position.set(coreX, coreY, 0);
+    }
+
     function resize() {
       var w = canvas.clientWidth || hero.clientWidth || 1;
       var h = canvas.clientHeight || hero.clientHeight || 1;
@@ -222,6 +242,7 @@
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      anchorCore();
     }
 
     window.addEventListener('scroll', function () {
