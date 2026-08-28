@@ -28,24 +28,28 @@
   })();
   if (!supportsGL) return;
 
-  function loadThree(cb) {
-    if (window.THREE) { cb(); return; }
-    if (document.getElementById('hero3dThreeLoader')) return;
-    var s = document.createElement('script');
-    s.id = 'hero3dThreeLoader';
-    s.src = 'three.min.js?v=1';
-    s.async = true;
-    s.onload = function () { if (window.THREE) cb(); };
-    document.head.appendChild(s);
-  }
-
-  loadThree(function () {
+  var threePromise = (function () {
+    // ES module build (three r150+ removed the global UMD builds). Dynamic
+    // import means the ~670KB library is still only fetched on desktop that
+    // will actually render it. On browsers without import() the construct
+    // throws and we no-op - same graceful degradation.
     try {
-      init();
+      return import('three.module.min.js?v=1').then(function (m) { return m.default || m; });
     } catch (e) {
-      console.error('hero3d init failed:', e);
+      return null;
     }
-  });
+  })();
+
+  if (threePromise) {
+    threePromise.then(function (THREE) {
+      if (!THREE) return;
+      try {
+        init();
+      } catch (e) {
+        console.error('hero3d init failed:', e);
+      }
+    });
+  }
 
   function init() {
     var canvas = document.createElement('canvas');
