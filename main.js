@@ -767,7 +767,20 @@ document.querySelectorAll('.plan-btn[data-plan]').forEach(btn => {
           const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).single();
           const dashUrl = getDashboardUrl(profile?.role) || 'index.html';
           Payment.openCheckout(selectedPlan, db, session.user).then(() => {
-            window.location.href = dashUrl;
+            // Hard-refresh the dashboard so the new plan is authoritative:
+            // payment was verified + stored server-side, but we poll
+            // get_active_plan before navigating so a slow write never lands on
+            // a stale page. Max ~3s, then go anyway (the record still exists).
+            const settle = (attempts) => {
+              Payment.getActivePlan(db, session.user.id).then((active) => {
+                if (active === selectedPlan || attempts <= 0) {
+                  window.location.href = `${dashUrl}?pc=upgraded&t=${Date.now()}`;
+                } else {
+                  setTimeout(() => settle(attempts - 1), 500);
+                }
+              });
+            };
+            settle(6);
           }).catch(err => {
             if (err.message !== 'Payment cancelled') {
               console.error('Payment failed:', err);
