@@ -784,6 +784,20 @@ document.querySelectorAll('.plan-btn[data-plan]').forEach(btn => {
   });
 });
 
+// Pause the FAQ marquee when its section is fully off-screen. Each track is a
+// huge width:max-content layer animating on a 40–60s loop; leaving them running
+// off-screen eats GPU/compositor budget and can make the hero paint white when
+// you flick quickly back to the top on mobile.
+const faqScroller = document.querySelector('.faq-scroller');
+if (faqScroller) {
+  const faqTracks = faqScroller.querySelectorAll('.faq-track');
+  const faqObserver = new IntersectionObserver((entries) => {
+    const off = !entries[0].isIntersecting;
+    faqTracks.forEach(t => { t.style.animationPlayState = off ? 'paused' : ''; });
+  }, { threshold: 0 });
+  faqObserver.observe(faqScroller);
+}
+
 // Scroll reveal
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

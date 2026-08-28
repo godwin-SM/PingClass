@@ -1174,7 +1174,6 @@ a {
   display: flex;
   gap: 16px;
   width: max-content;
-  will-change: transform;
 }
 
 .faq-row[data-direction="left"] .faq-track {
