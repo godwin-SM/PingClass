@@ -107,11 +107,11 @@
     group.add(coreGroup);
 
     var halo = new THREE.Mesh(
-      new THREE.SphereGeometry(1.5, 32, 24),
+      new THREE.SphereGeometry(1.7, 32, 24),
       new THREE.MeshBasicMaterial({
         color: 0x0d9488,
         transparent: true,
-        opacity: 0.45,
+        opacity: 0.55,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       })
@@ -119,13 +119,13 @@
     coreGroup.add(halo);
 
     var ring = new THREE.Mesh(
-      new THREE.TorusGeometry(1.9, 0.015, 12, 100),
+      new THREE.TorusGeometry(2.3, 0.015, 12, 100),
       new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.4 })
     );
     coreGroup.add(ring);
 
     var amberRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2.5, 0.012, 12, 100),
+      new THREE.TorusGeometry(3.1, 0.012, 12, 100),
       new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.3 })
     );
     amberRing.rotation.x = 1.25;
@@ -156,8 +156,8 @@
       coreGroup.add(pts);
       return pts;
     }
-    var tealNodes = buildOrbitNodes(22, 1.9, 0x5eead4, 0.18, 0.95, 0);
-    var amberNodes = buildOrbitNodes(12, 2.5, 0xfbbf24, 0.22, 0.75, 1.25);
+    var tealNodes = buildOrbitNodes(22, 2.3, 0x5eead4, 0.18, 0.95, 0);
+    var amberNodes = buildOrbitNodes(12, 3.1, 0xfbbf24, 0.22, 0.75, 1.25);
 
     // Collection gauge — the bright arc mirrors the card's real percentage.
     var gaugeFrac = 0.88;
@@ -167,7 +167,7 @@
       var gaugeVal = parseFloat(String(gaugeLabel.textContent || '').replace(/[^0-9.]/g, ''));
       if (isFinite(gaugeVal)) gaugeFrac = Math.min(1, Math.max(0, gaugeVal / 100));
     }
-    var GAUGE_R = 1.9, GSEGS = 100;
+    var GAUGE_R = 2.3, GSEGS = 100;
     var gaugePos = new Float32Array(GSEGS * 3);
     for (var g = 0; g < GSEGS; g++) {
       var ga = (g / GSEGS) * Math.PI * 2;
