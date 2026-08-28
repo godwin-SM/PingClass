@@ -75,59 +75,99 @@
     var group = new THREE.Group();
     scene.add(group);
 
-    // Teal particle shell — concentrated on the right half where the
-    // dash-card lives, so the 3D hangs around the product, not the text.
-    var TCOUNT = 1400;
-    var positions = new Float32Array(TCOUNT * 3);
-    for (var i = 0; i < TCOUNT; i++) {
-      positions[i * 3] = 1.1 + Math.random() * 3.4;
-      positions[i * 3 + 1] = -2.4 + Math.random() * 4.8;
-      positions[i * 3 + 2] = -2.5 + Math.random() * 5.0;
+    // Soft round glow sprite (canvas-drawn radial gradient) so particles are
+    // round and glowy instead of square pixels.
+    function makeGlowTexture() {
+      var size = 64;
+      var c = document.createElement('canvas');
+      c.width = c.height = size;
+      var ctx = c.getContext('2d');
+      var g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      g.addColorStop(0, 'rgba(255,255,255,1)');
+      g.addColorStop(0.35, 'rgba(255,255,255,0.55)');
+      g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, size, size);
+      return new THREE.CanvasTexture(c);
     }
-    var pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    var points = new THREE.Points(pGeo, new THREE.PointsMaterial({
-      color: 0x2dd4bf,
-      size: 0.05,
-      transparent: true,
-      opacity: 0.65,
-      sizeAttenuation: true
-    }));
-    group.add(points);
+    var glowTex = makeGlowTexture();
 
-    // Sparse amber accent particles.
-    var ACOUNT = 320;
-    var aPos = new Float32Array(ACOUNT * 3);
-    for (var j = 0; j < ACOUNT; j++) {
-      aPos[j * 3] = 0.9 + Math.random() * 3.8;
-      aPos[j * 3 + 1] = -2.6 + Math.random() * 5.2;
-      aPos[j * 3 + 2] = -1.6 + Math.random() * 3.2;
-    }
-    var aGeo = new THREE.BufferGeometry();
-    aGeo.setAttribute('position', new THREE.BufferAttribute(aPos, 3));
-    var aPoints = new THREE.Points(aGeo, new THREE.PointsMaterial({
-      color: 0xd97706,
-      size: 0.045,
-      transparent: true,
-      opacity: 0.4,
-      sizeAttenuation: true
-    }));
-    group.add(aPoints);
-
-    // Wireframe orbit rings around the visual zone.
-    var ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.9, 0.025, 10, 80),
-      new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.28 })
+    // Soft additive halo behind the dash-card — the product gets a "lit"
+    // presence instead of abstract specks.
+    var halo = new THREE.Mesh(
+      new THREE.SphereGeometry(2.1, 32, 24),
+      new THREE.MeshBasicMaterial({
+        color: 0x0d9488,
+        transparent: true,
+        opacity: 0.4,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      })
     );
-    ring.position.set(2.9, -0.2, -0.5);
+    halo.position.set(1.0, 0, -2.4);
+    group.add(halo);
+
+    // Glow-dust field across the whole hero volume.
+    var DCOUNT = 900;
+    var dust = new Float32Array(DCOUNT * 3);
+    for (var i = 0; i < DCOUNT; i++) {
+      dust[i * 3] = -3.2 + Math.random() * 6.4;
+      dust[i * 3 + 1] = -2.4 + Math.random() * 4.8;
+      dust[i * 3 + 2] = -2.5 + Math.random() * 5.0;
+    }
+    var dustGeo = new THREE.BufferGeometry();
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dust, 3));
+    var dustPoints = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+      color: 0x5eead4,
+      size: 0.12,
+      map: glowTex,
+      transparent: true,
+      opacity: 0.8,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    }));
+    group.add(dustPoints);
+
+    // Sparse larger amber glow accents.
+    var GCOUNT = 110;
+    var glows = new Float32Array(GCOUNT * 3);
+    for (var k = 0; k < GCOUNT; k++) {
+      glows[k * 3] = -0.4 + Math.random() * 3.2;
+      glows[k * 3 + 1] = -2.2 + Math.random() * 4.4;
+      glows[k * 3 + 2] = -1.8 + Math.random() * 3.6;
+    }
+    var glowsGeo = new THREE.BufferGeometry();
+    glowsGeo.setAttribute('position', new THREE.BufferAttribute(glows, 3));
+    var glowPoints = new THREE.Points(glowsGeo, new THREE.PointsMaterial({
+      color: 0xfbbf24,
+      size: 0.42,
+      map: glowTex,
+      transparent: true,
+      opacity: 0.5,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
+    }));
+    group.add(glowPoints);
+
+    // Orbit rings wrapped around the dash-card.
+    var ring = new THREE.Mesh(
+      new THREE.TorusGeometry(1.75, 0.02, 12, 90),
+      new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.5 })
+    );
+    ring.position.set(1.0, 0, 0);
+    ring.rotation.x = 0.7;
+    ring.rotation.z = 0.25;
     group.add(ring);
 
     var amberRing = new THREE.Mesh(
-      new THREE.TorusGeometry(3.6, 0.02, 10, 80),
-      new THREE.MeshBasicMaterial({ color: 0xd97706, transparent: true, opacity: 0.18 })
+      new THREE.TorusGeometry(2.5, 0.016, 12, 90),
+      new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.35 })
     );
-    amberRing.position.set(2.9, 0.1, -1.4);
-    amberRing.rotation.x = 1.1;
+    amberRing.position.set(1.1, 0.35, -0.9);
+    amberRing.rotation.x = 1.15;
+    amberRing.rotation.z = 0.5;
     group.add(amberRing);
 
     // ── Scroll scrub: 0 (hero at top) → 1 (hero scrolled one full height) ──
@@ -173,8 +213,11 @@
       group.rotation.x = 0.12 + progress * -0.55 + mouseY * 0.1;
       group.position.y = -progress * 1.5;
       camera.position.z = 11 - progress * 3.4;
-      points.rotation.y = t * 0.02;
-      aPoints.rotation.y = -t * 0.015;
+      ring.rotation.z = 0.25 + t * 0.45;
+      ring.rotation.x = 0.7 + Math.sin(t * 0.3) * 0.08;
+      amberRing.rotation.z = 0.5 - t * 0.25;
+      dustPoints.rotation.y = t * 0.01;
+      glowPoints.rotation.y = -t * 0.02;
 
       renderer.render(scene, camera);
       raf = requestAnimationFrame(render);
@@ -205,5 +248,6 @@
 
     resize();
     start();
+    console.info('PingClass 3D hero active');
   }
 })();
