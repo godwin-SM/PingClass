@@ -287,6 +287,42 @@ a {
   pointer-events: none;
 }
 
+/* Hero parallax wrappers (scroll depth) + local-proof trust strip */
+.hero-parallax {
+  min-width: 0;
+  will-change: transform;
+}
+
+.hero-parallax--visual {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-trust-strip {
+  margin-top: 18px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.62);
+  min-height: 22px;
+}
+
+.hero-trust-line {
+  display: inline-block;
+  transition: opacity 0.4s ease;
+  opacity: 1;
+  letter-spacing: 0.01em;
+}
+
+.hero-trust-line::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34D399;
+  margin-right: 9px;
+  vertical-align: 2px;
+}
+
 /* On touch/small screens the full-screen WebGL shader is deliberately disabled
    (it costs too much on mobile GPUs and can stall/flicker during fast scrolls).
    The hero falls back to a static, on-brand dark-teal gradient — zero runtime

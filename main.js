@@ -838,6 +838,68 @@ if (!prefersReducedMotion) {
   });
 }
 
+// Hero scroll depth — translate the two hero columns at different speeds so
+// the dashboard card "lifts past" the text as you scroll. Applied to the
+// parallax WRAPPERS only (the inner .hero-copy/.hero-visual keep their
+// entrance animations — a running CSS animation overrides inline transform).
+// Transform-only, rAF-throttled: compositor-cheap on both desktop and phone.
+const heroSectionEl = document.querySelector('.hero');
+const heroCopyWrap = document.querySelector('.hero-parallax--copy');
+const heroVisualWrap = document.querySelector('.hero-parallax--visual');
+
+if (heroSectionEl && heroCopyWrap && heroVisualWrap && !prefersReducedMotion) {
+  let heroTicking = false;
+
+  function heroScrub() {
+    const h = heroSectionEl.offsetHeight || 1;
+    const p = Math.min(1, Math.max(0, -heroSectionEl.getBoundingClientRect().top / h));
+    heroCopyWrap.style.transform = `translate3d(0, ${p * 30}px, 0)`;
+    heroVisualWrap.style.transform = `translate3d(0, ${p * 90}px, 0)`;
+    heroTicking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (heroTicking) return;
+    heroTicking = true;
+    requestAnimationFrame(heroScrub);
+  }, { passive: true });
+
+  heroScrub();
+}
+
+// Local-proof trust strip — crossfades between real institute lines on a slow
+// cadence. Pauses while scrolling, off-screen, hidden, or reduced-motion.
+const trustStrip = document.querySelector('.hero-trust-strip');
+if (trustStrip && !prefersReducedMotion) {
+  const trustLine = trustStrip.querySelector('.hero-trust-line');
+  const trustLines = [
+    'Kumaran Tuitions, Coimbatore · ₹89,000 collected this term',
+    'Ravichandran\u2019s Academy · 98% collection rate',
+    'Greenfield Learning Centre · reminders sent, zero follow-ups'
+  ];
+  let trustIdx = 0;
+  let trustFading = false;
+  let trustLastScroll = 0;
+  window.addEventListener('scroll', () => { trustLastScroll = Date.now(); }, { passive: true });
+
+  function trustNext() {
+    if (trustFading || document.hidden) return;
+    if (Date.now() - trustLastScroll < 600) return;
+    const r = trustStrip.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    trustFading = true;
+    trustLine.classList.add('is-fading');
+    setTimeout(() => {
+      trustIdx = (trustIdx + 1) % trustLines.length;
+      trustLine.textContent = trustLines[trustIdx];
+      trustLine.classList.remove('is-fading');
+      trustFading = false;
+    }, 400);
+  }
+
+  setInterval(trustNext, 4200);
+}
+
 // Bento grid mouse glow
 document.querySelectorAll('.bento-item').forEach(item => {
   item.addEventListener('mousemove', (e) => {
