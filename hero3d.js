@@ -29,12 +29,15 @@
   if (!supportsGL) return;
 
   var threePromise = (function () {
-    // ES module build (three r150+ removed the global UMD builds). Dynamic
-    // import means the ~670KB library is still only fetched on desktop that
-    // will actually render it. On browsers without import() the construct
-    // throws and we no-op - same graceful degradation.
+    // ES module build (three r150+ removed the global UMD builds). The ~670KB
+    // library is only fetched on desktop that will actually render it.
+    // Absolute URL avoids module-specifier resolution quirks; the ->.catch()<-
+    // swallows any load/parse failure so it can't surface as an uncaught
+    // promise rejection. Filename carries the version (no ?v= on modules).
     try {
-      return import('three.module.min.js?v=1').then(function (m) { return m.default || m; });
+      return import(new URL('three.module.min.v160.js', document.baseURI).href)
+        .then(function (m) { return m.default || m; })
+        .catch(function () { return null; });
     } catch (e) {
       return null;
     }
