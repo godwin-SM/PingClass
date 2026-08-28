@@ -95,83 +95,113 @@
     }
     var glowTex = makeGlowTexture();
 
-    // Soft additive halo behind the dash-card — the product gets a "lit"
-    // presence instead of abstract specks.
+    // ── The product, in motion ──
+    // The dash-card is the institute "core". Glow-nodes on the rings are
+    // students & parents orbiting your institute. The sweeping bright arc is
+    // the LIVE collection percentage read straight off the card next to it.
+    // Amber pulses are fee payments arriving on autopilot. Every element maps
+    // to the product — nothing here is abstract decoration.
+    var coreGroup = new THREE.Group();
+    coreGroup.position.set(1.0, 0, 0);
+    group.add(coreGroup);
+
     var halo = new THREE.Mesh(
-      new THREE.SphereGeometry(2.1, 32, 24),
+      new THREE.SphereGeometry(1.5, 32, 24),
       new THREE.MeshBasicMaterial({
         color: 0x0d9488,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.45,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       })
     );
-    halo.position.set(1.0, 0, -2.4);
-    group.add(halo);
+    coreGroup.add(halo);
 
-    // Glow-dust field across the whole hero volume.
-    var DCOUNT = 900;
-    var dust = new Float32Array(DCOUNT * 3);
-    for (var i = 0; i < DCOUNT; i++) {
-      dust[i * 3] = -3.2 + Math.random() * 6.4;
-      dust[i * 3 + 1] = -2.4 + Math.random() * 4.8;
-      dust[i * 3 + 2] = -2.5 + Math.random() * 5.0;
-    }
-    var dustGeo = new THREE.BufferGeometry();
-    dustGeo.setAttribute('position', new THREE.BufferAttribute(dust, 3));
-    var dustPoints = new THREE.Points(dustGeo, new THREE.PointsMaterial({
-      color: 0x5eead4,
-      size: 0.12,
-      map: glowTex,
-      transparent: true,
-      opacity: 0.8,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      sizeAttenuation: true
-    }));
-    group.add(dustPoints);
-
-    // Sparse larger amber glow accents.
-    var GCOUNT = 110;
-    var glows = new Float32Array(GCOUNT * 3);
-    for (var k = 0; k < GCOUNT; k++) {
-      glows[k * 3] = -0.4 + Math.random() * 3.2;
-      glows[k * 3 + 1] = -2.2 + Math.random() * 4.4;
-      glows[k * 3 + 2] = -1.8 + Math.random() * 3.6;
-    }
-    var glowsGeo = new THREE.BufferGeometry();
-    glowsGeo.setAttribute('position', new THREE.BufferAttribute(glows, 3));
-    var glowPoints = new THREE.Points(glowsGeo, new THREE.PointsMaterial({
-      color: 0xfbbf24,
-      size: 0.42,
-      map: glowTex,
-      transparent: true,
-      opacity: 0.5,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      sizeAttenuation: true
-    }));
-    group.add(glowPoints);
-
-    // Orbit rings wrapped around the dash-card.
     var ring = new THREE.Mesh(
-      new THREE.TorusGeometry(1.75, 0.02, 12, 90),
-      new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.5 })
+      new THREE.TorusGeometry(1.9, 0.015, 12, 100),
+      new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.4 })
     );
-    ring.position.set(1.0, 0, 0);
-    ring.rotation.x = 0.7;
-    ring.rotation.z = 0.25;
-    group.add(ring);
+    coreGroup.add(ring);
 
     var amberRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2.5, 0.016, 12, 90),
-      new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.35 })
+      new THREE.TorusGeometry(2.5, 0.012, 12, 100),
+      new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.3 })
     );
-    amberRing.position.set(1.1, 0.35, -0.9);
-    amberRing.rotation.x = 1.15;
-    amberRing.rotation.z = 0.5;
-    group.add(amberRing);
+    amberRing.rotation.x = 1.25;
+    coreGroup.add(amberRing);
+
+    // Nodes on each ring = students/parents connected to the institute.
+    function buildOrbitNodes(count, radius, color, size, opacity, tilt) {
+      var geo = new THREE.BufferGeometry();
+      var arr = new Float32Array(count * 3);
+      for (var n = 0; n < count; n++) {
+        var a = (n / count) * Math.PI * 2;
+        arr[n * 3] = Math.cos(a) * radius;
+        arr[n * 3 + 1] = Math.sin(a) * radius;
+        arr[n * 3 + 2] = 0;
+      }
+      geo.setAttribute('position', new THREE.BufferAttribute(arr, 3));
+      var pts = new THREE.Points(geo, new THREE.PointsMaterial({
+        color: color,
+        size: size,
+        map: glowTex,
+        transparent: true,
+        opacity: opacity,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+      }));
+      if (tilt) pts.rotation.x = tilt;
+      coreGroup.add(pts);
+      return pts;
+    }
+    var tealNodes = buildOrbitNodes(22, 1.9, 0x5eead4, 0.18, 0.95, 0);
+    var amberNodes = buildOrbitNodes(12, 2.5, 0xfbbf24, 0.22, 0.75, 1.25);
+
+    // Collection gauge — the bright arc mirrors the card's real percentage.
+    var gaugeFrac = 0.88;
+    var gaugeLabel = document.querySelector('.dash-card-progress-head strong');
+    if (gaugeLabel) {
+      var gaugeVal = parseFloat(String(gaugeLabel.textContent || '').replace(/[^0-9.]/g, ''));
+      if (isFinite(gaugeVal)) gaugeFrac = Math.min(1, Math.max(0, gaugeVal / 100));
+    }
+    var GAUGE_R = 1.9, GSEGS = 100;
+    var gaugePos = new Float32Array(GSEGS * 3);
+    for (var g = 0; g < GSEGS; g++) {
+      var ga = (g / GSEGS) * Math.PI * 2;
+      gaugePos[g * 3] = Math.cos(ga) * GAUGE_R;
+      gaugePos[g * 3 + 1] = Math.sin(ga) * GAUGE_R;
+      gaugePos[g * 3 + 2] = 0.02;
+    }
+    var gaugeGeo = new THREE.BufferGeometry();
+    gaugeGeo.setAttribute('position', new THREE.BufferAttribute(gaugePos, 3));
+    gaugeGeo.setDrawRange(0, Math.round(GSEGS * gaugeFrac));
+    var gaugeGroup = new THREE.Group();
+    var gaugeLine = new THREE.Line(gaugeGeo, new THREE.LineBasicMaterial({
+      color: 0x5eead4, transparent: true, opacity: 0.9
+    }));
+    gaugeGroup.add(gaugeLine);
+    var gaugeTip = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: glowTex, color: 0x5eead4, transparent: true, opacity: 0.95,
+      blending: THREE.AdditiveBlending, depthWrite: false
+    }));
+    var tipA = gaugeFrac * Math.PI * 2;
+    gaugeTip.position.set(Math.cos(tipA) * GAUGE_R, Math.sin(tipA) * GAUGE_R, 0.02);
+    gaugeGroup.add(gaugeTip);
+    coreGroup.add(gaugeGroup);
+
+    // Payment pulses — amber sparks spiral into the core ("fee received").
+    var sparks = [];
+    for (var s = 0; s < 6; s++) {
+      var sp = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: glowTex, color: 0xfbbf24, transparent: true, opacity: 0,
+        blending: THREE.AdditiveBlending, depthWrite: false
+      }));
+      sp.userData.phase = s / 6;
+      sp.scale.setScalar(0.6);
+      coreGroup.add(sp);
+      sparks.push(sp);
+    }
 
     // ── Scroll scrub: 0 (hero at top) → 1 (hero scrolled one full height) ──
     var progress = 0;
@@ -216,11 +246,20 @@
       group.rotation.x = 0.12 + progress * -0.55 + mouseY * 0.1;
       group.position.y = -progress * 1.5;
       camera.position.z = 11 - progress * 3.4;
-      ring.rotation.z = 0.25 + t * 0.45;
-      ring.rotation.x = 0.7 + Math.sin(t * 0.3) * 0.08;
-      amberRing.rotation.z = 0.5 - t * 0.25;
-      dustPoints.rotation.y = t * 0.01;
-      glowPoints.rotation.y = -t * 0.02;
+
+      // Students/parents orbit the institute, the gauge sweeps, payments flow in.
+      tealNodes.rotation.z = t * 0.35;
+      amberNodes.rotation.z = -t * 0.22;
+      gaugeGroup.rotation.z = t * 0.15;
+      gaugeTip.scale.setScalar(0.55 + Math.sin(t * 6) * 0.12);
+      for (var s = 0; s < sparks.length; s++) {
+        var sp = sparks[s];
+        var f = (t * 0.14 + sp.userData.phase) % 1;
+        var ang = f * Math.PI * 2 * 1.6;
+        var rr = 3.1 - f * 3.0;
+        sp.position.set(Math.cos(ang) * rr, Math.sin(ang) * rr, 0.3);
+        sp.material.opacity = Math.sin(f * Math.PI) * 0.85;
+      }
 
       renderer.render(scene, camera);
       raf = requestAnimationFrame(render);
