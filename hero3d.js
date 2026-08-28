@@ -12,6 +12,8 @@
 (function () {
   'use strict';
 
+  var THREE = null;
+
   var hero = document.querySelector('.hero');
   if (!hero) return;
 
@@ -44,7 +46,8 @@
   })();
 
   if (threePromise) {
-    threePromise.then(function (THREE) {
+    threePromise.then(function (lib) {
+      THREE = lib || null;
       if (!THREE) return;
       try {
         init();
