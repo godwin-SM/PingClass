@@ -784,18 +784,35 @@ document.querySelectorAll('.plan-btn[data-plan]').forEach(btn => {
   });
 });
 
-// Pause the FAQ marquee when its section is fully off-screen. Each track is a
-// huge width:max-content layer animating on a 40–60s loop; leaving them running
-// off-screen eats GPU/compositor budget and can make the hero paint white when
-// you flick quickly back to the top on mobile.
+// Pause the FAQ marquee whenever the user is scrolling AND when the section is
+// off-screen. Each track is a width:max-content layer animating on a 40–60s
+// translateX loop; a flick straight up from the FAQ section was holding three
+// ~2000px animated GPU layers for the whole gesture, which is what made the
+// page hitch at the top. They now freeze the instant a scroll starts and
+// resume only 250ms after it settles (and only if still on screen).
 const faqScroller = document.querySelector('.faq-scroller');
 if (faqScroller) {
   const faqTracks = faqScroller.querySelectorAll('.faq-track');
+  const pauseTracks = () => faqTracks.forEach(t => { t.style.animationPlayState = 'paused'; });
+  const resumeInView = () => {
+    if (prefersReducedMotion) return;
+    const r = faqScroller.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight) {
+      faqTracks.forEach(t => { t.style.animationPlayState = ''; });
+    }
+  };
   const faqObserver = new IntersectionObserver((entries) => {
-    const off = !entries[0].isIntersecting;
-    faqTracks.forEach(t => { t.style.animationPlayState = off ? 'paused' : ''; });
+    if (!entries[0].isIntersecting) pauseTracks();
+    else resumeInView();
   }, { threshold: 0 });
   faqObserver.observe(faqScroller);
+
+  let faqResumeTimer = null;
+  window.addEventListener('scroll', () => {
+    pauseTracks();
+    if (faqResumeTimer) clearTimeout(faqResumeTimer);
+    faqResumeTimer = setTimeout(resumeInView, 250);
+  }, { passive: true });
 }
 
 // Scroll reveal

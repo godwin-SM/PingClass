@@ -9,6 +9,15 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Touch/small screens: skip WebGL entirely. The full-screen shader is the
+  // top jank/crash source during fast scrolls on mobile GPUs, so touch devices
+  // get the static CSS gradient instead (set in styles.css). We never even ask
+  // for a context, so there is nothing that can fail or flash.
+  const STATIC_MODE =
+    prefersReducedMotion ||
+    window.matchMedia('(pointer: coarse)').matches ||
+    Math.min(window.innerWidth, window.innerHeight) < 700;
+
   // Small screens get a lighter shader (fewer fbm octaves) so cheap mobile GPUs
   // don't stall/hitch; forces fewer per-pixel noise lookups.
   const isSmallScreen = Math.min(window.innerWidth, window.innerHeight) < 700;
@@ -224,6 +233,11 @@
     stopLoop();
     gl = null;
     program = null;
+
+    if (STATIC_MODE) {
+      canvas.classList.add('ready');
+      return;
+    }
 
     const attrs = {
       alpha: true,
