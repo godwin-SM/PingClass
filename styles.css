@@ -276,6 +276,17 @@ a {
   opacity: 1;
 }
 
+/* Desktop-only scroll-scrubbed 3D ambience (canvas is injected by hero3d.js,
+   never on touch devices). pointer-events:none so it can never block the CTA. */
+#hero3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* On touch/small screens the full-screen WebGL shader is deliberately disabled
    (it costs too much on mobile GPUs and can stall/flicker during fast scrolls).
    The hero falls back to a static, on-brand dark-teal gradient — zero runtime
