@@ -187,6 +187,28 @@
   window.fluidPause = () => { paused = true; if (animId) cancelAnimationFrame(animId); };
   window.fluidResume = () => { if (!prefersReducedMotion && paused) { paused = false; animId = requestAnimationFrame(render); } };
 
+  // Pause the rAF loop while the user is scrolling and resume ~150ms after the
+  // last scroll event. This frees the mobile main thread during fast flicks
+  // (less jank/white flash) while keeping the animation load when idle.
+  let resumeTimer = null;
+  const scrollPause = () => {
+    if (!paused) {
+      paused = true;
+      if (animId) cancelAnimationFrame(animId);
+    }
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => {
+      if (prefersReducedMotion) return;
+      // Don't resume while the auth modal is open (body scroll locked).
+      if (document.body.style.overflow === 'hidden') return;
+      if (paused) {
+        paused = false;
+        animId = requestAnimationFrame(render);
+      }
+    }, 150);
+  };
+  window.addEventListener('scroll', scrollPause, { passive: true });
+
   if (prefersReducedMotion) {
     gl.uniform1f(timeLocation, 0);
     gl.uniform2f(resolutionLocation, canvas.width, canvas.height);

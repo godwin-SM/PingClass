@@ -21,15 +21,24 @@ if (db && localStorage.getItem('pcResetPending')) {
   db.auth.signOut().then(() => window.location.reload()).catch(() => {});
 }
 
-// Navbar scroll effect
+// Navbar scroll effect — rAF-throttled with hysteresis so the glass state
+// toggles exactly once (add > 24px, remove < 12px) instead of churning the
+// class on every pixel crossing 20px during a fast flick scroll.
 const navbar = document.getElementById('navbar');
+let scrollTicking = false;
 
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 20) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    const y = window.scrollY;
+    if (y > 24) {
+      navbar.classList.add('scrolled');
+    } else if (y < 12) {
+      navbar.classList.remove('scrolled');
+    }
+    scrollTicking = false;
+  });
 }, { passive: true });
 
 // Mobile menu toggle
