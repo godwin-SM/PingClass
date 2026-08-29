@@ -13,7 +13,8 @@
     scenes.forEach(s=>{
       const target=sceneProgress(s);
       targets.set(s,target);
-      const p=target;
+      const prev=current.has(s)?current.get(s):target;
+      const p=prev+(target-prev)*0.06;
       current.set(s,p);
       s.style.setProperty('--scene-p',p.toFixed(4));
       if(s.id==='problem'){
@@ -47,6 +48,37 @@
   }
   window.addEventListener('scroll',()=>{ticking=true; if(reduce) { update(); ticking=false; }},{passive:true});
   if(!reduce){frame();setTimeout(update,100);} else update();
+  function shouldGate(delta){
+    if(reduce || !delta) return false;
+    const vh=window.innerHeight, forward=delta>0;
+    for(const s of scenes){
+      const cur=current.get(s);
+      if(cur==null || cur<0.06 || cur>0.94) continue;
+      const travel=Math.max(1, s.offsetHeight-vh);
+      const r=s.getBoundingClientRect();
+      const raw=clamp((-r.top)/travel);
+      const rawNext=clamp((-(r.top+delta))/travel);
+      const exiting=forward?(raw>=0.97&&rawNext>=0.999):(raw<=0.03&&rawNext<=0.001);
+      if(!exiting) continue;
+      if(forward&&cur<0.92) return true;
+      if(!forward&&cur>0.08) return true;
+    }
+    return false;
+  }
+  window.addEventListener('wheel',function(e){ if(shouldGate(e.deltaY)) e.preventDefault(); },{passive:false});
+  let gateTouchY=null;
+  window.addEventListener('touchstart',function(e){ const t=e.touches&&e.touches[0]; gateTouchY=t?t.clientY:null; },{passive:true});
+  window.addEventListener('touchmove',function(e){ const t=e.touches&&e.touches[0]; if(!t) return; if(gateTouchY==null) gateTouchY=t.clientY; if(shouldGate(t.clientY-gateTouchY)) e.preventDefault(); },{passive:false});
+  window.addEventListener('keydown',function(e){
+    const k=e.key; let d=0;
+    if(k==='ArrowDown'||k==='PageDown') d=k==='PageDown'?window.innerHeight:140;
+    else if(k==='ArrowUp'||k==='PageUp') d=-(k==='PageUp'?window.innerHeight:140);
+    else if(k===' ') d=window.innerHeight*0.7;
+    else if(k==='Home') d=-1e6;
+    else if(k==='End') d=1e6;
+    else return;
+    if(shouldGate(d)) e.preventDefault();
+  });
   const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   document.querySelectorAll('.metric strong[data-count]').forEach(el=>{const target=+el.dataset.count;let done=false;const o=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!done){done=true;let s=0,st=performance.now();function f(t){s=Math.min(target,Math.round(target*((t-st)/900)));el.textContent=s;if(s<target)requestAnimationFrame(f)}requestAnimationFrame(f);o.disconnect();}},{threshold:.5});o.observe(el);});
