@@ -5,6 +5,8 @@
   const lerp=(a,b,t)=>a+(b-a)*t;
   const scenes=[...document.querySelectorAll('.story-section')];
   const narrow=window.innerWidth<=1000? (window.innerWidth<=700? .45:.6) : 1;
+  const isMobile=window.innerWidth<=700||window.matchMedia?.('(pointer:coarse)').matches;
+  const lerpF=isMobile?.12:.06;
   const targets=new Map(), current=new Map();
   function sceneProgress(el){
     const r=el.getBoundingClientRect(), travel=Math.max(1,el.offsetHeight-window.innerHeight);
@@ -15,7 +17,7 @@
       const target=sceneProgress(s);
       targets.set(s,target);
       const prev=current.has(s)?current.get(s):target;
-      const p=prev+(target-prev)*0.06;
+      const p=prev+(target-prev)*lerpF;
       current.set(s,p);
       s.style.setProperty('--scene-p',p.toFixed(4));
       if(s.id==='problem'){
@@ -50,7 +52,7 @@
   window.addEventListener('scroll',()=>{ticking=true; if(reduce) { update(); ticking=false; }},{passive:true});
   if(!reduce){frame();setTimeout(update,100);} else update();
   function shouldGate(delta){
-    if(reduce || !delta) return false;
+    if(reduce||isMobile||!delta) return false;
     const vh=window.innerHeight, forward=delta>0;
     for(const s of scenes){
       const cur=current.get(s);
