@@ -27,7 +27,7 @@
       if(s.id==='features') s.querySelector('.product-explosion')?.style.setProperty('--p',p);
       if(s.id==='attendance'){const st=s.querySelector('.attendance-stack');if(st)st.style.transform=`translate3d(0,${lerp(70,0,p)}px,0) scale(${lerp(.92,1,p)})`;}
       if(s.id==='fees'){const st=s.querySelector('.payment-visual');if(st)st.style.transform=`translate3d(0,${lerp(80,0,p)}px,0) rotate(${lerp(2,0,p)}deg)`;}
-      if(s.id==='roles'){s.querySelectorAll('.role-card').forEach((c,i)=>{const off=[[-140*narrow,20*narrow],[0,-35*narrow],[140*narrow,20*narrow]][i];c.style.transform=`translate3d(${lerp(off[0],0,p)}px,${lerp(off[1],0,p)}px,0) rotate(${lerp(i===0?-5:i===2?5:0,0,p)}deg)`;c.style.opacity=String(lerp(.55,1,p));});}
+      if(s.id==='roles'){s.querySelectorAll('.role-card').forEach((c,i)=>{const off=[[-140*narrow,20*narrow],[0,35*narrow],[140*narrow,20*narrow]][i];c.style.transform=`translate3d(${lerp(off[0],0,p)}px,${lerp(off[1],0,p)}px,0) rotate(${lerp(i===0?-5:i===2?5:0,0,p)}deg)`;c.style.opacity=String(lerp(.55,1,p));});}
     });
     const hero=document.querySelector('.story-hero'); if(hero){const p=clamp(window.scrollY/Math.max(1,hero.offsetHeight)); hero.style.setProperty('--hero-p',p.toFixed(3));}
     updateRail();
