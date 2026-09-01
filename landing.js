@@ -11,10 +11,10 @@
   function sceneProgress(el){
     const r=el.getBoundingClientRect();
     if(narrow<1){
-      // Mobile: complete animation by the time the content reaches the top
-      // of the viewport, so cards finish while still visible.
+      // Mobile: progress tracks the visual content itself, so the animation
+      // completes exactly when the content reaches the top of the viewport.
       const scene=el.querySelector('.sticky-scene');
-      if(scene){const sr=scene.getBoundingClientRect();return clamp((window.innerHeight-sr.top)/Math.max(window.innerHeight,sr.height*0.6));}
+      if(scene){const content=el.querySelector('.chaos-board,.product-explosion,.attendance-stack,.payment-visual,.role-stage')||scene;const cr=content.getBoundingClientRect();return clamp((window.innerHeight-cr.top)/Math.max(window.innerHeight,cr.height*0.6));}
     }
     const travel=Math.max(1,el.offsetHeight-window.innerHeight);
     return clamp((-r.top)/travel);
