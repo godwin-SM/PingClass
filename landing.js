@@ -9,7 +9,14 @@
   const lerpF=isMobile?.12:.06;
   const targets=new Map(), current=new Map();
   function sceneProgress(el){
-    const r=el.getBoundingClientRect(), travel=Math.max(1,el.offsetHeight-window.innerHeight);
+    const r=el.getBoundingClientRect();
+    if(narrow<1){
+      // Mobile: complete animation by the time the content reaches the top
+      // of the viewport, so cards finish while still visible.
+      const scene=el.querySelector('.sticky-scene');
+      if(scene){const sr=scene.getBoundingClientRect();return clamp((window.innerHeight-sr.top)/Math.max(window.innerHeight,sr.height*0.6));}
+    }
+    const travel=Math.max(1,el.offsetHeight-window.innerHeight);
     return clamp((-r.top)/travel);
   }
   function update(){
