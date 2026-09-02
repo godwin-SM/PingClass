@@ -42,7 +42,7 @@
   const railLinks=[...document.querySelectorAll('.story-rail a')];
   function updateRail(){
     if(!railLinks.length) return;
-    let active=railLinks[0];
+    let active=railLinks.find(a=>a.classList.contains('is-active'))||railLinks[0];
     for(const a of railLinks){
       const t=document.querySelector(a.getAttribute('href'));
       if(!t) continue;
