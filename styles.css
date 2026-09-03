@@ -2170,3 +2170,7 @@ a {
 
 /* story rail visible only while its story sections are in view */
 .story-rail.is-hidden { display: none; }
+
+/* footer-v2 parity with landing page (used by legal pages that only load styles.css) */
+.footer-v2{background:#041a18}
+.footer-logo img{width:28px;height:28px}
