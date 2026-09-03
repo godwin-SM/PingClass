@@ -38,6 +38,16 @@
     });
     const hero=document.querySelector('.story-hero'); if(hero){const p=clamp(window.scrollY/Math.max(1,hero.offsetHeight)); hero.style.setProperty('--hero-p',p.toFixed(3));}
     updateRail();
+    updateRailVisibility();
+  }
+  function updateRailVisibility(){
+    const rail=document.getElementById('storyRail');
+    if(!rail||scenes.length===0) return;
+    const first=scenes[0], last=scenes[scenes.length-1];
+    const fr=first.getBoundingClientRect(), lr=last.getBoundingClientRect();
+    const vh=window.innerHeight;
+    const inStory = fr.top<=vh*0.6 && lr.top>-vh*0.2;
+    rail.classList.toggle('is-hidden', !inStory);
   }
   const railLinks=[...document.querySelectorAll('.story-rail a')];
   function updateRail(){

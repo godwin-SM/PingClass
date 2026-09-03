@@ -2167,3 +2167,6 @@ a {
   border-radius: 8px;
   border: none;
 }
+
+/* story rail visible only while its story sections are in view */
+.story-rail.is-hidden { display: none; }
