@@ -46,9 +46,17 @@ const mobileToggle = document.getElementById('mobileToggle');
 const mobileMenu = document.getElementById('mobileMenu');
 let menuOpen = false;
 
+const lockScroll = () => {
+  document.body.style.overflow = 'hidden';
+};
+const unlockScroll = () => {
+  document.body.style.overflow = '';
+};
+
 mobileToggle.addEventListener('click', () => {
   menuOpen = !menuOpen;
   mobileMenu.classList.toggle('active', menuOpen);
+  if (menuOpen) lockScroll(); else unlockScroll();
   const svg = mobileToggle.querySelector('svg');
   svg.innerHTML = menuOpen
     ? '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />'
@@ -59,8 +67,21 @@ mobileMenu.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
     menuOpen = false;
     mobileMenu.classList.remove('active');
+    unlockScroll();
     mobileToggle.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />';
   });
+});
+
+// Close the mobile menu when tapping outside the popup
+document.addEventListener('click', (e) => {
+  if (!menuOpen) return;
+  const menu = e.target.closest('#mobileMenu, #mobileToggle');
+  if (!menu) {
+    menuOpen = false;
+    mobileMenu.classList.remove('active');
+    unlockScroll();
+    mobileToggle.querySelector('svg').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />';
+  }
 });
 
 // Smooth scroll
