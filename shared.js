@@ -432,9 +432,10 @@ async function completeInit(session, expectedRole) {
     throw makeNetworkError();
   }
 
-  // Teacher / parent with no profile → institute was deleted or never existed.
-  // Don't auto-create (only admins do that). Send them to the landing page.
-  if (!data && expectedRole && expectedRole !== 'admin') {
+  // No profile exists — either admin's first login or teacher/parent whose
+  // institute was deleted. Distinguish by user_metadata: only admins have
+  // institute_name set during signup. Everyone else gets bounced to landing.
+  if (!data && !currentUser.user_metadata?.institute_name) {
     window.location.href = 'index.html?error=institute_missing';
     return;
   }
