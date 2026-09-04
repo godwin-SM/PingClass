@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=14">
+  <link rel="stylesheet" href="styles.css?v=15">
   <link rel="stylesheet" href="landing.css?v=31">
 </head>
 <body>
@@ -168,6 +168,17 @@
           </div>
           <h3 class="otp-title">Check your email</h3>
           <p class="otp-desc">We sent a 6-digit code to <strong id="otpEmail"></strong></p>
+          <!-- Session expired state (replaces form when the signup session times out) -->
+          <div class="otp-expired hidden" id="otpExpired">
+            <div class="otp-expired-icon" aria-hidden="true">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+            </div>
+            <h4 class="otp-expired-title">Session expired</h4>
+            <p class="otp-expired-desc">The sign-up session has timed out. Please start over to create a new account.</p>
+            <button type="button" class="auth-btn" id="otpRestartBtn">Start Over</button>
+          </div>
           <form id="otpSubmit">
             <div class="form-group">
               <input type="text" id="otp-code" aria-label="Enter the 6-digit code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
@@ -277,7 +288,20 @@
   <script src="plan-basic.js"></script>
   <script src="plan-pro.js"></script>
   <script src="payment.js?v=7"></script>
-  <script src="main.js?v=6"></script>
+  <script src="main.js?v=7"></script>
   <script src="landing.js?v=15"></script>
+  <script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    if (error !== 'institute_missing') return;
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:9999;max-width:480px;width:90%;padding:14px 18px;border-radius:12px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:#fca5a5;font-size:.875rem;line-height:1.5;text-align:center;backdrop-filter:blur(12px);opacity:0;transition:opacity .3s';
+    t.textContent = 'Your institute no longer exists. The admin account may have been removed. Please contact support or create a new account.';
+    document.body.appendChild(t);
+    requestAnimationFrame(() => { t.style.opacity = '1'; });
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 6000);
+  })();
+  </script>
 </body>
 </html>

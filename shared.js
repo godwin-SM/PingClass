@@ -432,6 +432,13 @@ async function completeInit(session, expectedRole) {
     throw makeNetworkError();
   }
 
+  // Teacher / parent with no profile → institute was deleted or never existed.
+  // Don't auto-create (only admins do that). Send them to the landing page.
+  if (!data && expectedRole && expectedRole !== 'admin') {
+    window.location.href = 'index.html?error=institute_missing';
+    return;
+  }
+
   // Fetch institute separately
   let institute = null;
 
@@ -442,6 +449,12 @@ async function completeInit(session, expectedRole) {
       .eq('id', data.institute_id)
       .single();
     institute = inst;
+  }
+
+  // Profile exists but institute was deleted (admin account removed).
+  if (data && !institute) {
+    window.location.href = 'index.html?error=institute_missing';
+    return;
   }
 
   // First time — create institute + profile

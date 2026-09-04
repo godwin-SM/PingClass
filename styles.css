@@ -1635,6 +1635,49 @@ a {
   font-weight: 600;
 }
 
+/* OTP Session Expired state */
+.otp-expired {
+  text-align: center;
+  padding: 8px 0 0;
+}
+
+.otp-expired-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EF4444;
+  margin: 0 auto 16px;
+}
+
+.otp-expired-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #FCA5A5;
+  margin-bottom: 8px;
+}
+
+.otp-expired-desc {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.otp-expired .auth-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.otp-expired .auth-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .auth-error {
   margin-top: 12px;
   padding: 10px 12px;

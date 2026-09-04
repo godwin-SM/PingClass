@@ -145,9 +145,11 @@ function openAuth(mode) {
   document.body.style.overflow = 'hidden';
   authError.classList.add('hidden');
   if (window.fluidPause) window.fluidPause();
-  // Reset OTP step
+  // Reset OTP step + expired state
   document.getElementById('otpStep').classList.add('hidden');
   document.getElementById('signupSubmit').classList.remove('hidden');
+  stopSignupExpiredPoll();
+  resetSignupExpired();
   resetResetForm();
   if (mode === 'signup') {
     signupForm.classList.remove('hidden');
@@ -165,9 +167,11 @@ function closeAuth() {
   // Clear all form fields
   document.querySelectorAll('#signupForm input, #loginForm input, #otpStep input, #resetForm input').forEach(el => el.value = '');
   authError.classList.add('hidden');
-  // Reset OTP step
+  // Reset OTP step + expired state
   document.getElementById('otpStep').classList.add('hidden');
   document.getElementById('signupSubmit').classList.remove('hidden');
+  stopSignupExpiredPoll();
+  resetSignupExpired();
   localStorage.removeItem('pcSignupExpiry');
   resetResetForm();
 }
@@ -281,6 +285,8 @@ document.getElementById('signupSubmit').addEventListener('submit', async (e) => 
     document.getElementById('otpEmail').textContent = email;
     setOtpExpiry('pcSignupExpiry');
     authError.classList.add('hidden');
+    resetSignupExpired();
+    startSignupExpiredPoll();
   } catch (err) {
     showError(friendlyError(err));
   } finally {
@@ -310,7 +316,8 @@ document.getElementById('otpSubmit').addEventListener('submit', async (e) => {
   // Client-side expiry check — a used or too-old code must not be accepted.
   if (otpExpired('pcSignupExpiry')) {
     localStorage.removeItem('pcSignupExpiry');
-    showError('This code has expired. Please resend a new code.');
+    stopSignupExpiredPoll();
+    showSignupExpired();
     btn.disabled = false;
     btn.textContent = 'Verify';
     return;
@@ -324,7 +331,15 @@ document.getElementById('otpSubmit').addEventListener('submit', async (e) => {
     });
 
     if (error) {
-      showError('Invalid or expired code. Please try again.');
+      const msg = (error.message || '').toLowerCase();
+      const isExpired = /expired|invalid_token|token_expired/.test(msg);
+      if (isExpired) {
+        localStorage.removeItem('pcSignupExpiry');
+        stopSignupExpiredPoll();
+        showSignupExpired();
+      } else {
+        showError('Invalid or expired code. Please try again.');
+      }
       return;
     }
 
@@ -369,6 +384,8 @@ document.getElementById('otpResend').addEventListener('click', async (e) => {
   try {
     await db.auth.resend({ email, type: 'signup' });
     setOtpExpiry('pcSignupExpiry');
+    resetSignupExpired();
+    startSignupExpiredPoll();
     link.textContent = 'Sent! Check your email';
     setTimeout(() => { link.textContent = 'Resend code'; link.style.pointerEvents = ''; }, 3000);
   } catch {
@@ -433,6 +450,55 @@ function setOtpExpiry(key) {
 function otpExpired(key) {
   const t = Number(localStorage.getItem(key) || 0);
   return !t || Date.now() > t;
+}
+
+// ── Signup OTP session-expired UI ──
+const signupExpiredForm = document.getElementById('signupSubmit');
+const signupExpiredOtp  = document.getElementById('otpStep');
+const signupExpiredEl   = document.getElementById('otpExpired');
+let signupExpiredPoll   = null;
+
+function showSignupExpired() {
+  if (!signupExpiredOtp || signupExpiredOtp.classList.contains('hidden')) return;
+  // Hide form + resend link, show expired card
+  document.getElementById('otpSubmit').classList.add('hidden');
+  document.getElementById('otpResend').classList.add('hidden');
+  document.querySelector('.otp-desc').classList.add('hidden');
+  if (signupExpiredEl) signupExpiredEl.classList.remove('hidden');
+}
+
+function resetSignupExpired() {
+  if (signupExpiredEl) signupExpiredEl.classList.add('hidden');
+  document.getElementById('otpSubmit').classList.remove('hidden');
+  document.getElementById('otpResend').classList.remove('hidden');
+  document.querySelector('.otp-desc').classList.remove('hidden');
+}
+
+// Poll every second while the OTP screen is visible
+function startSignupExpiredPoll() {
+  stopSignupExpiredPoll();
+  signupExpiredPoll = setInterval(() => {
+    if (signupExpiredOtp && !signupExpiredOtp.classList.contains('hidden') && otpExpired('pcSignupExpiry')) {
+      showSignupExpired();
+      stopSignupExpiredPoll();
+    }
+  }, 1000);
+}
+function stopSignupExpiredPoll() {
+  if (signupExpiredPoll) { clearInterval(signupExpiredPoll); signupExpiredPoll = null; }
+}
+
+// "Start Over" button
+if (document.getElementById('otpRestartBtn')) {
+  document.getElementById('otpRestartBtn').addEventListener('click', () => {
+    stopSignupExpiredPoll();
+    localStorage.removeItem('pcSignupExpiry');
+    resetSignupExpired();
+    // Go back to signup form
+    document.getElementById('otpStep').classList.add('hidden');
+    document.getElementById('signupSubmit').classList.remove('hidden');
+    authError.classList.add('hidden');
+  });
 }
 
 function showResetPhase(phaseId) {
@@ -680,6 +746,11 @@ async function ensureProfileForSession(session) {
       .maybeSingle();
     if (existing) return;
   } catch (e) { /* fall through and try to create */ }
+
+  // Only admins (who signed up with institute_name) get auto-created profiles.
+  // Teachers / parents are created via invite — don't fabricate an admin profile
+  // if their institute was deleted and the cascade wiped their row.
+  if (!user.user_metadata?.institute_name) return;
 
   const fullName = user.user_metadata?.full_name || (user.email || '').split('@')[0] || 'User';
   const instituteName = user.user_metadata?.institute_name || 'My Institute';
