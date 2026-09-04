@@ -485,7 +485,8 @@ async function buildMonthlyTrend(instituteId) {
   // Fees — pending by due_date, paid by paid_at (deduplicated)
   // Upper bound: last day of the final month in the window
   const lastWindowMonth = monthStarts[5];
-  const sixMonthsEnd = `${lastWindowMonth.getFullYear()}-${String(lastWindowMonth.getMonth() + 1).padStart(2, '0')}-31`;
+  const lastDay = new Date(lastWindowMonth.getFullYear(), lastWindowMonth.getMonth() + 1, 0).getDate();
+  const sixMonthsEnd = `${lastWindowMonth.getFullYear()}-${String(lastWindowMonth.getMonth() + 1).padStart(2, '0')}-${lastDay}`;
   const [pendingRes, paidRes] = await Promise.all([
     safeQuery(() =>
       db.from('payments').select('id, amount, status, due_date, paid_at').eq('institute_id', instituteId).in('status', ['pending', 'overdue']).gte('due_date', windowStart).lte('due_date', sixMonthsEnd)
