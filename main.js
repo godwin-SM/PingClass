@@ -670,7 +670,7 @@ async function updateNavForLoggedInUser() {
       .from('users')
       .select('full_name')
       .eq('id', session.user.id)
-      .single();
+      .maybeSingle();
     if (profile?.full_name) displayName = profile.full_name.split(' ')[0];
   } catch (e) {}
   displayName = escapeHtml(displayName);
@@ -799,7 +799,7 @@ async function shouldGoToDashboard(userId) {
       .from('users')
       .select('role')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
     // Teachers and parents always go to dashboard
     if (profile?.role === 'teacher' || profile?.role === 'parent') return getDashboardUrl(profile.role);
     // Admin always goes to dashboard — plan limits are enforced inside
@@ -836,7 +836,7 @@ document.querySelectorAll('.plan-btn[data-plan]').forEach(btn => {
       if (db) {
         const { data: { session } } = await db.auth.getSession();
         if (session) {
-          const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).single();
+          const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).maybeSingle();
           window.location.href = getDashboardUrl(profile?.role) || 'index.html';
           return;
         }
@@ -851,12 +851,12 @@ document.querySelectorAll('.plan-btn[data-plan]').forEach(btn => {
           const activePlan = await Payment.getActivePlan(db, session.user.id);
           if (activePlan === selectedPlan) {
             alert('You already have this plan active!');
-            const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).single();
+            const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).maybeSingle();
             window.location.href = getDashboardUrl(profile?.role) || 'index.html';
             return;
           }
           // Open Razorpay checkout
-          const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).single();
+          const { data: profile } = await db.from('users').select('role').eq('id', session.user.id).maybeSingle();
           const dashUrl = getDashboardUrl(profile?.role) || 'index.html';
           Payment.openCheckout(selectedPlan, db, session.user).then(() => {
             // Hard-refresh the dashboard so the new plan is authoritative:
