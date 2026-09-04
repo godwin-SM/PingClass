@@ -298,7 +298,7 @@ async function loadStats() {
   let overdue = [];
   if (studentIds.length > 0) {
     const overdueRes = await safeQuery(() =>
-      db.from('payments').select('amount, due_date').eq('status', 'overdue').in('student_id', studentIds)
+      db.from('payments').select('amount, due_date').eq('status', 'pending').lt('due_date', toDateKey(new Date())).in('student_id', studentIds)
     );
     overdue = overdueRes.ok ? overdueRes.data : [];
   }
@@ -1292,7 +1292,7 @@ async function buildTopStudents(students, studentIds, studentsPerBatch, batchIds
 
   const [attRes, payRes, sbRes, batchRes] = await Promise.all([
     studentIds.length > 0 ? safeQuery(() => db.from('attendance').select('student_id, status').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
-    studentIds.length > 0 ? safeQuery(() => db.from('payments').select('student_id, status').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
+    studentIds.length > 0 ? safeQuery(() => db.from('payments').select('student_id, status, due_date').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
     batchIds && batchIds.length > 0 ? safeQuery(() => db.from('student_batches').select('student_id, batch_id').in('batch_id', batchIds).limit(2000)) : Promise.resolve({ ok: true, data: [] }),
     safeQuery(() => db.from('batches').select('id, name').eq('institute_id', userProfile.institute_id).limit(50))
   ]);
@@ -1311,9 +1311,12 @@ async function buildTopStudents(students, studentIds, studentsPerBatch, batchIds
 
   const feeByStudent = {};
   const payRows = payRes.ok ? payRes.data : [];
+  const _todayKey = toDateKey(new Date());
   payRows.forEach(r => {
     const s = feeByStudent[r.student_id] || {};
-    s[r.status] = (s[r.status] || 0) + 1;
+    let st = r.status;
+    if (r.status === 'pending' && r.due_date && r.due_date.slice(0, 10) < _todayKey) st = 'overdue';
+    s[st] = (s[st] || 0) + 1;
     feeByStudent[r.student_id] = s;
   });
 
@@ -1353,7 +1356,7 @@ async function buildAtRiskStudents(students, studentIds, batchIds) {
 
   const [attRes, payRes, sbRes, batchRes] = await Promise.all([
     studentIds.length > 0 ? safeQuery(() => db.from('attendance').select('student_id, status').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
-    studentIds.length > 0 ? safeQuery(() => db.from('payments').select('student_id, status').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
+    studentIds.length > 0 ? safeQuery(() => db.from('payments').select('student_id, status, due_date').in('student_id', studentIds).limit(1000)) : Promise.resolve({ ok: true, data: [] }),
     batchIds && batchIds.length > 0 ? safeQuery(() => db.from('student_batches').select('student_id, batch_id').in('batch_id', batchIds).limit(2000)) : Promise.resolve({ ok: true, data: [] }),
     safeQuery(() => db.from('batches').select('id, name').eq('institute_id', userProfile.institute_id).limit(50))
   ]);
@@ -1372,9 +1375,12 @@ async function buildAtRiskStudents(students, studentIds, batchIds) {
 
   const feeByStudent = {};
   const payRows = payRes.ok ? payRes.data : [];
+  const _todayKey = toDateKey(new Date());
   payRows.forEach(r => {
     const s = feeByStudent[r.student_id] || {};
-    s[r.status] = (s[r.status] || 0) + 1;
+    let st = r.status;
+    if (r.status === 'pending' && r.due_date && r.due_date.slice(0, 10) < _todayKey) st = 'overdue';
+    s[st] = (s[st] || 0) + 1;
     feeByStudent[r.student_id] = s;
   });
 
@@ -4963,7 +4969,7 @@ async function buildAlerts() {
       }
 
       const overdueRes = await safeQuery(() =>
-        db.from('payments').select('student_id, amount').eq('status', 'overdue').in('student_id', studentIds)
+        db.from('payments').select('student_id, amount').eq('status', 'pending').lt('due_date', today).in('student_id', studentIds)
       );
       if (overdueRes.ok && (overdueRes.data || []).length > 0) {
         const total = overdueRes.data.reduce((sum, p) => sum + (p.amount || 0), 0);
