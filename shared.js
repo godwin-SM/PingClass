@@ -436,6 +436,7 @@ async function completeInit(session, expectedRole) {
   // institute was deleted. Distinguish by user_metadata: only admins have
   // institute_name set during signup. Everyone else gets bounced to landing.
   if (!data && !currentUser.user_metadata?.institute_name) {
+    await db.auth.signOut();
     window.location.href = 'index.html?error=institute_missing';
     return;
   }

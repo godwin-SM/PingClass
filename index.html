@@ -295,6 +295,8 @@
     const params = new URLSearchParams(window.location.search);
     const error = params.get('error');
     if (error !== 'institute_missing') return;
+    if (sessionStorage.getItem('pcInstituteMissingShown')) return;
+    sessionStorage.setItem('pcInstituteMissingShown', '1');
     const t = document.createElement('div');
     t.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:9999;max-width:480px;width:90%;padding:14px 18px;border-radius:12px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:#fca5a5;font-size:.875rem;line-height:1.5;text-align:center;backdrop-filter:blur(12px);opacity:0;transition:opacity .3s';
     t.textContent = 'Your institute no longer exists. The admin account may have been removed. Please contact support or create a new account.';
