@@ -29,10 +29,21 @@ const _skeletonTemplates = {
   students: () => `
     <div class="skeleton-table-rows">
       ${Array(6).fill('').map((_, i) => `
-        <div class="skeleton-table-row" style="animation-delay:${i * 0.05}s">
-          <span class="skeleton"></span><span class="skeleton"></span>
-          <span class="skeleton"></span><span class="skeleton"></span>
-          <span class="skeleton"></span><span class="skeleton"></span>
+        <div class="skeleton-student-row" style="animation-delay:${i * 0.05}s">
+          <div class="skeleton-student-main">
+            <div class="skeleton skeleton-avatar"></div>
+            <div class="skeleton skeleton-name"></div>
+          </div>
+          <div class="skeleton-student-fields">
+            <span class="skeleton"></span>
+            <span class="skeleton"></span>
+            <span class="skeleton"></span>
+            <span class="skeleton"></span>
+          </div>
+          <div class="skeleton-student-actions">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+          </div>
         </div>`).join('')}
     </div>`,
 
