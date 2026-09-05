@@ -120,6 +120,10 @@ def serve_config():
             'SUPABASE_ANON_KEY',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2cnF6Z2prc21pZHFoenZja2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTE4MzksImV4cCI6MjEwMDEyNzgzOX0.UV4YLbfJwszr-zzzkpJgbLbQ4ZZhiGVYzlAHpst45mE'
         ),
+        'VAPID_PUBLIC_KEY': os.environ.get(
+            'VAPID_PUBLIC_KEY',
+            'BJtfhRDqtUWCSWIaJhZpjvhXHYGPUNJvqxPNyrMxKG_0AKRmEMpeuNp4fbYoFgqNg-kNP30rfRc0P7GGULChzn4'
+        ),
         'PLANS': {
             'free': {'name': 'Free', 'amount': 0, 'razorpayPlanId': None},
             'basic': {'name': 'Basic', 'amount': 24900, 'razorpayPlanId': None},

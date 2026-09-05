@@ -825,9 +825,35 @@ async function initPushSubscription() {
   try {
     const registration = await navigator.serviceWorker.register('/sw.js');
 
+    // Store (or re-sync an existing) subscription in DB
+    async function submitSubscription(sub) {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) return false;
+      const keys = (sub.toJSON && sub.toJSON().keys) || {};
+      const res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/push-subscribe`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          endpoint: sub.endpoint,
+          p256dh: keys.p256dh || '',
+          auth: keys.auth || ''
+        })
+      });
+      if (!res.ok) { const t = await res.text().catch(() => ''); console.warn('[push] push-subscribe returned', res.status, t); return false; }
+      return true;
+    }
+
     // Check if already subscribed
     const subscription = await registration.pushManager.getSubscription();
-    if (subscription) return; // Already subscribed
+    if (subscription) {
+      // Re-sync an existing subscription too (it may have been created before
+      // the DB write was wired up, or in a prior session).
+      await submitSubscription(subscription);
+      return;
+    }
 
     // Check notification permission
     if (Notification.permission === 'denied') return;
@@ -849,23 +875,9 @@ async function initPushSubscription() {
     });
 
     // Store subscription in DB
-    const { data: { session } } = await db.auth.getSession();
-    if (!session) return;
-
-    await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/push-subscribe`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        endpoint: newSubscription.endpoint,
-        p256dh: newSubscription.keys.p256dh,
-        auth: newSubscription.keys.auth
-      })
-    });
+    await submitSubscription(newSubscription);
   } catch (e) {
-    // Push subscription failed silently — not critical
+    console.warn('[push] subscription failed:', e && e.message ? e.message : e);
   }
 }
 
