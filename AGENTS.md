@@ -34,3 +34,22 @@ Migrations are timestamped `YYYYMMDDHHMMSS_name.sql` (UTC). <= 0000 = dashboard-
   service_role key in frontend code.
 - Rebuild minified assets after changing source JS/CSS (see console history), bump
   the `?v=` query on the HTML reference.
+
+## Edge function secrets
+Functions that must be reachable ONLY from cron/other functions are NOT secured by
+`verify_jwt` alone (any valid user JWT passes). Guard them with a shared secret:
+
+- One 32-byte random value, stored in TWO places with the SAME value:
+  - Deno env: `supabase secrets set --project-ref <ref> INTERNAL_SECRET=<value>`
+  - Database Vault (so cron can send it): `vault.create_secret('<value>', 'internal_secret')`
+- Function compares `req.headers.get("x-supabase-secret")` to `Deno.env.get("INTERNAL_SECRET")`
+  (constant-time compare; `Deno.env.get("...") ?? ""`). 401 without it.
+- Cron jobs send the header via
+  `jsonb_build_object('x-supabase-secret', (select decrypted_secret from vault.decrypted_secrets where name='internal_secret' limit 1))`.
+- NEVER commit the secret. Migrations reference `internal_secret` by name, never by value.
+- Inner functions (push/email) must be called with the header explicitly — a caller
+  reaching them without the header means the caller is NOT sanctioned.
+- Start any existing function that silently relied on "no auth" (check-fee-notifications,
+  send-push-notifications, send-overdue-email) as `verify_jwt = true` in config.toml
+  and on deploy; precedence applies on top of the secret check.
+- The 24h rate-limit pattern (`check-email`) is the default for money/invite paths.

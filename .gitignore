@@ -12,8 +12,7 @@ __pycache__/
 # Node
 node_modules/
 
-# Supabase local dev
-supabase/
+# Supabase local dev (keep source tracked; ignore env/temp/state only)
 supabase/.temp/
 supabase/.branches/
 supabase/.env.local
