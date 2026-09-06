@@ -4054,6 +4054,20 @@ async function editStudent(id) {
   document.getElementById('studentPhone').value = student.phone || '';
   document.getElementById('studentParentName').value = student.parent_consent_by || '';
   document.getElementById('studentParentConsent').checked = !!student.parent_consent;
+  const hintEl = document.getElementById('studentConsentHint');
+  if (hintEl) {
+    if (student.parent_consent && student.parent_consent_method === 'verified_invite') {
+      hintEl.style.display = 'block';
+      hintEl.textContent = 'Verified — parent/guardian confirmed via invite.';
+      hintEl.style.color = '#0D9488';
+    } else if (student.parent_consent) {
+      hintEl.style.display = 'block';
+      hintEl.textContent = 'Recorded as admin declaration. Invite the parent to verify with an OTP.';
+      hintEl.style.color = '';
+    } else {
+      hintEl.style.display = 'none';
+    }
+  }
   await loadBatchesForSelect('studentBatch');
   document.getElementById('studentError').classList.remove('visible');
   document.getElementById('studentModal').classList.add('open');
@@ -4104,6 +4118,7 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
         if (parentConsent) {
           consentFields.parent_consent = true;
           consentFields.parent_consent_at = new Date().toISOString();
+          consentFields.parent_consent_method = 'manual';
         }
         await db.from('students').update({ full_name: name, phone: phone || null, ...consentFields }).eq('id', editingStudentId);
         if (batchId) {
@@ -4139,7 +4154,8 @@ document.getElementById('studentForm')?.addEventListener('submit', async (e) => 
             institute_id: currentInstitute.id,
             parent_consent: true,
             parent_consent_by: parentName || null,
-            parent_consent_at: new Date().toISOString()
+            parent_consent_at: new Date().toISOString(),
+            parent_consent_method: 'manual'
           })
           .select('id')
           .single();

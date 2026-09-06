@@ -172,6 +172,12 @@
     .pw-match.ok { color: var(--success); display: block; }
     .pw-match.no { color: var(--error); display: block; }
 
+    /* ── Consent ── */
+    .invite-consent-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+    .invite-consent-label input { margin-top: 3px; accent-color: var(--primary); }
+    .invite-consent-label a { color: var(--secondary); text-decoration: underline; }
+    .invite-consent-hint { display: block; margin-top: 6px; color: var(--text-muted); line-height: 1.5; }
+
     /* ── Resend Link ── */
     .resend-row {
       text-align: center; margin-top: 16px; font-size: 0.8125rem; color: var(--text-muted);
@@ -405,6 +411,16 @@
             </button>
           </div>
           <div class="pw-match" id="pwMatch"></div>
+        </div>
+
+        <div class="invite-form-group">
+          <label class="invite-consent-label">
+            <input type="checkbox" id="inviteConsent" />
+            <span style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.55;">
+              I have read and agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>, and I consent to the processing of my personal data as described there, under the Digital Personal Data Protection Act, 2023.
+              <span class="invite-consent-hint">मैंने Privacy Policy और Terms of Service पढ़ ली हैं और इनसे सहमत हूँ। डिजिटल पर्सनल डेटा प्रोटेक्शन अधिनियम, 2023 के अनुसार मेरे व्यक्तिगत डेटा के प्रोसेसिंग के लिए यह सहमति देता/देती हूँ।</span>
+            </span>
+          </label>
         </div>
 
         <div class="invite-error" id="pwError"></div>
@@ -661,6 +677,14 @@
       hideError('pwError');
       document.getElementById('pwMatch').className = 'pw-match';
 
+      const consentEl = document.getElementById('inviteConsent');
+      if (!consentEl || !consentEl.checked) {
+        showError('pwError', 'Please accept the Privacy Policy and Terms of Service to continue.');
+        document.getElementById('createAccountBtn').disabled = false;
+        document.getElementById('createAccountBtn').textContent = 'Create Account';
+        return;
+      }
+
       // Validate
       if (password.length < 6) {
         showError('pwError', 'Password must be at least 6 characters.');
@@ -683,7 +707,11 @@
       // 1) Set password + display name on the auth user
       const { error: pwErr } = await db.auth.updateUser({
         password,
-        data: { full_name: inviteData.name }
+        data: {
+          full_name: inviteData.name,
+          consent_at: new Date().toISOString(),
+          consent_version: '2026-09-06'
+        }
       });
       if (pwErr) {
         console.error('Set password error:', pwErr);

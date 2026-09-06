@@ -270,7 +270,7 @@ document.getElementById('signupSubmit').addEventListener('submit', async (e) => 
       email,
       password,
       options: {
-        data: { full_name: name, institute_name: institute, consent_at: new Date().toISOString(), consent_version: '2026-08-14' }
+        data: { full_name: name, institute_name: institute, consent_at: new Date().toISOString(), consent_version: '2026-09-06' }
       }
     });
 
