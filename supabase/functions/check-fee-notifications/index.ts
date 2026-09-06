@@ -55,7 +55,8 @@ async function sendPushNotification(supabaseUrl: string, userId: string, title: 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`
+        "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        "x-supabase-secret": Deno.env.get("INTERNAL_SECRET") ?? ""
       },
       body: JSON.stringify({ user_id: userId, title, body, type, data })
     });
@@ -74,7 +75,8 @@ async function sendOverdueEmail(supabaseUrl: string, to: string, parentName: str
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`
+        "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        "x-supabase-secret": Deno.env.get("INTERNAL_SECRET") ?? ""
       },
       body: JSON.stringify({ to, parentName, childName, amount, dueDate, daysOverdue })
     });
@@ -94,6 +96,12 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Cron-only: must present the shared INTERNAL_SECRET (see fee_notifications_cron).
+    const provided = req.headers.get("x-supabase-secret") ?? "";
+    if (!provided || provided !== Deno.env.get("INTERNAL_SECRET")) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 
     const admin = createClient(

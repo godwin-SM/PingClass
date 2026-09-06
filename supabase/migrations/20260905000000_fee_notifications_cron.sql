@@ -16,7 +16,13 @@
 --   1. The `service_role` secret must exist in Vault:
 --        select vault.create_secret('<SERVICE_ROLE_KEY>', 'service_role');
 --      (Runs ONCE; use the CLI secret value, then remove the file.)
---   2. Replace <PROJECT_REF> below with your Supabase project ref.
+--   2. The internal edge-function secret must exist in Vault AND as the
+--      INTERNAL_SECRET function secret (same value), so cron can authenticate
+--      and the functions can verify it:
+--        select vault.create_secret('<INTERNAL_SECRET>', 'internal_secret');
+--      and:
+--        supabase secrets set INTERNAL_SECRET=<INTERNAL_SECRET>
+--   3. Replace <PROJECT_REF> below with your Supabase project ref.
 --
 -- NOTE: timeout_milliseconds is raised above pg_net's 5s default because the
 -- edge function legitimately takes several seconds (it iterates payments and
@@ -38,7 +44,8 @@ select cron.schedule(
     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/check-fee-notifications',
     headers := jsonb_build_object(
       'Content-Type',  'application/json',
-      'Authorization', (select 'Bearer ' || decrypted_secret from vault.decrypted_secrets where name = 'service_role' limit 1)
+      'Authorization', (select 'Bearer ' || decrypted_secret from vault.decrypted_secrets where name = 'service_role' limit 1),
+      'x-supabase-secret', (select decrypted_secret from vault.decrypted_secrets where name = 'internal_secret' limit 1)
     ),
     timeout_milliseconds := 20000
   )

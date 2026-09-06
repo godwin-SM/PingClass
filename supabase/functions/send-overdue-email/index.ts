@@ -92,6 +92,12 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Internal-only: must present the shared INTERNAL_SECRET.
+    const provided = req.headers.get("x-supabase-secret") ?? "";
+    if (!provided || provided !== Deno.env.get("INTERNAL_SECRET")) {
+      return json({ error: "Unauthorized" }, 401);
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const resendKey = Deno.env.get("RESEND_API_KEY") ?? "";
 

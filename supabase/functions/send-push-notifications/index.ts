@@ -139,9 +139,11 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Verify request is from service-role (cron or admin)
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) return json({ error: "Missing authorization" }, 401);
+    // Internal-only: must present the shared INTERNAL_SECRET.
+    const provided = req.headers.get("x-supabase-secret") ?? "";
+    if (!provided || provided !== Deno.env.get("INTERNAL_SECRET")) {
+      return json({ error: "Unauthorized" }, 401);
+    }
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
