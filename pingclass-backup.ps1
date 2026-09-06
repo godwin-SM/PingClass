@@ -1,20 +1,19 @@
-# PingClass Free Backup
-# Nightly JSON snapshot of every public table via the Supabase REST API (service-role key).
-# Zero cost: no PITR, no backup add-on. Best-effort disaster/export snapshot,
-# NOT a byte-perfect time machine (see pingclass-restore.ps1).
+# PingClass Zero-Local Backup
+# Nightly JSON snapshot of every public table via the Supabase REST API (service-role key),
+# uploaded straight to the PRIVATE GitHub repo godwin-SM/PingClass-backups via the GitHub API.
+# Nothing is stored permanently on this computer: the snapshot lives in the temp folder during
+# the run and is deleted the moment the upload succeeds.
 #
-# Credentials are read from .env (gitignored). Cannot run if .env is missing.
+# Credentials are read from .env (gitignored): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
+# GITHUB_REPO, GITHUB_BACKUP_TOKEN.
 
 param(
-    [string]$BackupRoot = "",
-    [int]$RetentionDays = 14,
     [string]$EnvFile = ""
 )
 
 $ErrorActionPreference = "Stop"
 
 $RepoDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-if (-not $BackupRoot) { $BackupRoot = Join-Path $RepoDir "backups" }
 if (-not $EnvFile)    { $EnvFile    = Join-Path $RepoDir ".env" }
 
 # ---- 1. Load credentials from .env ----
@@ -28,9 +27,21 @@ if (Test-Path -LiteralPath $EnvFile) {
 }
 $SupabaseUrl = $envVars["SUPABASE_URL"]
 $ServiceKey  = $envVars["SUPABASE_SERVICE_ROLE_KEY"]
+$GitHubRepo  = $envVars["GITHUB_REPO"]
+$GitHubToken = $envVars["GITHUB_BACKUP_TOKEN"]
 if (-not $SupabaseUrl -or -not $ServiceKey) {
     Write-Error "Missing SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY in $EnvFile. Backup aborted."
     exit 1
+}
+if (-not $GitHubRepo -or -not $GitHubToken) {
+    Write-Error "Missing GITHUB_REPO / GITHUB_BACKUP_TOKEN in $EnvFile. Backup aborted."
+    exit 1
+}
+
+$ApiHeaders = @{
+    Authorization = "Bearer $GitHubToken"
+    "User-Agent"  = "pingclass-backup"
+    Accept        = "application/vnd.github+json"
 }
 
 # ---- 2. Dump each known public table (paginated, 1000 rows per request) ----
@@ -44,8 +55,9 @@ $tables = @()
 
 Write-Host "PingClass Backup @ $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Cyan
 
-$stamp   = Get-Date -Format "yyyyMMdd-HHmmss"
-$outDir  = Join-Path $BackupRoot $stamp
+$stamp  = Get-Date -Format "yyyyMMdd-HHmmss"
+$tmpDir = Join-Path $env:TEMP "PingClassBackups"
+$outDir = Join-Path $tmpDir $stamp
 New-Item -ItemType Directory -Path $outDir -Force | Out-Null
 
 $manifest = [ordered]@{
@@ -78,7 +90,7 @@ foreach ($t in $candidates) {
     }
 
     $tables += $t
-    $rows | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath (Join-Path $outDir "$t.json") -Encoding UTF8
+    ConvertTo-Json -InputObject @($rows) -Depth 100 | Set-Content -LiteralPath (Join-Path $outDir "$t.json") -Encoding UTF8
     $manifest.tables[$t] = @($rows).Count
     $totalRows += @($rows).Count
     Write-Host ("  {0,-28} {1,6} rows" -f $t, @($rows).Count) -ForegroundColor Gray
@@ -87,27 +99,42 @@ foreach ($t in $candidates) {
 $manifest.total_rows = $totalRows
 $manifest | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $outDir "_manifest.json") -Encoding UTF8
 
-# ---- 4. Retention: keep the last N days ----
-Get-ChildItem -LiteralPath $BackupRoot -Directory -ErrorAction SilentlyContinue |
-    Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-$RetentionDays) } |
-    Remove-Item -Recurse -Force
+# ---- 3. Upload the whole snapshot as ONE commit to the private GitHub repo ----
+try {
+    $branch = "main"
+    $base   = Invoke-RestMethod -Uri "https://api.github.com/repos/$GitHubRepo/branches/$branch" -Headers $ApiHeaders
+    $baseSha = $base.commit.sha
 
-# ---- 5. Push to the private GitHub repo (best-effort; local backup ALWAYS succeeds) ----
-# backups/ is its own git repo pointing at github.com/godwin-SM/PingClass-backups (private).
-if (Test-Path -LiteralPath (Join-Path $BackupRoot ".git")) {
-    try {
-        Push-Location $BackupRoot
-        git add -A
-        git -c user.name="PingClass Backup" -c user.email="backup@pingclass.in" commit -m "backup $stamp ($totalRows rows)" --quiet
-        git push origin main --quiet
-        Write-Host "Pushed to private GitHub repo." -ForegroundColor Green
-        Pop-Location
-    } catch {
-        Pop-Location
-        Write-Host "GitHub push skipped ($($_.Exception.Message)). Local backup is safe." -ForegroundColor Yellow
+    $tree = @()
+    foreach ($f in @(Get-ChildItem -LiteralPath $outDir -File)) {
+        $bytes = [System.IO.File]::ReadAllBytes($f.FullName)
+        $b64   = [Convert]::ToBase64String($bytes)
+        $blob  = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$GitHubRepo/git/blobs" `
+            -Headers $ApiHeaders -ContentType "application/json" `
+            -Body (@{ content = $b64; encoding = "base64" } | ConvertTo-Json -Compress)
+        $tree += @{ path = "$stamp/$($f.Name)"; mode = "100644"; type = "blob"; sha = $blob.sha }
     }
-} else {
-    Write-Host "No git repo in $BackupRoot - skipping GitHub push." -ForegroundColor Yellow
+
+    $newTree = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$GitHubRepo/git/trees" `
+        -Headers $ApiHeaders -ContentType "application/json" `
+        -Body (@{ tree = $tree; base_tree = $baseSha } | ConvertTo-Json -Compress -Depth 10)
+
+    $commit = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$GitHubRepo/git/commits" `
+        -Headers $ApiHeaders -ContentType "application/json" `
+        -Body (@{ message = "backup $stamp ($totalRows rows)"; tree = $newTree.sha; parents = @($baseSha) } | ConvertTo-Json -Compress)
+
+    Invoke-RestMethod -Method Patch -Uri "https://api.github.com/repos/$GitHubRepo/git/refs/heads/$branch" `
+        -Headers $ApiHeaders -ContentType "application/json" `
+        -Body (@{ sha = $commit.sha; force = $false } | ConvertTo-Json -Compress) | Out-Null
+
+    Write-Host "Uploaded to private GitHub repo as commit $($commit.sha.Substring(0,7))." -ForegroundColor Green
+    Write-Host "Deleting local copy..." -ForegroundColor Gray
+    Remove-Item -LiteralPath $outDir -Recurse -Force
+    Write-Host "Local copy removed - nothing permanent stored on this computer." -ForegroundColor Green
+} catch {
+    Write-Warning ("GitHub upload FAILED: " + $_.Exception.Message)
+    Write-Warning "Snapshot PRESERVED at $outDir (will be kept until a later run uploads successfully)."
+    exit 2
 }
 
-Write-Host "Backup complete: $outDir ($totalRows rows, $($tables.Count) tables)" -ForegroundColor Green
+Write-Host "Backup complete: GitHub:$stamp ($totalRows rows, $($tables.Count) tables)" -ForegroundColor Green
