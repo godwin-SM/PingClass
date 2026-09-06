@@ -25,4 +25,5 @@ Thumbs.db
 .vercel
 strix_runs/
 archive/
+backups/
 setup-monitor.ps1
