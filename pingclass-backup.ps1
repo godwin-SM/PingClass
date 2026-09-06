@@ -92,4 +92,22 @@ Get-ChildItem -LiteralPath $BackupRoot -Directory -ErrorAction SilentlyContinue 
     Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-$RetentionDays) } |
     Remove-Item -Recurse -Force
 
+# ---- 5. Push to the private GitHub repo (best-effort; local backup ALWAYS succeeds) ----
+# backups/ is its own git repo pointing at github.com/godwin-SM/PingClass-backups (private).
+if (Test-Path -LiteralPath (Join-Path $BackupRoot ".git")) {
+    try {
+        Push-Location $BackupRoot
+        git add -A
+        git -c user.name="PingClass Backup" -c user.email="backup@pingclass.in" commit -m "backup $stamp ($totalRows rows)" --quiet
+        git push origin main --quiet
+        Write-Host "Pushed to private GitHub repo." -ForegroundColor Green
+        Pop-Location
+    } catch {
+        Pop-Location
+        Write-Host "GitHub push skipped ($($_.Exception.Message)). Local backup is safe." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "No git repo in $BackupRoot - skipping GitHub push." -ForegroundColor Yellow
+}
+
 Write-Host "Backup complete: $outDir ($totalRows rows, $($tables.Count) tables)" -ForegroundColor Green
