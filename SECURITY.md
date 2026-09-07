@@ -63,13 +63,31 @@ Vault; matching pending migrations:
   (`extension_in_public` = pg_net false positive; leaked-password protection =
   does not exist on the current plan).
 
+## Backup & restore (no-cost path)
+
+- Nightly full snapshot of all 19 data tables via `pingclass-backup.ps1`
+  (scheduled task `PingClassBackup`, daily 03:30 local). Uses the REST API with
+  the service-role key from `.env` - no local storage, no PITR cost. Snapshots are
+  uploaded straight to the private repo `godwin-SM/PingClass-backups` via the
+  GitHub API (fine-grained token in `.env`, zero local files).
+- Restore via `pingclass-restore.ps1 -FromGitHub`: idempotent per-row upserts in
+  FK-safe order. Existing student rows are PATCHed (never INSERTed) so the DPDP
+  consent BEFORE-INSERT trigger cannot fabricate `parent_consent`; only genuinely
+  missing rows are re-created with consent marked true. `rate_limit_hits` is not
+  restored. `audit_log` is restored last and reconciled to the snapshot (the app's
+  audit triggers would otherwise log every restore write).
+- Live DB triggers/grants verified compatible with service-role restores:
+  `check_announcement_plan` fixed (was raising 42703 on every insert) and
+  service_role granted EXECUTE/USAGE on all `private` helpers
+  (migrations `20260907112039`, `20260907112956`, `20260907113047`).
+- Token expiry caveat: the fine-grained backup token is valid ~90 days; when it
+  dies the nightly task pauses and warns until `.env` is refreshed.
+
 ## Remaining (dashboard actions, cannot be scripted)
 
-1. **Scheduled backups / PITR** - Database > Backups. Without this, no self-service
-   recovery from destructive SQL/ransomware. *Most important outstanding item.*
-2. **MFA enforcement** - Authentication > Sign In. Require MFA for all users
+1. **MFA enforcement** - Authentication > Sign In. Require MFA for all users
    (especially institute owners/admins).
-3. **Leaked-password (HIBP) check** - Authentication > Sign In > Password strength.
+2. **Leaked-password (HIBP) check** - Authentication > Sign In > Password strength.
    Available on paid plans only.
 
 ## Conventions
@@ -85,3 +103,4 @@ Vault; matching pending migrations:
 | `1e24c68` | track edge functions in VCS + rate-limit payment/invite paths |
 | `9c590eb` | INTERNAL_SECRET gate on push/email/cron functions, `verify_jwt=true` |
 | `4da39c5` | un-ignore supabase source; document secrets convention |
+| `8fb0d20` | zero-local nightly backup via GitHub API (scripted, no PITR cost) |

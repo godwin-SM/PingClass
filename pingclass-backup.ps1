@@ -47,9 +47,10 @@ $ApiHeaders = @{
 # ---- 2. Dump each known public table (paginated, 1000 rows per request) ----
 $candidates = @(
     "users", "institutes", "students", "batches", "student_batches",
-    "parent_student_links", "payments", "attendance", "announcements",
+    "parent_student_links", "payments", "fees", "attendance", "announcements",
     "invite_tokens", "institute_settings", "notification_preferences",
-    "notifications", "subscriptions", "rate_limit_hits"
+    "notifications", "subscriptions", "push_subscriptions", "rate_limit_hits",
+    "waitlist", "audit_log"
 )
 $tables = @()
 
