@@ -354,13 +354,14 @@ document.getElementById('otpSubmit').addEventListener('submit', async (e) => {
     const { data: { session: otpSession } } = await db.auth.getSession();
     await ensureProfileForSession(otpSession);
 
-    // Check if user should go to dashboard (teacher/parent always, admin if paid)
+    // Route through the thank-you page once after signup — it shows next steps
+    // and the response-time promise, then one click continues to the dashboard.
     if (otpSession) {
       const dashUrl = await shouldGoToDashboard(otpSession.user.id);
-      if (dashUrl) {
-        window.location.href = dashUrl;
-        return;
-      }
+      window.location.href = dashUrl
+        ? 'thank-you.html?next=' + encodeURIComponent(dashUrl)
+        : 'thank-you.html';
+      return;
     }
 
     // Update nav based on subscription status
