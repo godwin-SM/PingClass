@@ -119,6 +119,14 @@ const signupForm = document.getElementById('signupForm');
 const loginForm = document.getElementById('loginForm');
 const authError = document.getElementById('authError');
 
+// ── Signup OTP session-expired UI ──
+// Declared up here (before openAuth is called) so top-level #login/#signup
+// handling below can safely touch these without hitting the TDZ.
+const signupExpiredForm = document.getElementById('signupSubmit');
+const signupExpiredOtp  = document.getElementById('otpStep');
+const signupExpiredEl   = document.getElementById('otpExpired');
+let signupExpiredPoll   = null;
+
 // Arriving via #login / #signup (e.g. footer links from other pages) should
 // open the right auth form — there are no elements with those ids to scroll to.
 (function() {
@@ -462,11 +470,6 @@ function otpExpired(key) {
 }
 
 // ── Signup OTP session-expired UI ──
-const signupExpiredForm = document.getElementById('signupSubmit');
-const signupExpiredOtp  = document.getElementById('otpStep');
-const signupExpiredEl   = document.getElementById('otpExpired');
-let signupExpiredPoll   = null;
-
 function showSignupExpired() {
   if (!signupExpiredOtp || signupExpiredOtp.classList.contains('hidden')) return;
   // Hide form + resend link, show expired card
