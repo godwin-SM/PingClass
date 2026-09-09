@@ -98,4 +98,16 @@
   const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
   document.querySelectorAll('.metric strong[data-count]').forEach(el=>{const target=+el.dataset.count;let done=false;const o=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!done){done=true;let s=0,st=performance.now();function f(t){s=Math.min(target,Math.round(target*((t-st)/900)));el.textContent=s;if(s<target)requestAnimationFrame(f)}requestAnimationFrame(f);o.disconnect();}},{threshold:.5});o.observe(el);});
+  const navBar=document.getElementById('navbar');
+  if(navBar){
+    let navTick=false;
+    window.addEventListener('scroll',()=>{
+      if(navTick) return;
+      navTick=true;
+      requestAnimationFrame(()=>{
+        navBar.classList.toggle('scrolled', window.scrollY>24);
+        navTick=false;
+      });
+    }, {passive:true});
+  }
 })();
