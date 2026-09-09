@@ -50,6 +50,15 @@
     .article-hero .blog-cat { color: #2DD4BF; font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; }
     .article-hero h1 { font-size: clamp(1.75rem, 4.5vw, 2.75rem); font-weight: 700; line-height: 1.15; max-width: 720px; margin: 12px auto 8px; }
     .article-hero .blog-meta { color: rgba(255,255,255,.6); font-size: .875rem; margin-top: 8px; }
+    .article-back { display: inline-block; margin-bottom: 14px; color: #2DD4BF; font-size: .875rem; font-weight: 600; letter-spacing: .02em; text-decoration: none; }
+    .article-back:hover { color: #A7F3EA; }
+    .article-body table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: .95rem; }
+    .article-body th { background: #134E4A; color: #fff; text-align: left; padding: 10px 12px; font-weight: 700; }
+    .article-body th:first-child { border-top-left-radius: 10px; }
+    .article-body th:last-child { border-top-right-radius: 10px; }
+    .article-body td { padding: 10px 12px; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
+    .article-body tr:last-child td { border-bottom: none; }
+    .table-wrap { overflow-x: auto; }
     .article-body { max-width: 720px; margin: 0 auto 40px; padding: 40px 44px 48px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 20px; box-shadow: 0 20px 48px -28px rgba(0, 0, 0, 0.25); color: #2D3F3B; line-height: 1.75; font-size: 1rem; }
     .article-body h2 { font-size: 1.35rem; font-weight: 700; color: #134E4A; margin: 40px 0 12px; }
     .article-body h3 { font-size: 1.1rem; font-weight: 600; color: #0D9488; margin: 28px 0 8px; }
@@ -71,7 +80,7 @@
     .related-card .related-cat { font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #0D9488; font-weight: 600; }
     .related-card h3 { color: #134E4A; font-weight: 700; font-size: 1rem; line-height: 1.45; margin: 6px 0 10px; }
     .related-go { color: #0D9488; font-weight: 600; font-size: .875rem; }
-    @media (max-width: 768px) { .article-hero { padding: 100px 16px 40px; } .article-body { padding: 28px 20px 36px; margin-left: 16px; margin-right: 16px; } .article-cta { margin-left: 16px; margin-right: 16px; } .related { padding: 0 16px; } .related-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .article-hero { padding: 100px 16px 40px; } .article-body { padding: 28px 20px 36px; margin-left: 16px; margin-right: 16px; } .article-body table { font-size: .875rem; } .article-body th, .article-body td { padding: 8px 10px; } .article-cta { margin-left: 16px; margin-right: 16px; } .related { padding: 0 16px; } .related-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -114,6 +123,7 @@
 
   <main>
     <section class="article-hero">
+      <a class="article-back" href="../blog.html">← Back to Blog</a>
       <span class="blog-cat">ATTENDANCE</span>
       <h1>Attendance Tracking for Coaching Institutes: Why Paper Registers Fail</h1>
       <p class="blog-meta">4 min read · Updated September 2026</p>
