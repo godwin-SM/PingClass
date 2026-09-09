@@ -127,11 +127,28 @@
     ]
   }
   </script>
+  <!-- ====================================================================
+       REVIEW SCHEMA SCAFFOLD — ENABLE ONLY AFTER REAL, VERIFIED REVIEWS.
+       Google's guidelines prohibit marking up fabricated ratings/reviews and
+       can penalize pages that do. Keep this commented at HTML level until
+       real institute owners have reviewed PingClass in the visible section
+       below (#reviews). When 1+ real reviews exist, paste aggregateRating
+       and review() INSIDE the SoftwareApplication node (@id "#software") in
+       the FIRST application/ld+json block of this page, e.g.:
+       "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5",
+         "ratingCount": "1", "bestRating": "5", "worstRating": "1" },
+       "review": [ { "@type": "Review",
+         "author": { "@type": "Person", "name": "REAL_OWNER_NAME" },
+         "datePublished": "2026-09-01",
+         "reviewBody": "REAL_VERBATIM_QUOTE_FROM_THE_OWNER",
+         "reviewRating": { "@type": "Rating", "ratingValue": "5" } } ]
+       Keep the visible testimonials below in sync with every review marked up.
+       ==================================================================== -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=15">
-  <link rel="stylesheet" href="landing.css?v=31">
+  <link rel="stylesheet" href="landing.css?v=32">
 </head>
 <body>
   <nav class="navbar" id="navbar">
@@ -227,6 +244,29 @@
         <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">Is there a mobile app?</h4><p class="faq-card-a">Yes. Parents and students use the mobile app. Teachers and admins use the web dashboard from any device.</p></div>
       </div></div>
     </div></section>
+
+    <section class="testimonials" id="reviews">
+      <div class="testimonials-inner">
+        <span class="section-kicker">WHAT INSTITUTES SAY</span>
+        <h2>Built on <span>honest feedback.</span></h2>
+        <p>We won't publish a single quote until a real institute owner says it. These slots are where verified reviews will live — real names, real institutes, real experiences.</p>
+        <div class="testimonial-grid">
+          <article class="testimonial-card t-empty">
+            <span class="t-empty-tag">Review slot 01</span>
+            <p class="t-empty-txt">Awaiting its first verified review. Ready to drop in a quote, a name and an institute.</p>
+          </article>
+          <article class="testimonial-card t-empty">
+            <span class="t-empty-tag">Review slot 02</span>
+            <p class="t-empty-txt">Awaiting its first verified review. Ready to drop in a quote, a name and an institute.</p>
+          </article>
+          <article class="testimonial-card t-empty">
+            <span class="t-empty-tag">Review slot 03</span>
+            <p class="t-empty-txt">Awaiting its first verified review. Ready to drop in a quote, a name and an institute.</p>
+          </article>
+        </div>
+        <a class="t-share" href="mailto:pingclassoff@gmail.com?subject=PingClass%20review">Sharing your honest experience helps the next institute →</a>
+      </div>
+    </section>
 
     <section class="final-cta"><div class="final-glow"></div><img src="logo.png" alt="PingClass"><span class="section-kicker">READY WHEN YOU ARE</span><h2>Your institute deserves<br><span>a calmer way to run.</span></h2><p>Start with 20 students for free. Upgrade when your institute grows.</p><a href="#signup" class="btn-primary large">Create your institute <span>→</span></a><small>No credit card · Free forever plan · Real humans reply within 24 hours</small></section>
   </main>
