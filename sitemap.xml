@@ -36,6 +36,26 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://pingclass.vercel.app/blog/parent-communication-tuition-center</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pingclass.vercel.app/blog/structuring-batches-tuition-center</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pingclass.vercel.app/blog/tuition-fees-subscription-vs-course</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pingclass.vercel.app/blog/choosing-tuition-management-software</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://pingclass.vercel.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
