@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+Sitemap: https://pingclass.vercel.app/sitemap.xml
