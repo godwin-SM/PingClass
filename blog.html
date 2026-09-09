@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guides for running a tuition or coaching institute: managing fees, tracking attendance, keeping parents informed and reducing admin work.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <title>PingClass Blog — Tuition Management Tips & Guides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="landing.css?v=31">
+  <style>
+    .navbar { background: rgba(5,31,28,.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .page-hero { background: radial-gradient(1200px 500px at 50% -10%, rgba(20,184,166,.22), transparent 60%), #051F1C; color: #fff; padding: 120px 24px 56px; text-align: center; }
+    .page-hero .section-kicker { color: #2DD4BF; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; line-height: 1.1; margin: 12px 0; }
+    .page-hero h1 span { color: #2DD4BF; }
+    .page-hero p { max-width: 620px; margin: 0 auto; color: rgba(255,255,255,.72); font-size: 1.05rem; line-height: 1.7; }
+    .blog-index { max-width: 960px; margin: 0 auto; padding: 72px 24px 40px; }
+    .blog-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 10px 30px -18px rgba(0,0,0,.18); transition: transform .2s, box-shadow .2s; display: block; color: inherit; text-decoration: none; }
+    .blog-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -20px rgba(0,0,0,.25); }
+    .blog-card .blog-meta { font-size: .8125rem; color: #5B7B76; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+    .blog-card h2 { font-size: 1.4rem; font-weight: 700; color: #134E4A; margin-bottom: 8px; }
+    .blog-card p { color: #3A5A55; font-size: .95rem; line-height: 1.65; margin-bottom: 12px; }
+    .blog-card .blog-read { color: #0D9488; font-weight: 600; font-size: .9rem; }
+    @media (max-width: 768px) { .blog-index { padding: 48px 16px 32px; } .blog-card { padding: 22px 20px; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span>PingClass</span>
+      </a>
+      <div class="nav-links">
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="index.html#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a href="index.html#login" class="nav-login">Log in</a>
+        <a href="index.html#signup" class="nav-cta">Start free</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html">Blog</a>
+      <a href="index.html#faq">FAQ</a>
+      <div class="mobile-divider"></div>
+      <a href="index.html#login">Log in</a>
+      <a href="index.html#signup" class="mobile-cta">Start free</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero">
+      <span class="section-kicker">BLOG</span>
+      <h1>Run your institute better.<br><span>One guide at a time.</span></h1>
+      <p>Practical, no-fluff advice for tuition and coaching institutes — fees, attendance, parents and the admin that eats your evening.</p>
+    </section>
+
+    <section class="blog-index">
+      <a href="blog/manage-fees-tuition-center.html" class="blog-card">
+        <div class="blog-meta">Fees · 5 min read</div>
+        <h2>How to Manage Fees for a Tuition Center Without the Chaos</h2>
+        <p>Fee collection is where most institutes lose the most time — and money. Here's a simple system to track paid, pending and overdue fees without a register or spreadsheet.</p>
+        <span class="blog-read">Read article →</span>
+      </a>
+
+      <a href="blog/attendance-tracking-coaching-institute.html" class="blog-card">
+        <div class="blog-meta">Attendance · 4 min read</div>
+        <h2>Attendance Tracking for Coaching Institutes: Why Paper Registers Fail</h2>
+        <p>Attendance records are the backbone of a coaching institute — for parents, for fees and for spotting at-risk students. Here's how to keep them accurate without extra admin.</p>
+        <span class="blog-read">Read article →</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer footer-v2"><div class="footer-container"><div class="footer-top"><div class="footer-brand"><a href="index.html" class="footer-logo"><img src="logo-64.png" alt="PingClass"><span>PingClass</span></a><p class="footer-tagline">A simpler way to run your tuition institute.</p></div><div class="footer-links"><div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="index.html#faq">FAQ</a><a href="blog.html">Blog</a></div><div class="footer-col"><h4>Company</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div><div class="footer-col"><h4>Account</h4><a href="index.html#login">Log in</a><a href="index.html#signup">Start free</a></div></div></div><div class="footer-bottom"><p>&copy; 2026 PingClass. All rights reserved.</p><p>pingclassoff@gmail.com</p></div></div></footer>
+
+  <script>
+  (function(){
+    var toggle=document.getElementById('mobileToggle');
+    var menu=document.getElementById('mobileMenu');
+    if(!toggle||!menu) return;
+    var open=false;
+    toggle.addEventListener('click',function(){
+      open=!open;
+      menu.classList.toggle('active',open);
+      var svg=toggle.querySelector('svg');
+      if(svg) svg.innerHTML = open
+        ? '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>';
+    });
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',function(){ open=false; menu.classList.remove('active'); });
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PingClass pricing for tuition and coaching institutes: Free plan for up to 20 students, Basic at ₹249/month, and Pro at ₹599/month. No contracts, cancel anytime.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/png" href="logo-64.png">
+  <title>PingClass Pricing — Free, Basic & Pro Plans for Tuition Institutes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="landing.css?v=31">
+  <style>
+    .navbar { background: rgba(5,31,28,.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .page-hero { background: radial-gradient(1200px 500px at 50% -10%, rgba(20,184,166,.22), transparent 60%), #051F1C; color: #fff; padding: 120px 24px 48px; text-align: center; }
+    .page-hero .section-kicker { color: #2DD4BF; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 700; line-height: 1.1; margin: 12px 0; }
+    .page-hero h1 span { color: #2DD4BF; }
+    .page-hero p { max-width: 620px; margin: 0 auto; color: rgba(255,255,255,.72); font-size: 1.05rem; line-height: 1.7; }
+    .pricing { padding-top: 72px; }
+    .pricing-v2 { padding-right: 0; padding-left: 0; }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span>PingClass</span>
+      </a>
+      <div class="nav-links">
+        <a href="features.html">Features</a>
+        <a href="pricing.html" class="active">Pricing</a>
+        <a href="blog.html">Blog</a>
+        <a href="index.html#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a href="index.html#login" class="nav-login">Log in</a>
+        <a href="index.html#signup" class="nav-cta">Start free</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="features.html">Features</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="blog.html">Blog</a>
+      <a href="index.html#faq">FAQ</a>
+      <div class="mobile-divider"></div>
+      <a href="index.html#login">Log in</a>
+      <a href="index.html#signup" class="mobile-cta">Start free</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero">
+      <span class="section-kicker">SIMPLE PRICING</span>
+      <h1>Start free.<br><span>Grow when you need to.</span></h1>
+      <p>No contracts. No surprise charges. Just the tools your institute needs.</p>
+    </section>
+
+    <section class="pricing pricing-v2" id="pricing">
+      <div class="pricing-container">
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <div class="plan-name">Free</div>
+            <div class="plan-price"><span class="price-amount">₹0</span><span class="price-period">/month</span></div>
+            <p class="plan-desc">For getting started.</p>
+            <ul class="plan-features">
+              <li>Up to 20 students</li>
+              <li>1 batch</li>
+              <li>Fee reminders</li>
+              <li>Attendance tracking</li>
+            </ul>
+            <a href="#" class="plan-btn plan-btn-outline" data-plan="free">Start free</a>
+          </div>
+          <div class="pricing-card pricing-card-popular">
+            <div class="popular-badge">Most Popular</div>
+            <div class="plan-name">Basic</div>
+            <div class="plan-price"><span class="price-amount">₹249</span><span class="price-period">/month</span></div>
+            <p class="plan-desc">For growing tuition centers.</p>
+            <ul class="plan-features">
+              <li>Up to 100 students</li>
+              <li>5 batches</li>
+              <li>Parent access</li>
+              <li>Announcements</li>
+              <li>Everything in Free</li>
+            </ul>
+            <a href="#" class="plan-btn plan-btn-primary" data-plan="basic">Start Basic</a>
+          </div>
+          <div class="pricing-card">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price"><span class="price-amount">₹599</span><span class="price-period">/month</span></div>
+            <p class="plan-desc">For established institutes.</p>
+            <ul class="plan-features">
+              <li>Unlimited students</li>
+              <li>Unlimited batches</li>
+              <li>Multiple teachers</li>
+              <li>Priority support</li>
+              <li>Everything in Basic</li>
+            </ul>
+            <a href="#" class="plan-btn plan-btn-outline" data-plan="pro">Go Pro</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="faq-header">
+        <span class="section-tag">FAQ</span>
+        <h2 class="section-title">Pricing questions, answered.</h2>
+        <p class="section-subtitle">The short answers to what institutes ask most.</p>
+      </div>
+      <div class="faq-scroller">
+        <div class="faq-row" data-direction="left"><div class="faq-track">
+          <div class="faq-card"><h4 class="faq-card-q">Can I try it for free?</h4><p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p></div>
+          <div class="faq-card"><h4 class="faq-card-q">Can I cancel anytime?</h4><p class="faq-card-a">Absolutely. No long-term contracts and no upfront subscription. Access continues until the billing period ends.</p></div>
+          <div class="faq-card"><h4 class="faq-card-q">What payment methods do you accept?</h4><p class="faq-card-a">UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">Can I try it for free?</h4><p class="faq-card-a">Yes! The Free plan supports up to 20 students and 1 batch with no time limit. Upgrade when you need more.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">Can I cancel anytime?</h4><p class="faq-card-a">Absolutely. No long-term contracts and no upfront subscription. Access continues until the billing period ends.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">What payment methods do you accept?</h4><p class="faq-card-a">UPI, credit/debit cards, and net banking via Razorpay. All transactions are secure and encrypted.</p></div>
+        </div></div>
+        <div class="faq-row" data-direction="right"><div class="faq-track">
+          <div class="faq-card"><h4 class="faq-card-q">When do you upgrade to a paid plan?</h4><p class="faq-card-a">Only when you need more than 20 students or more than 1 batch. The Free plan has no time limit.</p></div>
+          <div class="faq-card"><h4 class="faq-card-q">Is student data safe with PingClass?</h4><p class="faq-card-a">Yes. Data is stored on encrypted, access-controlled servers with role-based permissions and row-level security.</p></div>
+          <div class="faq-card"><h4 class="faq-card-q">Are there hidden costs?</h4><p class="faq-card-a">No. The monthly price is all you pay. Fee reminders via the parent app are free and don't need SMS credits.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">When do you upgrade to a paid plan?</h4><p class="faq-card-a">Only when you need more than 20 students or more than 1 batch. The Free plan has no time limit.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">Is student data safe with PingClass?</h4><p class="faq-card-a">Yes. Data is stored on encrypted, access-controlled servers with role-based permissions and row-level security.</p></div>
+          <div class="faq-card" aria-hidden="true"><h4 class="faq-card-q">Are there hidden costs?</h4><p class="faq-card-a">No. The monthly price is all you pay. Fee reminders via the parent app are free and don't need SMS credits.</p></div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="final-cta">
+      <div class="final-glow"></div>
+      <img src="logo.png" alt="PingClass">
+      <span class="section-kicker">READY WHEN YOU ARE</span>
+      <h2>Your institute deserves<br><span>a calmer way to run.</span></h2>
+      <p>Start with 20 students for free. Upgrade when your institute grows.</p>
+      <a href="index.html#signup" class="btn-primary large">Create your institute <span>→</span></a>
+      <small>No credit card · Free forever plan</small>
+    </section>
+  </main>
+
+  <footer class="footer footer-v2"><div class="footer-container"><div class="footer-top"><div class="footer-brand"><a href="index.html" class="footer-logo"><img src="logo-64.png" alt="PingClass"><span>PingClass</span></a><p class="footer-tagline">A simpler way to run your tuition institute.</p></div><div class="footer-links"><div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="index.html#faq">FAQ</a><a href="blog.html">Blog</a></div><div class="footer-col"><h4>Company</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div><div class="footer-col"><h4>Account</h4><a href="index.html#login">Log in</a><a href="index.html#signup">Start free</a></div></div></div><div class="footer-bottom"><p>&copy; 2026 PingClass. All rights reserved.</p><p>pingclassoff@gmail.com</p></div></div></footer>
+
+  <!-- Auth Modal -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-modal">
+      <button class="auth-close" id="authClose" aria-label="Close">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Sign Up Form -->
+      <div class="auth-form" id="signupForm">
+        <h2 class="auth-title">Create your account</h2>
+        <p class="auth-subtitle">No credit card required. Start managing your institute today.</p>
+
+        <form id="signupSubmit">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" placeholder="John Doe" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password">
+              <button type="button" class="toggle-pw" data-target="signup-password" aria-label="Show password">
+                <svg class="eye-open" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg class="eye-closed hidden" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-institute">Institute Name</label>
+            <input type="text" id="signup-institute" placeholder="Bright Academy" required autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label class="consent-label">
+              <input type="checkbox" id="signup-consent">
+              <span>I have read and agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>, and I consent to the processing of my personal data as described there, under the Digital Personal Data Protection Act, 2023.
+                <span style="display:block;margin-top:6px;font-size:0.8125rem;opacity:.85;line-height:1.5;">मैंने Privacy Policy और Terms of Service पढ़ ली हैं और इनसे सहमत हूँ। डिजिटल पर्सनल डेटा प्रोटेक्शन अधिनियम, 2023 के अनुसार मेरे व्यक्तिगत डेटा के प्रोसेसिंग के लिए यह सहमति देता/देती हूँ।</span>
+              </span>
+            </label>
+          </div>
+          <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
+        </form>
+
+        <!-- OTP Verification (hidden by default) -->
+        <div class="otp-step hidden" id="otpStep">
+          <div class="otp-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="otp-title">Check your email</h3>
+          <p class="otp-desc">We sent a 6-digit code to <strong id="otpEmail"></strong></p>
+          <!-- Session expired state (replaces form when the signup session times out) -->
+          <div class="otp-expired hidden" id="otpExpired">
+            <div class="otp-expired-icon" aria-hidden="true">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+            </div>
+            <h4 class="otp-expired-title">Session expired</h4>
+            <p class="otp-expired-desc">The sign-up session has timed out. Please start over to create a new account.</p>
+            <button type="button" class="auth-btn" id="otpRestartBtn">Start Over</button>
+          </div>
+          <form id="otpSubmit">
+            <div class="form-group">
+              <input type="text" id="otp-code" aria-label="Enter the 6-digit code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
+            </div>
+            <button type="submit" class="auth-btn" id="otpBtn">Verify</button>
+          </form>
+          <p class="otp-resend">Didn't get it? <a href="#" id="otpResend">Resend code</a></p>
+        </div>
+
+        <p class="auth-switch">
+          Already have an account? <a href="#" id="showLogin">Log in</a>
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <div class="auth-form hidden" id="loginForm">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-subtitle">Log in to your PingClass dashboard</p>
+
+        <form id="loginSubmit">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password">
+              <button type="button" class="toggle-pw" data-target="login-password" aria-label="Show password">
+                <svg class="eye-open" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg class="eye-closed hidden" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
+              </button>
+            </div>
+          </div>
+          <div class="forgot-pw-row">
+            <a href="#" id="forgotPassword" class="forgot-pw">Forgot password?</a>
+          </div>
+          <button type="submit" class="auth-btn" id="loginBtn">Log In</button>
+        </form>
+
+        <p class="auth-switch">
+          Don't have an account? <a href="#" id="showSignup">Sign up</a>
+        </p>
+      </div>
+
+      <!-- Reset Password -->
+      <div class="auth-form hidden" id="resetForm">
+        <!-- Phase 1: request code -->
+        <div id="resetRequest">
+          <h2 class="auth-title">Reset your password</h2>
+          <p class="auth-subtitle">We'll send a 6-digit code to your email to verify it's you. The code expires in 10 minutes.</p>
+          <form id="resetRequestForm">
+            <div class="form-group">
+              <label for="reset-email">Email</label>
+              <input type="email" id="reset-email" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <button type="submit" class="auth-btn" id="resetRequestBtn">Send code</button>
+          </form>
+          <p class="auth-switch"><a href="#" id="resetBackLogin">&larr; Back to login</a></p>
+        </div>
+
+        <!-- Phase 2: enter code -->
+        <div class="otp-step hidden" id="resetOtp">
+          <div class="otp-icon">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+          <h3 class="otp-title">Enter the code</h3>
+          <p class="otp-desc">We sent a 6-digit code to <strong id="resetOtpEmail"></strong></p>
+          <form id="resetOtpForm">
+            <div class="form-group">
+              <input type="text" id="reset-otp" aria-label="Enter the 6-digit code" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required>
+            </div>
+            <button type="submit" class="auth-btn" id="resetOtpBtn">Verify</button>
+          </form>
+          <p class="otp-resend">Didn't get it? <a href="#" id="resetResend">Resend code</a></p>
+          <p class="auth-switch"><a href="#" id="resetOtpBackLogin">&larr; Back to login</a></p>
+        </div>
+
+        <!-- Phase 3: set new password -->
+        <div id="resetNewPw" class="hidden">
+          <h2 class="auth-title">Set a new password</h2>
+          <p class="auth-subtitle">Must be at least 6 characters with a mix of letters and numbers.</p>
+          <form id="resetNewPwForm">
+            <div class="form-group">
+              <label for="reset-pw">New password</label>
+              <input type="password" id="reset-pw" placeholder="New password" required autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label for="reset-pw-confirm">Confirm password</label>
+              <input type="password" id="reset-pw-confirm" placeholder="Repeat new password" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="auth-btn" id="resetNewPwBtn">Set New Password</button>
+          </form>
+          <p class="auth-switch"><a href="#" id="resetDoneLogin">&larr; Back to login</a></p>
+        </div>
+      </div>
+
+      <div class="auth-error hidden" id="authError"></div>
+    </div>
+  </div>
+
+    <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="plan-free.js"></script>
+  <script src="plan-basic.js"></script>
+  <script src="plan-pro.js"></script>
+  <script src="payment.js?v=7"></script>
+  <script src="main.js?v=9"></script>
+  <script>
+  (function(){
+    var toggle=document.getElementById('mobileToggle');
+    var menu=document.getElementById('mobileMenu');
+    if(!toggle||!menu) return;
+    var open=false;
+    toggle.addEventListener('click',function(){
+      open=!open;
+      menu.classList.toggle('active',open);
+      var svg=toggle.querySelector('svg');
+      if(svg) svg.innerHTML = open
+        ? '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>';
+    });
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',function(){ open=false; menu.classList.remove('active'); });
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple system to manage fees for a tuition center: track paid, pending and overdue fees, send timely reminders, and stop chasing payments with spreadsheets.">
+  <meta name="robots" content="index,follow">
+  <link rel="icon" type="image/png" href="../logo-64.png">
+  <title>How to Manage Fees for a Tuition Center Without the Chaos — PingClass Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=15">
+  <style>
+    .navbar { background: rgba(5,31,28,.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .article-hero { background: #051F1C; color: #fff; padding: 120px 24px 48px; text-align: center; }
+    .article-hero .blog-cat { color: #2DD4BF; font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; }
+    .article-hero h1 { font-size: clamp(1.75rem, 4.5vw, 2.75rem); font-weight: 700; line-height: 1.15; max-width: 720px; margin: 12px auto 8px; }
+    .article-hero .blog-meta { color: rgba(255,255,255,.6); font-size: .875rem; margin-top: 8px; }
+    .article-body { max-width: 720px; margin: 0 auto; padding: 48px 24px 72px; color: #2D3F3B; line-height: 1.75; font-size: 1rem; }
+    .article-body h2 { font-size: 1.35rem; font-weight: 700; color: #134E4A; margin: 40px 0 12px; }
+    .article-body h3 { font-size: 1.1rem; font-weight: 600; color: #0D9488; margin: 28px 0 8px; }
+    .article-body p { margin-bottom: 14px; }
+    .article-body ul, .article-body ol { padding-left: 22px; margin-bottom: 14px; }
+    .article-body li { margin-bottom: 8px; }
+    .article-body strong { color: #134E4A; }
+    .article-body blockquote { border-left: 3px solid #2DD4BF; margin: 24px 0; padding: 8px 20px; background: #F0FDFA; color: #134E4A; border-radius: 0 10px 10px 0; }
+    .article-cta { max-width: 720px; margin: 0 auto 72px; padding: 28px 32px; background: #F0FDFA; border: 1px solid #99F6E4; border-radius: 16px; text-align: center; }
+    .article-cta h3 { color: #134E4A; font-weight: 700; font-size: 1.15rem; margin-bottom: 6px; }
+    .article-cta p { color: #3A5A55; font-size: .95rem; margin-bottom: 14px; }
+    .article-cta a { display: inline-block; background: #0D9488; color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; }
+    .article-cta a:hover { background: #0F766E; }
+    @media (max-width: 768px) { .article-hero { padding: 100px 16px 40px; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <span>PingClass</span>
+      </a>
+      <div class="nav-links">
+        <a href="../features.html">Features</a>
+        <a href="../pricing.html">Pricing</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../index.html#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a href="../index.html#login" class="nav-login">Log in</a>
+        <a href="../index.html#signup" class="nav-cta">Start free</a>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="../features.html">Features</a>
+      <a href="../pricing.html">Pricing</a>
+      <a href="../blog.html">Blog</a>
+      <a href="../index.html#faq">FAQ</a>
+      <div class="mobile-divider"></div>
+      <a href="../index.html#login">Log in</a>
+      <a href="../index.html#signup" class="mobile-cta">Start free</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="article-hero">
+      <span class="blog-cat">FEES</span>
+      <h1>How to Manage Fees for a Tuition Center Without the Chaos</h1>
+      <p class="blog-meta">5 min read · Updated September 2026</p>
+    </section>
+
+    <section class="article-body">
+      <p>If you run a small tuition or coaching institute, fee collection is probably the task that eats the most of your week. You're not alone in that. The register gets forgotten, parents ask "how much do I owe?", and by the 15th you're making reminder calls instead of teaching.</p>
+      <p>The fix isn't more discipline — it's a system. Here's a simple way to manage fees that works for 20-student batches and 200-student halls alike.</p>
+
+      <h2>1. Know exactly what's owed, per batch, at all times</h2>
+      <p>Most confusion comes from not having one clean answer to "who has paid?" Keep a single record per student with:</p>
+      <ul>
+        <li><strong>Monthly fee</strong> — the amount for that student's batch</li>
+        <li><strong>Paid months</strong> — which months are settled</li>
+        <li><strong>Pending months</strong> — what's still outstanding</li>
+        <li><strong>Batch</strong> — so you can see collection rate per class, not just overall</li>
+      </ul>
+      <p>If you're on a spreadsheet or register, this is the minimum structure to keep. If you'd rather not, this is exactly what a fee management tool like PingClass tracks for you.</p>
+
+      <h2>2. Send reminders before the due date, not after</h2>
+      <p>Parents are not avoiding you — they forget. A reminder that arrives a few days before the due date prevents the awkward "can I pay tomorrow?" conversation.</p>
+      <p>Push notifications beat SMS and WhatsApp for this in two ways: they're free, and they reach parents directly on their phone. No message chains to dig through.</p>
+      <blockquote>One center owner told us reminders cut their overdue list by over half in two months. The parents were happy to pay early — they just needed a nudge.</blockquote>
+
+      <h2>3. Track collection rate, not just total collected</h2>
+      <p>"We collected ₹89,000 this month" sounds fine — until you realize you should have collected ₹1,00,000. Collection rate keeps the gap visible:</p>
+      <ul>
+        <li><strong>Collection rate</strong> = amount collected ÷ fees due for the period</li>
+        <li><strong>Set a target</strong> — most healthy institutes run above 90%</li>
+        <li><strong>Watch per batch</strong> — one batch dragging at 70% tells you where to focus</li>
+      </ul>
+
+      <h2>4. Give parents a record of what they've paid</h2>
+      <p>Disputes ("I already paid in May!") are the most time-consuming admin of all. When parents can open their own payment history, the argument disappears. It's also genuinely useful for them at tax time and for school fee recalls.</p>
+
+      <h2>5. Make it a 10-minute task, twice a week</h2>
+      <p>Don't try to "finish fees" once a month. Block twice a week to scan pending, follow up with the few stragglers, and record what came in. Short, regular attention beats a monthly panic.</p>
+
+      <h3>The bottom line</h3>
+      <p>Fee management falls apart when the record of "who paid" lives in your head or a shared register. A single, always-accurate record — per student, per batch, per month — plus reminders before the due date, will remove most of the chaos from your collection cycle.</p>
+    </section>
+
+    <section class="article-cta">
+      <h3>Want this without the spreadsheet?</h3>
+      <p>PingClass tracks fees per student and batch, sends free push reminders before due dates, and gives every parent their own payment history.</p>
+      <a href="../index.html#signup">Start free with 20 students →</a>
+    </section>
+  </main>
+
+  <footer class="footer footer-v2"><div class="footer-container"><div class="footer-top"><div class="footer-brand"><a href="../index.html" class="footer-logo"><img src="../logo-64.png" alt="PingClass"><span>PingClass</span></a><p class="footer-tagline">A simpler way to run your tuition institute.</p></div><div class="footer-links"><div class="footer-col"><h4>Product</h4><a href="../features.html">Features</a><a href="../pricing.html">Pricing</a><a href="../index.html#faq">FAQ</a><a href="../blog.html">Blog</a></div><div class="footer-col"><h4>Company</h4><a href="../privacy.html">Privacy</a><a href="../terms.html">Terms</a></div><div class="footer-col"><h4>Account</h4><a href="../index.html#login">Log in</a><a href="../index.html#signup">Start free</a></div></div></div><div class="footer-bottom"><p>&copy; 2026 PingClass. All rights reserved.</p><p>pingclassoff@gmail.com</p></div></div></footer>
+
+  <script>
+  (function(){
+    var toggle=document.getElementById('mobileToggle');
+    var menu=document.getElementById('mobileMenu');
+    if(!toggle||!menu) return;
+    var open=false;
+    toggle.addEventListener('click',function(){
+      open=!open;
+      menu.classList.toggle('active',open);
+      var svg=toggle.querySelector('svg');
+      if(svg) svg.innerHTML = open
+        ? '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>';
+    });
+    menu.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click',function(){ open=false; menu.classList.remove('active'); });
+    });
+  })();
+  </script>
+</body>
+</html>
