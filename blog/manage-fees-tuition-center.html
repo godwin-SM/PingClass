@@ -62,7 +62,15 @@
     .article-cta p { color: #3A5A55; font-size: .95rem; margin-bottom: 14px; }
     .article-cta a { display: inline-block; background: #0D9488; color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; text-decoration: none; }
     .article-cta a:hover { background: #0F766E; }
-    @media (max-width: 768px) { .article-hero { padding: 100px 16px 40px; } }
+    .related { max-width: 720px; margin: 0 auto 72px; padding: 0 24px; }
+    .related-kicker { color: #0D9488; font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+    .related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px; }
+    .related-card { display: block; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px 22px; text-decoration: none; background: #fff; box-shadow: 0 10px 30px -18px rgba(0,0,0,.18); transition: transform .2s, box-shadow .2s; }
+    .related-card:hover { transform: translateY(-3px); box-shadow: 0 16px 36px -20px rgba(0,0,0,.28); }
+    .related-card .related-cat { font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #0D9488; font-weight: 600; }
+    .related-card h3 { color: #134E4A; font-weight: 700; font-size: 1rem; line-height: 1.45; margin: 6px 0 10px; }
+    .related-go { color: #0D9488; font-weight: 600; font-size: .875rem; }
+    @media (max-width: 768px) { .article-hero { padding: 100px 16px 40px; } .related-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -151,6 +159,22 @@
       <h3>Want this without the spreadsheet?</h3>
       <p>PingClass tracks fees per student and batch, sends free push reminders before due dates, and gives every parent their own payment history.</p>
       <a href="../index.html#signup">Start free with 20 students →</a>
+    </section>
+
+    <section class="related">
+      <span class="related-kicker">Keep reading</span>
+      <div class="related-grid">
+        <a class="related-card" href="tuition-fees-subscription-vs-course.html">
+          <span class="related-cat">Fees</span>
+          <h3>Tuition Fees: Monthly Subscription vs Course Fee</h3>
+          <span class="related-go">Read article →</span>
+        </a>
+        <a class="related-card" href="structuring-batches-tuition-center.html">
+          <span class="related-cat">Batches</span>
+          <h3>How to Structure Batches for a Tuition or Coaching Institute</h3>
+          <span class="related-go">Read article →</span>
+        </a>
+      </div>
     </section>
   </main>
 

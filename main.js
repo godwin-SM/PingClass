@@ -119,6 +119,14 @@ const signupForm = document.getElementById('signupForm');
 const loginForm = document.getElementById('loginForm');
 const authError = document.getElementById('authError');
 
+// Arriving via #login / #signup (e.g. footer links from other pages) should
+// open the right auth form — there are no elements with those ids to scroll to.
+(function() {
+  const h = window.location.hash;
+  if (h === '#signup') openAuth('signup');
+  else if (h === '#login') openAuth('login');
+})();
+
 function resetResetForm() {
   const rf = document.getElementById('resetForm');
   if (!rf) return;
