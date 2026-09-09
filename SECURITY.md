@@ -65,11 +65,22 @@ Vault; matching pending migrations:
 
 ## Backup & restore (no-cost path)
 
-- Nightly full snapshot of all 19 data tables via `pingclass-backup.ps1`
-  (scheduled task `PingClassBackup`, daily 03:30 local). Uses the REST API with
-  the service-role key from `.env` - no local storage, no PITR cost. Snapshots are
-  uploaded straight to the private repo `godwin-SM/PingClass-backups` via the
-  GitHub API (fine-grained token in `.env`, zero local files).
+- Nightly full snapshot of all 19 data tables via the `backup-snapshot` edge
+  function, scheduled by pg_cron (`cron.schedule`, daily 04:30 UTC,
+  migration `20260909000000_backup_snapshot_cron.sql`). It dumps every table
+  through the service-role REST API and pushes a single commit straight to the
+  private repo `godwin-SM/PingClass-backups` via the GitHub API - running
+  entirely inside Supabase, no local scripts, no scheduled task, no PITR cost.
+- GitHub credentials live in Vault (`backup_github_token`, `backup_github_repo`);
+  the function reads them via the service_role-only `get_secret` RPC. Auth is the
+  shared `INTERNAL_SECRET` (cron sends it in `x-supabase-secret`), consistent
+  with AGENTS.md.
+- The old local path is deprecated: `pingclass-backup.ps1` still exists as a
+  manual/offline fallback (same snapshot format, so restore is unchanged). The
+  former scheduled task `PingClassBackup` was removed after antivirus flagged it
+  as `WORM.TASK.EMON.PSHELL.250419` - a heuristic on tasks that shell out to
+  PowerShell (false positive; script proved benign). The server-side cron is
+  unaffected by this.
 - Restore via `pingclass-restore.ps1 -FromGitHub`: idempotent per-row upserts in
   FK-safe order. Existing student rows are PATCHed (never INSERTed) so the DPDP
   consent BEFORE-INSERT trigger cannot fabricate `parent_consent`; only genuinely
@@ -81,7 +92,9 @@ Vault; matching pending migrations:
   service_role granted EXECUTE/USAGE on all `private` helpers
   (migrations `20260907112039`, `20260907112956`, `20260907113047`).
 - Token expiry caveat: the fine-grained backup token is valid ~90 days; when it
-  dies the nightly task pauses and warns until `.env` is refreshed.
+  dies the nightly function fails and warns in its logs until
+  `backup_github_token` is refreshed in Vault (and in `.env` for the local
+  fallback).
 
 ## Remaining (dashboard actions, cannot be scripted)
 
@@ -104,3 +117,4 @@ Vault; matching pending migrations:
 | `9c590eb` | INTERNAL_SECRET gate on push/email/cron functions, `verify_jwt=true` |
 | `4da39c5` | un-ignore supabase source; document secrets convention |
 | `8fb0d20` | zero-local nightly backup via GitHub API (scripted, no PITR cost) |
+| `<next>` | server-side daily backup: `backup-snapshot` edge function + pg_cron; GitHub creds in Vault; local task removed (AV heuristic) |
