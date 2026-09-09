@@ -100,11 +100,11 @@ foreach ($t in $candidates) {
 $manifest.total_rows = $totalRows
 $manifest | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $outDir "_manifest.json") -Encoding UTF8
 
-# ---- 3. Upload the whole snapshot as ONE commit to the private GitHub repo ----
+# ---- 3. Upload the snapshot as ONE commit on main (flat history - same as the
+#          server-side backup-snapshot function): each run is an orphan commit
+#          + force update, so the repo keeps exactly the newest snapshot dir.
 try {
     $branch = "main"
-    $base   = Invoke-RestMethod -Uri "https://api.github.com/repos/$GitHubRepo/branches/$branch" -Headers $ApiHeaders
-    $baseSha = $base.commit.sha
 
     $tree = @()
     foreach ($f in @(Get-ChildItem -LiteralPath $outDir -File)) {
@@ -118,15 +118,15 @@ try {
 
     $newTree = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$GitHubRepo/git/trees" `
         -Headers $ApiHeaders -ContentType "application/json" `
-        -Body (@{ tree = $tree; base_tree = $baseSha } | ConvertTo-Json -Compress -Depth 10)
+        -Body (@{ tree = $tree } | ConvertTo-Json -Compress -Depth 10)
 
     $commit = Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$GitHubRepo/git/commits" `
         -Headers $ApiHeaders -ContentType "application/json" `
-        -Body (@{ message = "backup $stamp ($totalRows rows)"; tree = $newTree.sha; parents = @($baseSha) } | ConvertTo-Json -Compress)
+        -Body (@{ message = "backup $stamp ($totalRows rows)"; tree = $newTree.sha; parents = @() } | ConvertTo-Json -Compress)
 
     Invoke-RestMethod -Method Patch -Uri "https://api.github.com/repos/$GitHubRepo/git/refs/heads/$branch" `
         -Headers $ApiHeaders -ContentType "application/json" `
-        -Body (@{ sha = $commit.sha; force = $false } | ConvertTo-Json -Compress) | Out-Null
+        -Body (@{ sha = $commit.sha; force = $true } | ConvertTo-Json -Compress) | Out-Null
 
     Write-Host "Uploaded to private GitHub repo as commit $($commit.sha.Substring(0,7))." -ForegroundColor Green
     Write-Host "Deleting local copy..." -ForegroundColor Gray

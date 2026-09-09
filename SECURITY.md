@@ -71,6 +71,12 @@ Vault; matching pending migrations:
   through the service-role REST API and pushes a single commit straight to the
   private repo `godwin-SM/PingClass-backups` via the GitHub API - running
   entirely inside Supabase, no local scripts, no scheduled task, no PITR cost.
+- The backup repo keeps FLAT history: each run uploads an orphan commit
+  (no parents) whose tree contains only the newest `yyyyMMdd-HHmmss` snapshot
+  dir, then force-updates `main`. The repository therefore always holds exactly
+  one snapshot - it never accumulates a full dump per day (history was squashed
+  once on 2026-09-09; see commit `591b7886`). Requires the fine-grained backup
+  token to allow force-pushing the branch - verified.
 - GitHub credentials live in Vault (`backup_github_token`, `backup_github_repo`);
   the function reads them via the service_role-only `get_secret` RPC. Auth is the
   shared `INTERNAL_SECRET` (cron sends it in `x-supabase-secret`), consistent

@@ -135,10 +135,12 @@ Deno.serve(async (req) => {
     };
     files.push({ path: "_manifest.json", content: JSON.stringify(manifest) });
 
-    // 2. Upload the whole snapshot as ONE commit (mirrors pingclass-backup.ps1).
+    // 2. Upload this snapshot as the ONLY commit on main (flat history).
+    //    Each run squashes: the repo keeps exactly one snapshot dir (the newest),
+    //    so it never accumulates a full dump per day. Orphan commit (no parents)
+    //    + force ref update certifies the token can rewrite the branch - verified
+    //    during the 2026-09-09 cleanup (single commit 591b7886).
     const branch = "main";
-    const base = await gh<{ commit: { sha: string } }>(`GET`, `/repos/${gitRepo}/branches/${branch}`);
-    const baseSha = base.commit.sha;
 
     const tree: Array<{ path: string; mode: string; type: string; sha: string }> = [];
     for (const f of files) {
@@ -147,13 +149,13 @@ Deno.serve(async (req) => {
       tree.push({ path: `${stampNow}/${f.path}`, mode: "100644", type: "blob", sha: blob.sha });
     }
 
-    const newTree = await gh<{ sha: string }>("POST", `/repos/${gitRepo}/git/trees`, { tree, base_tree: baseSha });
+    const newTree = await gh<{ sha: string }>("POST", `/repos/${gitRepo}/git/trees`, { tree });
     const commit = await gh<{ sha: string }>("POST", `/repos/${gitRepo}/git/commits`, {
       message: `backup ${stampNow} (${totalRows} rows)`,
       tree: newTree.sha,
-      parents: [baseSha],
+      parents: [],
     });
-    await gh("PATCH", `/repos/${gitRepo}/git/refs/heads/${branch}`, { sha: commit.sha, force: false });
+    await gh("PATCH", `/repos/${gitRepo}/git/refs/heads/${branch}`, { sha: commit.sha, force: true });
 
     console.log(`Backup complete: GitHub:${stampNow} (${totalRows} rows, ${files.length - 1} tables)`);
     return json({ ok: true, snapshot: stampNow, total_rows: totalRows, tables: files.length - 1, commit: commit.sha });
