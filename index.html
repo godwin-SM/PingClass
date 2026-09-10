@@ -14,6 +14,7 @@
   <meta name="theme-color" content="#051f1c">
   <meta name="description" content="PingClass helps tuition centers manage students, batches, attendance, fees, teachers and parents from one simple dashboard.">
   <link rel="icon" type="image/png" href="logo-64.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>PingClass — Tuition & Coaching Institute Management Software</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PingClass">
@@ -161,7 +162,7 @@
       <div class="nav-actions"><a href="#login" class="nav-login">Log in</a><a href="#signup" class="nav-cta">Start free</a></div>
       <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     </div>
-    <div class="mobile-menu" id="mobileMenu"><a href="features.html">Product</a><a href="pricing.html">Pricing</a><a href="blog.html">Blog</a><a href="#faq">FAQ</a><div class="mobile-divider"></div><a href="#login">Log in</a><a href="#signup" class="mobile-cta">Start free</a></div>
+    <div class="mobile-menu" id="mobileMenu"><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="blog.html">Blog</a><a href="#faq">FAQ</a><div class="mobile-divider"></div><a href="#login">Log in</a><a href="#signup" class="mobile-cta">Start free</a></div>
   </nav>
 
   <main>
@@ -451,7 +452,7 @@
   <script src="plan-basic.js"></script>
   <script src="plan-pro.js"></script>
   <script src="payment.js?v=7"></script>
-  <script src="main.js?v=13"></script>
+  <script src="main.js?v=14"></script>
   <script src="landing.js?v=16"></script>
   <script>
   (function () {
@@ -469,7 +470,7 @@
   })();
   </script>
 
-<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true">
+<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true" inert>
   <a href="demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>
   <a href="#signup" class="mcta-btn mcta-primary">Start for free</a>
 </div>
@@ -479,10 +480,25 @@
   var bar=document.getElementById('mctaBar');
   if(!bar) return;
   var t=parseInt(bar.getAttribute('data-show-after')||'',10)||600, tick=false;
-  function u(){ var s=window.scrollY>t; bar.classList.toggle('show',s); bar.setAttribute('aria-hidden', s?'false':'true'); }
+  function u(){
+    var s=window.scrollY>t;
+    bar.classList.toggle('show',s);
+    if(s){
+      bar.removeAttribute('aria-hidden');
+      bar.removeAttribute('inert');
+    }else{
+      if(document.activeElement && bar.contains(document.activeElement)) document.activeElement.blur();
+      bar.setAttribute('aria-hidden','true');
+      bar.setAttribute('inert','');
+    }
+  }
   u();
   window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
+  ['mousedown','touchstart','keydown'].forEach(function(ev){
+    document.addEventListener(ev, function(){ if(!bar.classList.contains('show') && window.scrollY>t) u(); }, {passive:true, once:true});
+  });
 })();
 </script>
+
 </body>
 </html>

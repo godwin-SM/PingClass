@@ -14,6 +14,7 @@
   <meta name="description" content="Why paper registers and spreadsheets fail at attendance tracking for coaching institutes, and the practical way to keep attendance accurate with less admin.">
   <meta name="robots" content="index,follow">
   <link rel="icon" type="image/png" href="../logo-64.png">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <title>Attendance Tracking for Coaching Institutes: Why Paper Registers Fail — PingClass Blog</title>
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="PingClass">
@@ -39,7 +40,18 @@
     "logo": { "@type": "ImageObject", "url": "https://pingclass.vercel.app/logo-64.png" },
     "email": "pingclassoff@gmail.com"
   }
+  </script>  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://pingclass.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://pingclass.vercel.app/blog.html" },
+      { "@type": "ListItem", "position": 3, "name": "Attendance Tracking for Coaching Institutes: Why Paper Registers Fail", "item": "https://pingclass.vercel.app/blog/attendance-tracking-coaching-institute" }
+    ]
+  }
   </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -207,7 +219,7 @@
   </script>
   <script src="../landing.js?v=16" defer></script>
 
-<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true">
+<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true" inert>
   <a href="../demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>
   <a href="../index.html#signup" class="mcta-btn mcta-primary">Start for free</a>
 </div>
@@ -217,10 +229,25 @@
   var bar=document.getElementById('mctaBar');
   if(!bar) return;
   var t=parseInt(bar.getAttribute('data-show-after')||'',10)||600, tick=false;
-  function u(){ var s=window.scrollY>t; bar.classList.toggle('show',s); bar.setAttribute('aria-hidden', s?'false':'true'); }
+  function u(){
+    var s=window.scrollY>t;
+    bar.classList.toggle('show',s);
+    if(s){
+      bar.removeAttribute('aria-hidden');
+      bar.removeAttribute('inert');
+    }else{
+      if(document.activeElement && bar.contains(document.activeElement)) document.activeElement.blur();
+      bar.setAttribute('aria-hidden','true');
+      bar.setAttribute('inert','');
+    }
+  }
   u();
   window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
+  ['mousedown','touchstart','keydown'].forEach(function(ev){
+    document.addEventListener(ev, function(){ if(!bar.classList.contains('show') && window.scrollY>t) u(); }, {passive:true, once:true});
+  });
 })();
 </script>
+
 </body>
 </html>

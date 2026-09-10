@@ -14,6 +14,7 @@
   <meta name="description" content="PingClass pricing for tuition and coaching institutes: Free plan for up to 20 students, Basic at ₹249/month, and Pro at ₹599/month. No contracts, cancel anytime.">
   <meta name="robots" content="index,follow">
   <link rel="icon" type="image/png" href="logo-64.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>PingClass Pricing — Free, Basic & Pro Plans for Tuition Institutes</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PingClass">
@@ -403,7 +404,7 @@
   <script src="plan-basic.js"></script>
   <script src="plan-pro.js"></script>
   <script src="payment.js?v=7"></script>
-  <script src="main.js?v=13"></script>
+  <script src="main.js?v=14"></script>
   <script>
   (function(){
     var toggle=document.getElementById('mobileToggle');
@@ -424,7 +425,7 @@
   })();
   </script>
 
-<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true">
+<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true" inert>
   <a href="demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>
   <a href="index.html#signup" class="mcta-btn mcta-primary">Start for free</a>
 </div>
@@ -434,10 +435,25 @@
   var bar=document.getElementById('mctaBar');
   if(!bar) return;
   var t=parseInt(bar.getAttribute('data-show-after')||'',10)||600, tick=false;
-  function u(){ var s=window.scrollY>t; bar.classList.toggle('show',s); bar.setAttribute('aria-hidden', s?'false':'true'); }
+  function u(){
+    var s=window.scrollY>t;
+    bar.classList.toggle('show',s);
+    if(s){
+      bar.removeAttribute('aria-hidden');
+      bar.removeAttribute('inert');
+    }else{
+      if(document.activeElement && bar.contains(document.activeElement)) document.activeElement.blur();
+      bar.setAttribute('aria-hidden','true');
+      bar.setAttribute('inert','');
+    }
+  }
   u();
   window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
+  ['mousedown','touchstart','keydown'].forEach(function(ev){
+    document.addEventListener(ev, function(){ if(!bar.classList.contains('show') && window.scrollY>t) u(); }, {passive:true, once:true});
+  });
 })();
 </script>
+
 </body>
 </html>

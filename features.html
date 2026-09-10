@@ -14,6 +14,7 @@
   <meta name="description" content="PingClass features for tuition and coaching institutes: batch-wise attendance, fee collection, parent notifications and role-based dashboards for admins, teachers and parents.">
   <meta name="robots" content="index,follow">
   <link rel="icon" type="image/png" href="logo-64.png">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>PingClass Features — Tuition Center Management Software</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PingClass">
@@ -204,7 +205,7 @@
   </script>
   <script src="landing.js?v=16" defer></script>
 
-<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true">
+<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true" inert>
   <a href="demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>
   <a href="index.html#signup" class="mcta-btn mcta-primary">Start for free</a>
 </div>
@@ -214,10 +215,25 @@
   var bar=document.getElementById('mctaBar');
   if(!bar) return;
   var t=parseInt(bar.getAttribute('data-show-after')||'',10)||600, tick=false;
-  function u(){ var s=window.scrollY>t; bar.classList.toggle('show',s); bar.setAttribute('aria-hidden', s?'false':'true'); }
+  function u(){
+    var s=window.scrollY>t;
+    bar.classList.toggle('show',s);
+    if(s){
+      bar.removeAttribute('aria-hidden');
+      bar.removeAttribute('inert');
+    }else{
+      if(document.activeElement && bar.contains(document.activeElement)) document.activeElement.blur();
+      bar.setAttribute('aria-hidden','true');
+      bar.setAttribute('inert','');
+    }
+  }
   u();
   window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
+  ['mousedown','touchstart','keydown'].forEach(function(ev){
+    document.addEventListener(ev, function(){ if(!bar.classList.contains('show') && window.scrollY>t) u(); }, {passive:true, once:true});
+  });
 })();
 </script>
+
 </body>
 </html>

@@ -84,22 +84,23 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    const href = this.getAttribute('href');
-    if (href === '#signup' || href === '#login' || href === '#demo') {
-      e.preventDefault();
-      if (href === '#signup') openAuth('signup');
-      else if (href === '#login') openAuth('login');
-      else if (href === '#demo') window.location.href = 'admin-dashboard.html?demo';
-      return;
-    }
-    if (href === '#') { e.preventDefault(); return; }
+// Smooth scroll + auth hash links. Delegated so links added later in the DOM
+// (e.g. the sticky mobile CTA bar near </body>) also open the right modal.
+document.addEventListener('click', function(e) {
+  const anchor = e.target.closest('a[href^="#"]');
+  if (!anchor) return;
+  const href = anchor.getAttribute('href');
+  if (href === '#signup' || href === '#login' || href === '#demo') {
     e.preventDefault();
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
-  });
+    if (href === '#signup') openAuth('signup');
+    else if (href === '#login') openAuth('login');
+    else if (href === '#demo') window.location.href = 'admin-dashboard.html?demo';
+    return;
+  }
+  if (href === '#') { e.preventDefault(); return; }
+  e.preventDefault();
+  const target = document.querySelector(href);
+  if (target) target.scrollIntoView({ behavior: 'smooth' });
 });
 
 // Show/hide password toggle
