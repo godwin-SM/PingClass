@@ -368,20 +368,19 @@ document.getElementById('otpSubmit').addEventListener('submit', async (e) => {
     // no-op if the profile already exists). Re-run on login/reset/page-load so
     // accounts that missed this step during signup self-heal.
     const { data: { session: otpSession } } = await db.auth.getSession();
-    await ensureProfileForSession(otpSession);
-
-    // Route through the thank-you page once after signup — it shows next steps
-    // and the response-time promise, then one click continues to the dashboard.
-    if (otpSession) {
-      const dashUrl = await shouldGoToDashboard(otpSession.user.id);
-      window.location.href = dashUrl
-        ? 'thank-you.html?next=' + encodeURIComponent(dashUrl)
-        : 'thank-you.html';
+    if (!otpSession) {
+      updateNavForLoggedInUser();
       return;
     }
 
-    // Update nav based on subscription status
-    updateNavForLoggedInUser();
+    // ensureProfileForSession returns the confirmed role so the thank-you page
+    // can link straight to the dashboard instead of falling back to index when
+    // the profile read races the just-created row.
+    const healedRole = await ensureProfileForSession(otpSession);
+    const dashUrl = healedRole ? getDashboardUrl(healedRole) : await shouldGoToDashboard(otpSession.user.id);
+    window.location.href = dashUrl
+      ? 'thank-you.html?next=' + encodeURIComponent(dashUrl)
+      : 'thank-you.html';
   } catch (err) {
     showError('Verification failed. Please try again.');
   } finally {
@@ -746,23 +745,23 @@ function getDashboardUrl(role) {
 // session wasn't persisted yet) the account has no profile and later logins
 // 406 on users?select=role. This re-runs the creation whenever it's missing.
 async function ensureProfileForSession(session) {
-  if (!session?.user) return;
+  if (!session?.user) return null;
   const user = session.user;
 
   // Already has a profile? Nothing to do.
   try {
     const { data: existing } = await db
       .from('users')
-      .select('id')
+      .select('role')
       .eq('id', user.id)
       .maybeSingle();
-    if (existing) return;
+    if (existing) return existing.role;
   } catch (e) { /* fall through and try to create */ }
 
   // Only admins (who signed up with institute_name) get auto-created profiles.
   // Teachers / parents are created via invite — don't fabricate an admin profile
   // if their institute was deleted and the cascade wiped their row.
-  if (!user.user_metadata?.institute_name) return;
+  if (!user.user_metadata?.institute_name) return null;
 
   const fullName = user.user_metadata?.full_name || (user.email || '').split('@')[0] || 'User';
   const instituteName = user.user_metadata?.institute_name || 'My Institute';
@@ -789,18 +788,19 @@ async function ensureProfileForSession(session) {
   }
 
   // Create user profile if missing
-  if (inst) {
-    try {
-      await db.from('users').insert({
-        id: user.id,
-        institute_id: inst.id,
-        full_name: fullName,
-        email: user.email,
-        role: 'admin'
-      });
-    } catch (e) {
-      console.warn('Could not create user profile:', e);
-    }
+  if (!inst) return null;
+  try {
+    await db.from('users').insert({
+      id: user.id,
+      institute_id: inst.id,
+      full_name: fullName,
+      email: user.email,
+      role: 'admin'
+    });
+    return 'admin';
+  } catch (e) {
+    console.warn('Could not create user profile:', e);
+    return null;
   }
 }
 

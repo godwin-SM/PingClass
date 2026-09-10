@@ -158,6 +158,8 @@
 
   <footer class="footer footer-v2"><div class="footer-container"><div class="footer-top"><div class="footer-brand"><a href="index.html" class="footer-logo"><img src="logo-64.png" alt="PingClass"><span>PingClass</span></a><p class="footer-tagline">A simpler way to run your tuition institute.</p></div><div class="footer-links"><div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="index.html#faq">FAQ</a><a href="blog.html">Blog</a></div><div class="footer-col"><h4>Company</h4><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div><div class="footer-col"><h4>Account</h4><a href="index.html#login">Log in</a><a href="index.html#signup">Start free</a></div></div></div><div class="footer-bottom"><p>&copy; 2026 PingClass. All rights reserved.</p><p>pingclassoff@gmail.com</p></div></div></footer>
 
+  <script src="supabase.min.js"></script>
+  <script src="config.js"></script>
   <script>
   (function(){
     var toggle=document.getElementById('mobileToggle');
@@ -185,8 +187,59 @@
         try{ var safe=new URL(next, window.location.origin).pathname; dashCta.setAttribute('href', safe); }
         catch(e){ dashCta.setAttribute('href', 'index.html'); }
       } else {
-        dashCta.setAttribute('href', 'index.html');
+        // No ?next landed here — self-heal the profile on click (idempotent)
+        // and continue straight into the right dashboard.
+        dashCta.addEventListener('click', continueNoNext);
       }
+    }
+
+    function continueNoNext(e){
+      e.preventDefault();
+      dashCta.textContent='Setting up your dashboard…';
+      var cfg=(typeof CONFIG!=='undefined'&&CONFIG)?CONFIG:null;
+      if(!cfg || !window.supabase){ window.location.href='index.html'; return; }
+      var client;
+      try{ client=window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY); }
+      catch(err){ window.location.href='index.html'; return; }
+      client.auth.getSession().then(function(r){
+        var session=r.data && r.data.session;
+        if(!session){ window.location.href='index.html'; return; }
+        resolveDashboard(client, session).then(function(url){
+          window.location.href=url || 'index.html';
+        }).catch(function(){ window.location.href='index.html'; });
+      }).catch(function(){ window.location.href='index.html'; });
+    }
+
+    function resolveDashboard(client, session){
+      var user=session.user;
+      return client.from('users').select('role').eq('id', user.id).maybeSingle().then(function(res){
+        if(res.data && res.data.role) return dashForRole(res.data.role);
+        if(!user.user_metadata || !user.user_metadata.institute_name) return null;
+        var fullName=user.user_metadata.full_name || (user.email || '').split('@')[0] || 'User';
+        var instName=user.user_metadata.institute_name || 'My Institute';
+        return client.from('institutes').select('*').eq('owner_id', user.id).maybeSingle().then(function(ir){
+          var haveInst=ir.data
+            ? Promise.resolve(ir.data)
+            : client.from('institutes').insert({ name: instName, owner_id: user.id, email: user.email })
+                .select().single().then(function(i){ return i.data; });
+          return haveInst.then(function(inst){
+            return client.from('users').insert({
+              id: user.id,
+              institute_id: inst.id,
+              full_name: fullName,
+              email: user.email,
+              role: 'admin'
+            }).then(function(){ return 'admin-dashboard.html'; });
+          });
+        });
+      });
+    }
+
+    function dashForRole(role){
+      if(role==='admin') return 'admin-dashboard.html';
+      if(role==='teacher') return 'teacher-dashboard.html';
+      if(role==='parent') return 'parent-dashboard.html';
+      return null;
     }
   })();
   </script>
