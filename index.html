@@ -149,8 +149,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=16">
-  <link rel="stylesheet" href="landing.css?v=35">
+  <link rel="stylesheet" href="styles.css?v=17">
+  <link rel="stylesheet" href="landing.css?v=36">
 </head>
 <body>
   <nav class="navbar" id="navbar">
@@ -469,6 +469,27 @@
     setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 6000);
   })();
   </script>
+
+<script>
+(function(){
+  var map = { '#features': 'a[href="features.html"]', '#pricing': 'a[href="pricing.html"]', '#faq': 'a[href="#faq"]' };
+  var tick = false;
+  function spy(){
+    var active = null;
+    Object.keys(map).forEach(function(id){
+      var el = document.querySelector(id);
+      if(!el) return;
+      var r = el.getBoundingClientRect();
+      if(r.top <= window.innerHeight * 0.55 && r.bottom > window.innerHeight * 0.3) active = map[id];
+    });
+    document.querySelectorAll('.nav-links a.active').forEach(function(a){ a.classList.remove('active'); });
+    if(active){ var a = document.querySelector(active); if(a) a.classList.add('active'); }
+  }
+  spy();
+  window.addEventListener('scroll', function(){ if(tick) return; tick = true; requestAnimationFrame(function(){ spy(); tick = false; }); }, {passive:true});
+  window.addEventListener('resize', spy);
+})();
+</script>
 
 <div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true" inert>
   <a href="demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>

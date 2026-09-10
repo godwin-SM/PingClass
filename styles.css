@@ -147,6 +147,22 @@ a {
   color: var(--white);
 }
 
+.nav-links a.active {
+  color: #2dd4bf;
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -9px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0d9488, #2dd4bf);
+}
+
 .nav-actions {
   display: flex;
   align-items: center;
@@ -226,6 +242,10 @@ a {
 
 .mobile-menu a:hover {
   color: var(--white);
+}
+
+.mobile-menu a.active {
+  color: #2dd4bf;
 }
 
 .mobile-divider {
