@@ -2217,3 +2217,7 @@ a {
 /* footer-v2 parity with landing page (used by legal pages that only load styles.css) */
 .footer-v2{background:#041a18}
 .footer-logo img{width:28px;height:28px}
+
+.mcta-bar{display:none}
+@media(max-width:700px){.mcta-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(5,31,28,0),rgba(5,31,28,.95) 40%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-sizing:border-box;transform:translateY(115%);transition:transform .3s ease;pointer-events:none}.mcta-bar.show{transform:translateY(0);pointer-events:auto}.mcta-btn{flex:1 1 0;display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;font:700 .875rem/1 "Plus Jakarta Sans",system-ui,sans-serif;text-decoration:none;transition:transform .2s ease,filter .2s ease}.mcta-btn:active{transform:scale(.97)}.mcta-primary{background:linear-gradient(135deg,var(--pc-teal),var(--pc-cyan));color:#fff;box-shadow:0 8px 24px rgba(13,148,136,.35)}.mcta-ghost{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#eafff9}body{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
+}

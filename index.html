@@ -148,8 +148,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
-  <link rel="stylesheet" href="landing.css?v=33">
+  <link rel="stylesheet" href="styles.css?v=16">
+  <link rel="stylesheet" href="landing.css?v=35">
 </head>
 <body>
   <nav class="navbar" id="navbar">
@@ -468,5 +468,21 @@
     setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }, 6000);
   })();
   </script>
+
+<div class="mcta-bar" id="mctaBar" data-show-after="600" aria-hidden="true">
+  <a href="demo-dashboard.html" class="mcta-btn mcta-ghost">Explore the demo</a>
+  <a href="#signup" class="mcta-btn mcta-primary">Start for free</a>
+</div>
+
+<script>
+(function(){
+  var bar=document.getElementById('mctaBar');
+  if(!bar) return;
+  var t=parseInt(bar.getAttribute('data-show-after')||'',10)||600, tick=false;
+  function u(){ var s=window.scrollY>t; bar.classList.toggle('show',s); bar.setAttribute('aria-hidden', s?'false':'true'); }
+  u();
+  window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
+})();
+</script>
 </body>
 </html>
