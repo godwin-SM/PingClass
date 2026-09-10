@@ -369,6 +369,36 @@
   flex-shrink: 0;
 }
 
+/* Search sits on its own row above the filter + action buttons */
+.page-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#page-students .page-header-actions,
+#page-staff .page-header-actions,
+#page-parents .page-header-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  width: 360px;
+}
+
+#page-students .page-header-actions > .section-search,
+#page-staff .page-header-actions > .section-search,
+#page-parents .page-header-actions > .section-search {
+  width: 100%;
+}
+
+#page-students .page-header-row,
+#page-staff .page-header-row,
+#page-parents .page-header-row {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
 .section-filter-select {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--card-border);
@@ -1802,6 +1832,16 @@
   margin-bottom: 20px;
 }
 
+.page-empty .page-action-btn,
+.staff-empty .page-action-btn {
+  margin: 0 auto;
+  align-self: center;
+}
+
+.staff-empty .page-action-btn {
+  width: max-content;
+}
+
 /* Staff modals */
 .staff-modal-overlay {
   position: fixed;
@@ -2785,6 +2825,27 @@
   .page-action-btn {
     align-self: flex-start;
     flex-shrink: 0;
+  }
+  /* Search stays on its own (full-width) row above filter + actions */
+  #page-students .page-header-actions,
+  #page-staff .page-header-actions,
+  #page-parents .page-header-actions {
+    width: 100%;
+  }
+  #page-students .page-header-actions > .section-search,
+  #page-staff .page-header-actions > .section-search,
+  #page-parents .page-header-actions > .section-search {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+  }
+  .page-header-row {
+    flex-wrap: wrap;
+  }
+  #page-students .page-header-row,
+  #page-staff .page-header-row,
+  #page-parents .page-header-row {
+    justify-content: space-between;
   }
   .section-toolbar {
     flex-wrap: wrap;
