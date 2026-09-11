@@ -14,9 +14,13 @@ if (localStorage.getItem('pcResetPending')) {
 // ── Network failure handling ──
 function isNetworkError(err) {
   if (!err) return false;
-  if (err instanceof TypeError) return true; // fetch rejects with TypeError on network failure
   const msg = String(err && (err.message || err.code || err.name) || err).toLowerCase();
-  return /failed to fetch|networkerror|network error|err_name_not_resolved|load failed|getaddr|fetch_failed|offline|socket/i.test(msg);
+  // CORS rejections also surface as TypeError("Failed to fetch") while the
+  // connection is perfectly fine — never treat those as "offline". Only trust
+  // explicit network indicators, or TypeErrors when the browser reports offline.
+  if (/err_name_not_resolved|err_connection|networkerror|network error|getaddr|load failed|fetch_failed|offline|socket/i.test(msg)) return true;
+  if (err instanceof TypeError) return typeof navigator === 'undefined' || navigator.onLine === false;
+  return false;
 }
 
 function makeNetworkError(message) {
