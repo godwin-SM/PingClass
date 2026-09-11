@@ -189,3 +189,22 @@
   grid-template-columns: 1fr;
 }
 
+/* Fees page: on phones the history table is wider than the viewport, so the
+   .page-table-wrap { overflow: hidden } clips the right column ("Paid On").
+   Let the table fit by compacting cell padding and scroll as a fallback. */
+@media (max-width: 768px) {
+  #page-fees .page-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #page-fees .page-table {
+    min-width: 0;
+  }
+  #page-fees .page-table thead th,
+  #page-fees .page-table td {
+    padding-left: 14px;
+    padding-right: 14px;
+    white-space: nowrap;
+  }
+}
+
