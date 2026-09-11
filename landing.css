@@ -95,3 +95,30 @@ html{scroll-behavior:smooth}body{background:var(--pc-bg);color:var(--pc-text);ov
 .role-stage{width:min(1320px,90vw)}
 }
 @media(min-width:2000px){.story-hero-copy{max-width:900px;margin-left:8vw}.hero-stage{width:min(1000px,55vw);right:2vw}}
+/* Short/medium-height laptops: prevent scene cropping, compress big-screen sizes */
+@media(min-width:1001px) and (max-height:830px){
+.story-hero{padding:92px 6vw 64px}
+.story-hero-copy{max-width:600px;margin-left:1vw}
+.story-hero-copy h1{font-size:clamp(46px,4.4vw,70px);margin:14px 0 18px}
+.story-hero-copy p{font-size:15px;margin-bottom:26px}
+.hero-actions{margin-top:26px}
+.micro-proof{font-size:12px;gap:16px;margin-top:30px}
+.btn-primary,.btn-ghost{min-height:48px;padding:0 22px;font-size:15px}
+.btn-primary.large{min-height:54px}
+.hero-stage{width:min(600px,46vw);right:1.5vw;top:18%}
+.dash-shell{min-height:380px}
+.sticky-scene{height:auto;min-height:100vh;padding:56px 7vw 90px}
+.scene-copy,.transform-header{max-width:580px}
+.scene-copy h2,.transform-header h2{font-size:clamp(36px,4.2vw,58px)}
+.scene-copy p,.transform-header p{font-size:15.5px}
+.chaos-board{height:min(560px,58vh)}
+.phone-stack,.payment-visual{width:min(520px,44vw);height:min(520px,54vh)}
+.role-stage{height:clamp(280px,34vh,360px)}
+.role-card{width:270px;min-height:200px;padding:18px}
+.role-teacher{margin-left:-135px}
+.outcome-metrics{gap:56px}
+.outcome-metrics strong{font-size:34px}
+.testimonials{padding:70px 20px}
+.testimonial-card{padding:24px 22px;min-height:200px}
+.final-cta{min-height:78vh}
+}
