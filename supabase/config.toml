@@ -460,3 +460,8 @@ entrypoint = "./functions/submit-review/index.ts"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/moderate-reviews/index.ts"
+
+[functions.submit-bug-report]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/submit-bug-report/index.ts"

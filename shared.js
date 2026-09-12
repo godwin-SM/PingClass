@@ -307,6 +307,114 @@ function showToast(message, opts = {}) {
   }, opts.duration || 3500);
 }
 
+// ── In-app bug report dialog ──
+function initBugReport() {
+  if (isDemoMode) return;
+  try {
+    const page = (location.pathname.split('/').pop() || 'dashboard');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'bugReportBtn';
+    btn.className = 'bug-report-fab';
+    btn.setAttribute('aria-label', 'Report a problem');
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><line x1="9" y1="9" x2="9" y2="9"/><line x1="15" y1="9" x2="15" y2="9"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Report a problem';
+
+    const modal = document.createElement('div');
+    modal.id = 'bugReportModal';
+    modal.className = 'bug-report-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.hidden = true;
+    modal.innerHTML =
+      '<div class="bug-report-card">' +
+        '<div class="bug-report-head"><h3>Report a problem</h3><button type="button" class="bug-report-close" aria-label="Close">&times;</button></div>' +
+        '<p class="bug-report-sub">Something broken? Tell us the page and what happened. We read every report.</p>' +
+        '<div class="bug-report-field"><label for="bugReportMsg">What went wrong?</label>' +
+        '<textarea id="bugReportMsg" rows="4" maxlength="2000" placeholder="Describe what happened and what you expected instead."></textarea></div>' +
+        '<p class="bug-report-status" id="bugReportStatus" role="status"></p>' +
+        '<div class="bug-report-actions"><button type="button" class="bug-report-cancel">Cancel</button><button type="button" class="bug-report-send">Send report</button></div>' +
+      '</div>';
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .bug-report-fab{position:fixed;right:20px;bottom:20px;z-index:9990;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary,#0D9488),var(--secondary,#2DD4BF));color:#fff;border:none;border-radius:999px;padding:11px 16px;font:600 13px/1 var(--font, "Plus Jakarta Sans"),system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.35);transition:transform .15s ease;}
+      .bug-report-fab:hover{transform:translateY(-2px);}
+      .bug-report-fab:focus-visible{outline:2px solid var(--secondary,#2DD4BF);outline-offset:2px;}
+      .bug-report-modal{position:fixed;inset:0;z-index:9995;display:flex;align-items:center;justify-content:center;background:rgba(3,15,14,.6);padding:20px;}
+      .bug-report-modal[hidden]{display:none;}
+      .bug-report-card{width:100%;max-width:460px;background:var(--card-bg,#0a2e2a);border:1px solid var(--card-border,rgba(255,255,255,.1));border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.45);}
+      .bug-report-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+      .bug-report-head h3{margin:0;font-size:17px;color:var(--text-primary,#fff);}
+      .bug-report-close{background:none;border:none;color:var(--text-muted,rgba(255,255,255,.5));font-size:22px;line-height:1;cursor:pointer;padding:4px;}
+      .bug-report-sub{color:var(--text-secondary,rgba(255,255,255,.6));font-size:13px;margin:0 0 14px;}
+      .bug-report-field label{display:block;color:var(--text-secondary,rgba(255,255,255,.6));font-size:12.5px;font-weight:600;margin-bottom:6px;}
+      .bug-report-field textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border,rgba(255,255,255,.12));border-radius:10px;color:var(--text-primary,#fff);font:400 13.5px/1.5 var(--font,"Plus Jakarta Sans"),system-ui,sans-serif;padding:10px 12px;resize:vertical;}
+      .bug-report-field textarea:focus{outline:none;border-color:var(--secondary,#2DD4BF);}
+      .bug-report-status{min-height:18px;font-size:12.5px;margin:8px 0 0;color:var(--text-muted,rgba(255,255,255,.5));}
+      .bug-report-status.err{color:var(--color-danger,#EF4444);}
+      .bug-report-status.ok{color:var(--color-success,#22C55E);}
+      .bug-report-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
+      .bug-report-actions button{border:none;border-radius:10px;padding:10px 16px;font:600 13px/1 var(--font,"Plus Jakarta Sans"),system-ui,sans-serif;cursor:pointer;}
+      .bug-report-cancel{background:transparent;border:1px solid var(--border,rgba(255,255,255,.14));color:var(--text-secondary,rgba(255,255,255,.6));}
+      .bug-report-send{background:var(--primary,#0D9488);color:#fff;}
+      .bug-report-send:hover{background:var(--primary-hover,#0F766E);}
+      .bug-report-send:disabled{opacity:.6;cursor:not-allowed;}
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(btn);
+    document.body.appendChild(modal);
+
+    const msgEl = modal.querySelector('#bugReportMsg');
+    const statusEl = modal.querySelector('#bugReportStatus');
+    const sendBtn = modal.querySelector('.bug-report-send');
+    const cancelBtn = modal.querySelector('.bug-report-cancel');
+    const closeBtn = modal.querySelector('.bug-report-close');
+
+    const open = () => { modal.hidden = false; setTimeout(() => { if (msgEl) msgEl.focus(); }, 50); };
+    const close = () => { modal.hidden = true; if (statusEl) { statusEl.textContent = ''; statusEl.className = 'bug-report-status'; } };
+    btn.addEventListener('click', open);
+    cancelBtn.addEventListener('click', close);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+    sendBtn.addEventListener('click', async () => {
+      if (!msgEl || !statusEl) return;
+      const message = msgEl.value.trim();
+      if (message.length < 5) {
+        statusEl.textContent = 'Please describe the problem briefly.';
+        statusEl.className = 'bug-report-status err';
+        return;
+      }
+      sendBtn.disabled = true;
+      statusEl.textContent = 'Sending…';
+      statusEl.className = 'bug-report-status';
+      try {
+        const { data: { session } } = await db.auth.getSession();
+        const token = session?.access_token;
+        if (!token) throw new Error('No session');
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/submit-bug-report`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_KEY },
+          body: JSON.stringify({ message, page, role: (userProfile && userProfile.role) || 'user' })
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result?.error || 'Could not send report');
+        close();
+        showToast('Thanks — your report is with our team.');
+      } catch (err) {
+        statusEl.textContent = err?.message || 'Could not send report. Please try again.';
+        statusEl.className = 'bug-report-status err';
+      } finally {
+        sendBtn.disabled = false;
+      }
+    });
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
+  } catch (e) {
+    // The dialog is a nicety — never take the dashboard down over it.
+  }
+}
+
 let currentUser = null;
 let userProfile = null;
 let isDemoMode = false;
@@ -411,6 +519,7 @@ async function sharedInit(expectedRole) {
     }
 
     await completeInit(session, expectedRole);
+    initBugReport();
   } catch (err) {
     console.error('Init failed:', err);
     if (isNetworkError(err)) handleNetworkFailure(err);
