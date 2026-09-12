@@ -143,3 +143,28 @@ html{scroll-behavior:smooth}body{background:var(--pc-bg);color:var(--pc-text);ov
 .def-line{max-width:760px;margin:18px auto 0;padding:14px 18px;border-left:3px solid #2dd4bf;background:rgba(45,212,191,.06);border-radius:0 12px 12px 0;font-size:15px;line-height:1.7;color:rgba(255,255,255,.82);text-align:left}
 .def-line strong{color:#2dd4bf}
 @media(max-width:768px){.compare-section{padding:72px 5vw}.compare-inner h2{font-size:clamp(30px,7vw,42px)}}
+
+/* Review capture form */
+.reviews-form{position:relative;background:#04211e;padding:80px 20px 110px;border-top:1px solid rgba(255,255,255,.05)}
+.reviews-form-inner{position:relative;max-width:760px;margin:0 auto}
+.reviews-form-inner h2{font-size:clamp(34px,4.4vw,54px);letter-spacing:-.04em;margin:14px 0 10px}
+.reviews-form-inner h2 span{background:linear-gradient(110deg,#5eead4,#2dd4bf);-webkit-background-clip:text;background-clip:text;color:transparent}
+.reviews-form-sub{color:var(--pc-muted);line-height:1.7;font-size:14.5px;margin-bottom:34px;max-width:560px}
+.review-form{display:grid;gap:18px;background:rgba(8,40,36,.6);border:1px solid rgba(45,212,191,.2);border-radius:18px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.rf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rf-field{display:grid;gap:8px;text-align:left}
+.rf-field span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#63e6d4}
+.rf-field input,.rf-field textarea{background:#0b2b26;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#eafff9;font:400 14px/1.5 "Plus Jakarta Sans",system-ui,sans-serif;padding:12px 14px;transition:border-color .2s ease}
+.rf-field input:focus,.rf-field textarea:focus{outline:none;border-color:rgba(45,212,191,.6)}
+.rf-field input::placeholder,.rf-field textarea::placeholder{color:rgba(225,250,246,.35)}
+.rf-field textarea{resize:vertical;min-height:96px}
+.rv-stars{display:inline-flex;gap:6px}
+.rv-star{background:none;border:none;padding:2px 3px;font-size:26px;line-height:1;color:rgba(255,255,255,.18);cursor:pointer;transition:color .15s ease,transform .15s ease}
+.rv-star:hover{transform:scale(1.15);color:#f7bd5e}
+.rv-star.active{color:#f7bd5e}
+.review-form .btn-primary{width:100%;cursor:pointer}
+.review-form .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.rv-status{min-height:20px;font-size:13.5px;line-height:1.6;margin:0;color:var(--pc-muted)}
+.rv-status.ok{color:#67e5a7}
+.rv-status.err{color:#ff8d8d}
+@media(max-width:640px){.rf-row{grid-template-columns:1fr}.reviews-form{padding:64px 20px 96px}}

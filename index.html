@@ -151,7 +151,7 @@
        ==================================================================== -->
 <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="styles.css?v=17">
-  <link rel="stylesheet" href="landing.css?v=39">
+  <link rel="stylesheet" href="landing.css?v=40">
 </head>
 <body>
   <nav class="navbar" id="navbar">
@@ -291,6 +291,42 @@
           </article>
         </div>
         <a class="t-share" href="mailto:pingclassoff@gmail.com?subject=PingClass%20review">Sharing your honest experience helps the next institute →</a>
+      </div>
+    </section>
+
+    <section class="reviews-form">
+      <div class="reviews-form-inner">
+        <span class="section-kicker">ADD YOURS</span>
+        <h2>Used PingClass? <span>Leave a review.</span></h2>
+        <p class="reviews-form-sub">Real quotes only get published once a PingClass team member verifies them in person. That's what keeps these words honest.</p>
+        <form class="review-form" id="reviewForm" onsubmit="return false;">
+          <div class="rf-row">
+            <label class="rf-field">
+              <span>Your name</span>
+              <input type="text" id="rvName" maxlength="60" placeholder="e.g. R. Arun Kumar" required>
+            </label>
+            <label class="rf-field">
+              <span>Institute (optional)</span>
+              <input type="text" id="rvInstitute" maxlength="80" placeholder="e.g. Arun Maths Classes, Erode">
+            </label>
+          </div>
+          <label class="rf-field">
+            <span>Your rating</span>
+            <div class="rv-stars" id="rvStars">
+              <button type="button" class="rv-star" data-v="1" aria-label="1 star">★</button>
+              <button type="button" class="rv-star" data-v="2" aria-label="2 stars">★</button>
+              <button type="button" class="rv-star" data-v="3" aria-label="3 stars">★</button>
+              <button type="button" class="rv-star" data-v="4" aria-label="4 stars">★</button>
+              <button type="button" class="rv-star" data-v="5" aria-label="5 stars">★</button>
+            </div>
+          </label>
+          <label class="rf-field">
+            <span>What changed for your institute?</span>
+            <textarea id="rvQuote" rows="4" maxlength="1000" placeholder="Keep it honest — we only publish what you actually say, after verifying it." required></textarea>
+          </label>
+          <button type="submit" class="btn-primary large" id="rvSubmit">Send review</button>
+          <p class="rv-status" id="rvStatus" role="status"></p>
+        </form>
       </div>
     </section>
 
@@ -541,6 +577,58 @@
   window.addEventListener('scroll', function(){ if(tick) return; tick=true; requestAnimationFrame(function(){ u(); tick=false; }); }, {passive:true});
   ['mousedown','touchstart','keydown'].forEach(function(ev){
     document.addEventListener(ev, function(){ if(!bar.classList.contains('show') && window.scrollY>t) u(); }, {passive:true, once:true});
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var stars = document.getElementById('rvStars');
+  if(!stars) return;
+  var rating = 5;
+  function draw(){ var n = 0; Array.prototype.forEach.call(stars.querySelectorAll('.rv-star'), function(b){ b.classList.toggle('active', n < rating); n++; }); }
+  stars.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('.rv-star') : null;
+    if(!t) return;
+    rating = parseInt(t.getAttribute('data-v'), 10);
+    draw();
+  });
+  draw();
+  var form = document.getElementById('reviewForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(typeof CONFIG === 'undefined' || !CONFIG || !CONFIG.SUPABASE_URL){ var el = document.getElementById('rvStatus'); if(el){ el.textContent = 'Submission is unavailable right now.'; el.className = 'rv-status err'; } return; }
+    var name = document.getElementById('rvName').value.trim();
+    var institute = document.getElementById('rvInstitute').value.trim();
+    var quote = document.getElementById('rvQuote').value.trim();
+    var status = document.getElementById('rvStatus');
+    var btn = document.getElementById('rvSubmit');
+    if(name.length < 2){ status.textContent = 'Please enter your name.'; status.className = 'rv-status err'; return; }
+    if(quote.length < 10){ status.textContent = 'Please share at least a sentence or two.'; status.className = 'rv-status err'; return; }
+    btn.disabled = true;
+    var original = btn.textContent;
+    btn.textContent = 'Sending…';
+    status.textContent = '';
+    status.className = 'rv-status';
+    fetch(CONFIG.SUPABASE_URL + '/functions/v1/submit-review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ authorName: name, institute: institute, quote: quote, rating: rating })
+    }).then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
+      .then(function(res){
+        if(res.ok && res.j && res.j.ok){
+          status.textContent = 'Thank you! Your review is in — we verify every quote in person before publishing.';
+          status.className = 'rv-status ok';
+          form.reset();
+          rating = 5;
+          draw();
+        } else {
+          status.textContent = (res.j && res.j.error) ? res.j.error : 'Could not send. Please try again.';
+          status.className = 'rv-status err';
+        }
+      })
+      .catch(function(){ status.textContent = 'Could not send. Please try again.'; status.className = 'rv-status err'; })
+      .then(function(){ btn.disabled = false; btn.textContent = original; });
   });
 })();
 </script>
