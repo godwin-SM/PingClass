@@ -122,3 +122,24 @@ html{scroll-behavior:smooth}body{background:var(--pc-bg);color:var(--pc-text);ov
 .testimonial-card{padding:24px 22px;min-height:200px}
 .final-cta{min-height:78vh}
 }
+
+.compare-section{position:relative;background:linear-gradient(180deg,#051f1c,#0d332b);padding:120px 7vw;overflow:hidden}
+.compare-section::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(circle at 20% 15%,black,transparent 65%)}
+.compare-inner{position:relative;max-width:980px;margin:0 auto}
+.compare-inner h2{font-size:clamp(38px,4.6vw,64px);line-height:1.05;letter-spacing:-.045em;margin:16px 0 18px}
+.compare-inner h2 span{color:#2dd4bf}
+.compare-lede{font-size:16px;line-height:1.75;color:var(--pc-muted);max-width:680px;margin-bottom:34px}
+.compare-table-wrap{overflow-x:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#0b2b26}
+.compare-table{width:100%;border-collapse:collapse;font-size:15px;min-width:660px}
+.compare-table th{background:#134e4a;color:#fff;text-align:left;padding:13px 16px;font-weight:600;font-size:13px;letter-spacing:.02em}
+.compare-table th:first-child{width:26%}
+.compare-table td{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.78);vertical-align:top;line-height:1.6}
+.compare-table td:first-child{color:#fff;font-weight:600}
+.compare-table td:nth-child(2){color:rgba(255,255,255,.5)}
+.compare-table td:nth-child(3){color:#7be7d9}
+.compare-note{font-size:14px;line-height:1.7;color:var(--pc-muted);margin-top:22px;max-width:760px}
+.compare-note a{color:#2dd4bf;font-weight:600;text-decoration:none;border-bottom:1px solid rgba(45,212,191,.35)}
+.compare-note a:hover{color:#a7f3ea}
+.def-line{max-width:760px;margin:18px auto 0;padding:14px 18px;border-left:3px solid #2dd4bf;background:rgba(45,212,191,.06);border-radius:0 12px 12px 0;font-size:15px;line-height:1.7;color:rgba(255,255,255,.82);text-align:left}
+.def-line strong{color:#2dd4bf}
+@media(max-width:768px){.compare-section{padding:72px 5vw}.compare-inner h2{font-size:clamp(30px,7vw,42px)}}

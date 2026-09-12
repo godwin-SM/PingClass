@@ -26,6 +26,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://pingclass.vercel.app/blog/spreadsheets-vs-tuition-management-software</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pingclass.vercel.app/blog/manage-fees-tuition-center</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>

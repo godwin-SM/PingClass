@@ -1,6 +1,100 @@
+# Standard crawlers
 User-agent: *
 Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
 
+# --- Generative / AI engines (GEO) ---
+# Explicitly allow the public site for AI answer engines (ChatGPT, Perplexity,
+# Claude, Gemini, Meta AI, Apple Intelligence, Google AI features). Private
+# dashboards stay disallowed for every agent, including these; they are also
+# marked noindex in-page as a second layer.
+
+User-agent: GPTBot
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: Bytespider
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: Applebot
+Allow: /
+Disallow: /accept-invite
+Disallow: /admin-dashboard
+Disallow: /teacher-dashboard
+Disallow: /parent-dashboard
+Disallow: /fintech-dashboard
+
+User-agent: Applebot-Extended
+Allow: /
 Disallow: /accept-invite
 Disallow: /admin-dashboard
 Disallow: /teacher-dashboard
