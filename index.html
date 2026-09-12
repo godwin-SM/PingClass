@@ -633,5 +633,36 @@
 })();
 </script>
 
+<script>
+(function(){
+  // Fill empty testimonial slots with verified, approved reviews.
+  if(typeof CONFIG === 'undefined' || !CONFIG || !CONFIG.SUPABASE_URL) return;
+  var slots = document.querySelectorAll('.testimonial-card.t-empty');
+  if(!slots.length) return;
+  var db;
+  try { db = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY); } catch(e){ return; }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function fill(){
+    db.from('reviews')
+      .select('author_name,quote,rating,institute')
+      .eq('status','approved')
+      .order('created_at',{ ascending:false })
+      .limit(slots.length)
+      .then(function(res){
+        if(res.error || !res.data || !res.data.length) return;
+        var stars = function(n){ var out=''; for(var i=1;i<=5;i++) out += i<=(n||5)?'★':'☆'; return out; };
+        res.data.slice(0, slots.length).forEach(function(r, i){
+          var slot = slots[i];
+          slot.classList.remove('t-empty');
+          slot.innerHTML = '<span class="t-stars">' + stars(r.rating) + '</span>' +
+            '<p class="t-quote">“' + esc(r.quote) + '”</p>' +
+            '<div class="t-who"><span class="t-avatar"></span><span><b>' + esc(r.author_name) + '</b>' + (r.institute ? '<small>' + esc(r.institute) + '</small>' : '') + '</span></div>';
+        });
+      });
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fill) : fill();
+})();
+</script>
+
 </body>
 </html>

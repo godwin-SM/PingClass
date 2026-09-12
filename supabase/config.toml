@@ -450,3 +450,13 @@ entrypoint = "./functions/send-overdue-email/index.ts"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/send-push-notifications/index.ts"
+
+[functions.submit-review]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/submit-review/index.ts"
+
+[functions.moderate-reviews]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/moderate-reviews/index.ts"
