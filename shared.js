@@ -404,7 +404,9 @@ async function sharedInit(expectedRole) {
     const { data: { session } } = await db.auth.getSession();
 
     if (!session) {
-      window.location.href = 'index.html';
+      // Load-time redirect (no user gesture) — replace so it doesn't create a
+      // history entry that traps Back on a redirect loop.
+      window.location.replace('index.html');
       return;
     }
 
@@ -441,7 +443,7 @@ async function completeInit(session, expectedRole) {
   // institute_name set during signup. Everyone else gets bounced to landing.
   if (!data && !currentUser.user_metadata?.institute_name) {
     await db.auth.signOut();
-    window.location.href = 'index.html?error=institute_missing';
+    window.location.replace('index.html?error=institute_missing');
     return;
   }
 
@@ -459,7 +461,7 @@ async function completeInit(session, expectedRole) {
 
   // Profile exists but institute was deleted (admin account removed).
   if (data && !institute) {
-    window.location.href = 'index.html?error=institute_missing';
+    window.location.replace('index.html?error=institute_missing');
     return;
   }
 
@@ -528,7 +530,7 @@ async function completeInit(session, expectedRole) {
   // own dashboard before any data loads or UI paint.
   if (expectedRole && userProfile?.role && userProfile.role !== expectedRole) {
     const target = getDashboardUrl(userProfile.role) || 'index.html';
-    window.location.href = target;
+    window.location.replace(target);
     return;
   }
 

@@ -830,7 +830,10 @@ if (db) {
     await ensureProfileForSession(session);
     const dashUrl = await shouldGoToDashboard(session.user.id);
     if (dashUrl) {
-      window.location.href = dashUrl;
+      // Auto-login redirect runs without a user gesture; replace() avoids
+      // leaving a history entry that Chrome would mark skippable (and that
+      // would trap Back on a redirect loop).
+      window.location.replace(dashUrl);
     } else {
       updateNavForLoggedInUser();
     }
