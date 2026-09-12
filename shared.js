@@ -340,9 +340,9 @@ function initBugReport() {
       .bug-report-fab{position:fixed;right:20px;bottom:20px;z-index:9990;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary,#0D9488),var(--secondary,#2DD4BF));color:#fff;border:none;border-radius:999px;padding:11px 16px;font:600 13px/1 var(--font, "Plus Jakarta Sans"),system-ui,sans-serif;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.35);transition:transform .15s ease;}
       .bug-report-fab:hover{transform:translateY(-2px);}
       .bug-report-fab:focus-visible{outline:2px solid var(--secondary,#2DD4BF);outline-offset:2px;}
-      .bug-report-modal{position:fixed;inset:0;z-index:9995;display:flex;align-items:center;justify-content:center;background:rgba(3,15,14,.6);padding:20px;}
+      .bug-report-modal{position:fixed;inset:0;z-index:9995;display:flex;align-items:center;justify-content:center;background:rgba(3,15,14,.72);padding:20px;}
       .bug-report-modal[hidden]{display:none;}
-      .bug-report-card{width:100%;max-width:460px;background:var(--card-bg,#0a2e2a);border:1px solid var(--card-border,rgba(255,255,255,.1));border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.45);}
+      .bug-report-card{width:100%;max-width:460px;background:rgb(10,46,42);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
       .bug-report-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
       .bug-report-head h3{margin:0;font-size:17px;color:var(--text-primary,#fff);}
       .bug-report-close{background:none;border:none;color:var(--text-muted,rgba(255,255,255,.5));font-size:22px;line-height:1;cursor:pointer;padding:4px;}
