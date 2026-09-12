@@ -854,6 +854,7 @@ async function openNotificationsPage() {
 }
 
 document.getElementById('notifPageLoadMore')?.addEventListener('click', loadOlderNotifications);
+document.getElementById('notifBackBtn')?.addEventListener('click', () => navigateToPage('dashboard'));
 
 // ── Push notification subscription ──
 async function initPushSubscription() {
