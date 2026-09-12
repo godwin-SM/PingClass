@@ -780,15 +780,21 @@ function renderParentNotificationsPage() {
 }
 
 async function populateNotificationsPage() {
-  // Skip DB fetch in demo mode — loadStats already populated the demo list.
-  if (!isDemoMode) {
-    const page = await fetchParentNotificationsPage(0);
-    _parentDbNotifications = page.notifications || [];
-    _parentDbNotifTotal = page.total;
-    if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
+  const loading = document.getElementById('notifPageLoading');
+  if (loading) loading.hidden = false;
+  try {
+    // Skip DB fetch in demo mode — loadStats already populated the demo list.
+    if (!isDemoMode) {
+      const page = await fetchParentNotificationsPage(0);
+      _parentDbNotifications = page.notifications || [];
+      _parentDbNotifTotal = page.total;
+      if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
+    }
+    renderParentBellBadge();
+    renderParentNotificationsPage();
+  } finally {
+    if (loading) loading.hidden = true;
   }
-  renderParentBellBadge();
-  renderParentNotificationsPage();
 }
 
 window._notifMarkRead = async function(id) {
@@ -849,8 +855,12 @@ async function initParentAlerts() {
 async function openNotificationsPage() {
   _parentBellRead = true;
   renderParentBellBadge();
-  if (!isDemoMode) await markAllNotificationsRead();
+  // Navigate immediately so the page (with its loading spinner) is visible
+  // while mark-all-read and the list fetch run in the background.
   navigateToPage('notifications');
+  if (!isDemoMode) {
+    try { await markAllNotificationsRead(); } catch (e) { /* best effort */ }
+  }
 }
 
 document.getElementById('notifPageLoadMore')?.addEventListener('click', loadOlderNotifications);

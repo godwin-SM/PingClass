@@ -3730,6 +3730,20 @@
   color: var(--text-muted);
 }
 
+.notif-page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 16px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.notif-page-loading[hidden] {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .notifications-list {
     gap: 10px;
