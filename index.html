@@ -618,7 +618,7 @@
     }).then(function(r){ return r.json().then(function(j){ return { ok: r.ok, j: j }; }); })
       .then(function(res){
         if(res.ok && res.j && res.j.ok){
-          status.textContent = 'Thank you! Your review is in — we verify every quote in person before publishing.';
+          status.textContent = 'Thank you! Honest reviews like yours help us grow — and they help other institutes choose with confidence.';
           status.className = 'rv-status ok';
           form.reset();
           rating = 5;
