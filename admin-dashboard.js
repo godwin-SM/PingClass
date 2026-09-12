@@ -1569,7 +1569,11 @@ async function loadPaymentHistory() {
       const planConfig = Payment.getPlanConfig(p.plan_id);
       const amount = `\u20B9${(p.amount || planConfig.price).toLocaleString('en-IN')}/mo`;
 
-      const isActive = new Date(p.expires_at) > new Date();
+      // A history row is only "Active" when it is the latest subscription AND
+      // its plan matches the server-verified current plan. Never compare
+      // against the client clock, so changing the device date can't flip the
+      // statement between Active and Expired.
+      const isActive = payments[0].id === p.id && p.plan_id === currentPlan;
       const statusClass = isActive ? 'active' : 'expired';
       const statusText = isActive ? 'Active' : 'Expired';
 

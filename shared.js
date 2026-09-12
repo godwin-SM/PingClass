@@ -1092,6 +1092,7 @@ function getPagePopulators() {
 // active indicator tracks); pages without a sidebar entry (e.g. the
 // notification-history page opened from the bell) are switched directly.
 function navigateToPage(page) {
+  hideTip();
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (navItem) {
     navItem.click();
@@ -1838,6 +1839,12 @@ let _tipEl = null;
 let _tipTimer = null;
 let _tipTarget = null;
 
+// Tracks whether the last input was a pointer (mouse/touch) as opposed to the
+// keyboard. Focus driven by a pointer should never pop a tooltip on its own —
+// a click already gives enough feedback and can leave a stale bubble behind
+// when it happens to move focus around (e.g. switching sidebar pages).
+let _tipLastInputWasPointer = false;
+
 function getTipEl() {
   if (!_tipEl) {
     _tipEl = document.createElement('div');
@@ -1915,6 +1922,7 @@ document.addEventListener('mouseout', (e) => {
 
 document.addEventListener('focusin', (e) => {
   if (recentTouch()) return;
+  if (_tipLastInputWasPointer) return;
   const target = e.target.closest('[data-tooltip]');
   if (target) {
     clearTimeout(_tipTimer);
@@ -1930,6 +1938,25 @@ document.addEventListener('focusout', (e) => {
 // A tooltip left open becomes stale the moment the page scrolls or resizes
 document.addEventListener('scroll', hideTip, { capture: true, passive: true });
 window.addEventListener('resize', hideTip);
+
+// Any pointer press dismisses a hover tooltip immediately (and marks the
+// input as pointer so a click-induced focus can't re-open it).
+document.addEventListener('pointerdown', () => {
+  _tipLastInputWasPointer = true;
+  hideTip();
+}, { capture: true, passive: true });
+
+// Any real key press is keyboard input (relevant for Tab/arrow navigation).
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Shift' && e.key !== 'Control' && e.key !== 'Alt' && e.key !== 'Meta') {
+    _tipLastInputWasPointer = false;
+  }
+}, true);
+
+// Switch back to this tab with a leftover bubble showing is always a bug.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) hideTip();
+});
 
 // ── Mobile long-press tooltips ──
 // On touch devices a tooltip only appears after pressing and holding the
