@@ -3665,33 +3665,36 @@
   color: var(--text-muted);
 }
 
-.alert-footer {
-  padding: 8px 10px 10px;
-  border-top: 1px solid var(--border);
+.notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.alert-load-more {
-  width: 100%;
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-secondary);
+#page-notifications .alert-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.notif-page-meta {
+  margin: 0 4px 16px;
   font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  color: var(--text-muted);
 }
 
-.alert-load-more:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(45, 212, 191, 0.4);
-  color: var(--text-primary);
-}
-
-.alert-load-more:disabled {
-  opacity: 0.6;
-  cursor: progress;
+@media (max-width: 768px) {
+  .notifications-list {
+    gap: 10px;
+  }
+  .notif-page-meta {
+    margin-left: 6px;
+  }
 }
 
 /* ========== DASHBOARD ANALYTICS ========== */

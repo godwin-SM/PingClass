@@ -1067,9 +1067,59 @@ document.addEventListener('scroll', (e) => {
 }, { capture: true, passive: true });
 
 // Page switching
+let _PAGE_POPULATORS = null;
+function getPagePopulators() {
+  if (_PAGE_POPULATORS) return _PAGE_POPULATORS;
+  _PAGE_POPULATORS = {
+    dashboard: typeof loadStats === 'function' ? loadStats : undefined,
+    billing: typeof populateBillingPage === 'function' ? populateBillingPage : undefined,
+    staff: typeof populateStaffPage === 'function' ? populateStaffPage : undefined,
+    parents: typeof populateParentsPage === 'function' ? populateParentsPage : undefined,
+    students: typeof populateStudentsPage === 'function' ? populateStudentsPage : undefined,
+    batches: typeof populateBatchesPage === 'function' ? populateBatchesPage : undefined,
+    fees: typeof populateFeesPage === 'function' ? populateFeesPage : undefined,
+    attendance: typeof populateAttendancePage === 'function' ? populateAttendancePage : undefined,
+    announcements: typeof populateAnnouncementsPage === 'function' ? populateAnnouncementsPage : undefined,
+    settings: typeof populateSettingsPage === 'function' ? populateSettingsPage : undefined,
+    notifications: typeof populateNotificationsPage === 'function' ? populateNotificationsPage : undefined
+  };
+  return _PAGE_POPULATORS;
+}
+
+// Navigate to a page by id. Sidebar pages get their nav item clicked (so the
+// active indicator tracks); pages without a sidebar entry (e.g. the
+// notification-history page opened from the bell) are switched directly.
 function navigateToPage(page) {
   const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
-  if (navItem) navItem.click();
+  if (navItem) {
+    navItem.click();
+    return;
+  }
+  const target = document.getElementById('page-' + page);
+  if (!target) return;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('page-active'));
+  target.classList.add('page-active');
+
+  const scrollEl = document.querySelector('.content-scroll');
+  if (scrollEl) scrollEl.scrollTo({ top: 0, behavior: 'instant' });
+  document.body.classList.toggle('page-dashboard', false);
+
+  if (typeof showSkeletons === 'function') showSkeletons(page);
+  const fn = getPagePopulators()[page];
+  if (typeof fn === 'function') {
+    return Promise.resolve().then(fn).catch(err => {
+      console.error('Failed to load page:', page, err);
+      if (typeof hideSkeletons === 'function') hideSkeletons(page);
+      const offline = isNetworkError(err);
+      if (offline && typeof handleNetworkFailure === 'function') handleNetworkFailure(err);
+      if (typeof showSectionError === 'function') {
+        showSectionError(page,
+          offline ? 'We couldn\u2019t reach the server. Check your internet connection and try again.' : 'Something went wrong while loading this section. Please try again.',
+          { retry: () => fn(), retryLabel: 'Try again' });
+      }
+    });
+  }
 }
 
 document.querySelectorAll('.nav-item[data-page]').forEach(item => {
@@ -1106,18 +1156,7 @@ document.querySelectorAll('.nav-item[data-page]').forEach(item => {
     if (typeof showSkeletons === 'function' && page !== 'dashboard') showSkeletons(page);
 
     // Call page-specific populate functions if they exist
-    const pageFns = {
-      dashboard: typeof loadStats === 'function' ? loadStats : undefined,
-      billing: typeof populateBillingPage === 'function' ? populateBillingPage : undefined,
-      staff: typeof populateStaffPage === 'function' ? populateStaffPage : undefined,
-      parents: typeof populateParentsPage === 'function' ? populateParentsPage : undefined,
-      students: typeof populateStudentsPage === 'function' ? populateStudentsPage : undefined,
-      batches: typeof populateBatchesPage === 'function' ? populateBatchesPage : undefined,
-      fees: typeof populateFeesPage === 'function' ? populateFeesPage : undefined,
-      attendance: typeof populateAttendancePage === 'function' ? populateAttendancePage : undefined,
-      announcements: typeof populateAnnouncementsPage === 'function' ? populateAnnouncementsPage : undefined,
-      settings: typeof populateSettingsPage === 'function' ? populateSettingsPage : undefined
-    };
+    const pageFns = getPagePopulators();
     const fn = pageFns[page];
     if (typeof fn === 'function') {
       try {

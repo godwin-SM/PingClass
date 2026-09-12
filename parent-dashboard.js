@@ -274,7 +274,7 @@ async function loadStats() {
     }));
     _parentDbNotifTotal = _parentDbNotifications.length;
     _parentDbNotifUnread = _parentDbNotifications.filter(n => !n.read_at).length;
-    renderParentBellAlerts();
+    renderParentBellBadge();
 
     // Load announcements while skeleton is still visible.
     const demoList = demoAnnouncements
@@ -340,7 +340,7 @@ async function loadStats() {
   _parentDbNotifications = notifPage.notifications || [];
   _parentDbNotifTotal = notifPage.total;
   if (typeof notifPage.unread_count === 'number') _parentDbNotifUnread = notifPage.unread_count;
-  renderParentBellAlerts();
+  renderParentBellBadge();
 
   // Hide skeleton, show real content
   if (skel) skel.style.display = 'none';
@@ -666,7 +666,6 @@ let _parentDbNotifications = [];
 let _parentDbNotifTotal = 0;
 let _parentDbNotifUnread = 0;
 let _parentBellRead = false;
-let _lastBellCount = 0;
 const NOTIF_PAGE_SIZE = 50;
 
 const NOTIF_ICONS = {
@@ -738,42 +737,11 @@ async function markAllNotificationsRead() {
   } catch (e) { /* ignore */ }
 }
 
-function renderParentBellAlerts() {
-  const list = document.getElementById('alertList');
-  const empty = document.getElementById('alertEmpty');
-  const badge = document.getElementById('alertBadge');
-  const meta = document.getElementById('alertPanelMeta');
-  const more = document.getElementById('alertLoadMore');
-  const footer = document.getElementById('alertPanelFooter');
-  if (!list) return;
-
-  const alerts = _parentDbNotifications;
-  const count = alerts.length;
-
-  if (count > 0 && _parentBellRead && _lastBellCount !== count) {
-    _parentBellRead = false;
-  }
-  _lastBellCount = count;
-
-  if (badge) {
-    const unread = Math.max(_parentDbNotifUnread, 0);
-    badge.textContent = unread > 9 ? '9+' : unread;
-    badge.hidden = unread === 0 || _parentBellRead;
-  }
-  if (meta) {
-    meta.textContent = _parentDbNotifTotal > 0
-      ? `${count} of ${_parentDbNotifTotal}`
-      : (count > 0 ? `${count} alert${count !== 1 ? 's' : ''}` : '');
-  }
-  if (empty) empty.hidden = count > 0;
-  const hasMore = count > 0 && _parentDbNotifTotal > count;
-  if (more) more.hidden = !hasMore;
-  if (footer) footer.hidden = !hasMore;
-  list.innerHTML = alerts.map(a => {
-    const page = NOTIF_PAGES[a.type] || 'dashboard';
-    const icon = NOTIF_ICONS[a.type] || '🔔';
-    const timeAgo = getTimeAgo(a.created_at);
-    return `
+function parentNotifItemHTML(a) {
+  const page = NOTIF_PAGES[a.type] || 'dashboard';
+  const icon = NOTIF_ICONS[a.type] || '🔔';
+  const timeAgo = getTimeAgo(a.created_at);
+  return `
     <li class="alert-item alert-item--${a.type === 'fee_overdue' ? 'danger' : a.type === 'fee_due_today' ? 'warning' : 'info'}"
         onclick="navigateToPage('${page}'); window._notifMarkRead('${a.id}');">
       <span class="alert-item-dot" aria-hidden="true">${icon}</span>
@@ -782,19 +750,58 @@ function renderParentBellAlerts() {
         <div class="alert-item-detail">${escapeHtml(a.body)} · ${timeAgo}</div>
       </div>
     </li>`;
-  }).join('');
+}
+
+function renderParentBellBadge() {
+  const badge = document.getElementById('alertBadge');
+  if (!badge) return;
+  const unread = Math.max(_parentDbNotifUnread, 0);
+  badge.textContent = unread > 9 ? '9+' : unread;
+  badge.hidden = unread === 0 || _parentBellRead;
+}
+
+function renderParentNotificationsPage() {
+  const list = document.getElementById('notifPageList');
+  const empty = document.getElementById('notifPageEmpty');
+  const meta = document.getElementById('notifPageMeta');
+  const more = document.getElementById('notifPageLoadMore');
+  if (!list) return;
+
+  const count = _parentDbNotifications.length;
+  if (meta) {
+    meta.textContent = _parentDbNotifTotal > 0
+      ? `${count} of ${_parentDbNotifTotal} notification${_parentDbNotifTotal !== 1 ? 's' : ''}`
+      : '';
+  }
+  if (empty) empty.style.display = count > 0 ? 'none' : 'flex';
+  list.innerHTML = _parentDbNotifications.map(parentNotifItemHTML).join('');
+  const hasMore = count > 0 && _parentDbNotifTotal > count;
+  if (more) more.style.display = hasMore ? '' : 'none';
+}
+
+async function populateNotificationsPage() {
+  // Skip DB fetch in demo mode — loadStats already populated the demo list.
+  if (!isDemoMode) {
+    const page = await fetchParentNotificationsPage(0);
+    _parentDbNotifications = page.notifications || [];
+    _parentDbNotifTotal = page.total;
+    if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
+  }
+  renderParentBellBadge();
+  renderParentNotificationsPage();
 }
 
 window._notifMarkRead = async function(id) {
   await markNotificationsRead([id]);
   _parentDbNotifications = _parentDbNotifications.filter(n => n.id !== id);
   _parentDbNotifTotal = Math.max(_parentDbNotifTotal - 1, 0);
-  renderParentBellAlerts();
+  renderParentNotificationsPage();
+  renderParentBellBadge();
 };
 
-window._loadOlderNotifs = async function() {
-  const more = document.getElementById('alertLoadMore');
-  if (more) { more.disabled = true; more.textContent = 'Loading…'; }
+async function loadOlderNotifications() {
+  const btn = document.getElementById('notifPageLoadMore');
+  if (btn) { btn.disabled = true; btn.textContent = 'Loading\u2026'; }
   const page = await fetchParentNotificationsPage(_parentDbNotifications.length);
   const existing = new Set(_parentDbNotifications.map(n => n.id));
   const fresh = (page.notifications || []).filter(n => !existing.has(n.id));
@@ -803,8 +810,9 @@ window._loadOlderNotifs = async function() {
   }
   if (page.total > 0) _parentDbNotifTotal = page.total;
   if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
-  if (more) { more.disabled = false; more.textContent = 'Show older notifications'; }
-  renderParentBellAlerts();
+  if (btn) { btn.disabled = false; btn.textContent = 'Show older notifications'; }
+  renderParentNotificationsPage();
+  renderParentBellBadge();
 };
 
 function getTimeAgo(dateStr) {
@@ -821,8 +829,7 @@ function getTimeAgo(dateStr) {
 
 async function initParentAlerts() {
   const bell = document.getElementById('alertBell');
-  const panel = document.getElementById('alertPanel');
-  if (!bell || !panel) return;
+  if (!bell) return;
 
   // Load notifications from DB (skip in demo mode — already set by loadStats)
   if (!isDemoMode) {
@@ -833,39 +840,20 @@ async function initParentAlerts() {
       if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
     }
   }
-  renderParentBellAlerts();
+  renderParentBellBadge();
 
-  const moreBtn = document.getElementById('alertLoadMore');
-  if (moreBtn) moreBtn.addEventListener('click', () => window._loadOlderNotifs());
-
-  bell.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const willShow = panel.hidden;
-    panel.hidden = !willShow;
-    bell.setAttribute('aria-expanded', String(willShow));
-    if (willShow) {
-      _parentBellRead = true;
-      markAllNotificationsRead();
-      // Clear badge visually
-      _parentDbNotifications.forEach(n => n.read_at = n.read_at || new Date().toISOString());
-      renderParentBellAlerts();
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!panel.hidden && !e.target.closest('.alert-wrap')) {
-      panel.hidden = true;
-      bell.setAttribute('aria-expanded', 'false');
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !panel.hidden) {
-      panel.hidden = true;
-      bell.setAttribute('aria-expanded', 'false');
-    }
-  });
+  // The bell opens the notification-history page instead of a dropdown.
+  bell.addEventListener('click', openNotificationsPage);
 }
+
+async function openNotificationsPage() {
+  _parentBellRead = true;
+  renderParentBellBadge();
+  if (!isDemoMode) await markAllNotificationsRead();
+  navigateToPage('notifications');
+}
+
+document.getElementById('notifPageLoadMore')?.addEventListener('click', loadOlderNotifications);
 
 // ── Push notification subscription ──
 async function initPushSubscription() {
