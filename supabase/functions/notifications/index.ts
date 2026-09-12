@@ -15,7 +15,9 @@ Deno.serve(async (req) => {
     return new Response("ok", {
       headers: {
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PATCH, DELETE",
         "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+        "Access-Control-Max-Age": "86400",
       },
     });
   }
@@ -41,10 +43,11 @@ Deno.serve(async (req) => {
     const url = new URL(req.url);
     const method = req.method;
 
-    // GET / — List user's notifications
+    // GET / - List user's notifications (paginated via limit/offset).
+    // Returns total count and unread_count for the bell badge + history view.
     if (method === "GET") {
       const limit = Math.min(parseInt(url.searchParams.get("limit") || "50"), 100);
-      const offset = parseInt(url.searchParams.get("offset") || "0");
+      const offset = Math.max(parseInt(url.searchParams.get("offset") || "0"), 0);
       const unreadOnly = url.searchParams.get("unread") === "true";
 
       let query = admin
@@ -61,10 +64,21 @@ Deno.serve(async (req) => {
       const { data, error, count } = await query;
       if (error) return json({ error: error.message }, 500);
 
-      return json({ notifications: data, total: count });
+      let unreadCount: number | null = null;
+      if (!unreadOnly) {
+        const { count: unread } = await admin
+          .from("notifications")
+          .select("id", { count: "exact" })
+          .eq("user_id", user.id)
+          .is("read_at", null);
+        if (unread === null) unread = 0;
+        unreadCount = unread;
+      }
+
+      return json({ notifications: data, total: count, unread_count: unreadCount });
     }
 
-    // PATCH / — Mark as read
+    // PATCH / - Mark as read
     if (method === "PATCH") {
       const body = await req.json();
       const { ids, markAll } = body;
@@ -88,7 +102,7 @@ Deno.serve(async (req) => {
       return json({ success: true });
     }
 
-    // DELETE / — Delete notifications
+    // DELETE / - Delete notifications
     if (method === "DELETE") {
       const body = await req.json();
       const { ids } = body;

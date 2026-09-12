@@ -6,7 +6,8 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 //  - It never deletes student/attendance/fee records (financial records are kept
 //    for 6 years under Indian tax law: IT Act 1961 s.44AA / Rule 6F; GST Act 2017 s.36).
 //  - It only purges stale personal data: used/expired invite tokens (which hold
-//    names + emails) and orphaned link rows pointing at deleted records.
+//    names + emails), orphaned link rows pointing at deleted records, old audit
+//    logs, and read/obsolete in-app notifications.
 
 const DAYS_MS = 24 * 60 * 60 * 1000;
 
@@ -44,6 +45,7 @@ Deno.serve(async (req) => {
   const now = new Date();
   const cutoff30 = new Date(now.getTime() - 30 * DAYS_MS).toISOString();
   const cutoff90 = new Date(now.getTime() - 90 * DAYS_MS).toISOString();
+  const cutoff365 = new Date(now.getTime() - 365 * DAYS_MS).toISOString();
 
   // 1. Used invite tokens older than 30 days (hold name + email).
   {
@@ -128,6 +130,44 @@ Deno.serve(async (req) => {
         await admin.from("student_batches").delete().in("id", orphans.map((o: { id: string }) => o.id));
         summary.push(`student_batches orphans: ${orphans.length}`);
       }
+    }
+  }
+
+  // 6. Audit-log rows older than 12 months (can hold old/new row snapshots).
+  {
+    const { data: rows } = await admin
+      .from("audit_log")
+      .select("id")
+      .lt("created_at", cutoff365);
+    if (rows && rows.length) {
+      await admin.from("audit_log").delete().in("id", rows.map((r: { id: string }) => r.id));
+      summary.push(`audit_log >365d: ${rows.length}`);
+    }
+  }
+
+  // 7. In-app notifications: keep a 90-day history. Purge anything the user has
+  //    read more than 90 days ago, plus any still-unread items older than a year
+  //    (stale reminders are worthless and only grow the table). Unread rows are
+  //    otherwise always kept so actionable items are never silently dropped.
+  {
+    const { data: rows } = await admin
+      .from("notifications")
+      .select("id")
+      .lt("read_at", cutoff90);
+    if (rows && rows.length) {
+      await admin.from("notifications").delete().in("id", rows.map((r: { id: string }) => r.id));
+      summary.push(`notifications read>90d: ${rows.length}`);
+    }
+  }
+  {
+    const { data: rows } = await admin
+      .from("notifications")
+      .select("id")
+      .is("read_at", null)
+      .lt("created_at", cutoff365);
+    if (rows && rows.length) {
+      await admin.from("notifications").delete().in("id", rows.map((r: { id: string }) => r.id));
+      summary.push(`notifications unread>365d: ${rows.length}`);
     }
   }
 

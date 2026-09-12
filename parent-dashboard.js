@@ -272,6 +272,8 @@ async function loadStats() {
       read_at: null,
       created_at: new Date().toISOString()
     }));
+    _parentDbNotifTotal = _parentDbNotifications.length;
+    _parentDbNotifUnread = _parentDbNotifications.filter(n => !n.read_at).length;
     renderParentBellAlerts();
 
     // Load announcements while skeleton is still visible.
@@ -334,7 +336,10 @@ async function loadStats() {
   renderParentAlerts(_parentBellAlerts);
 
   // Fetch DB-backed notifications for bell icon
-  _parentDbNotifications = await fetchParentNotifications();
+  const notifPage = await fetchParentNotificationsPage(0);
+  _parentDbNotifications = notifPage.notifications || [];
+  _parentDbNotifTotal = notifPage.total;
+  if (typeof notifPage.unread_count === 'number') _parentDbNotifUnread = notifPage.unread_count;
   renderParentBellAlerts();
 
   // Hide skeleton, show real content
@@ -658,8 +663,11 @@ function hideSkeletons(pageName) {
 
 // ── Bell icon alerts (DB-backed) ──
 let _parentDbNotifications = [];
+let _parentDbNotifTotal = 0;
+let _parentDbNotifUnread = 0;
 let _parentBellRead = false;
 let _lastBellCount = 0;
+const NOTIF_PAGE_SIZE = 50;
 
 const NOTIF_ICONS = {
   fee_reminder: '💰',
@@ -675,19 +683,25 @@ const NOTIF_PAGES = {
   payment_confirmed: 'fees'
 };
 
-async function fetchParentNotifications() {
-  if (isDemoMode || !currentUser?.id) return [];
+async function fetchParentNotificationsPage(offset) {
+  if (isDemoMode || !currentUser?.id) {
+    return { notifications: [], total: _parentDbNotifTotal, unread_count: 0 };
+  }
   try {
     const { data: { session } } = await db.auth.getSession();
-    if (!session) return [];
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifications?limit=50`, {
+    if (!session) return { notifications: [], total: 0, unread_count: 0 };
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifications?limit=${NOTIF_PAGE_SIZE}&offset=${offset}`, {
       headers: { Authorization: `Bearer ${session.access_token}` }
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { notifications: [], total: 0, unread_count: 0 };
     const json = await res.json();
-    return json.notifications || [];
+    return {
+      notifications: json.notifications || [],
+      total: json.total || 0,
+      unread_count: typeof json.unread_count === 'number' ? json.unread_count : null
+    };
   } catch (e) {
-    return [];
+    return { notifications: [], total: 0, unread_count: 0 };
   }
 }
 
@@ -720,6 +734,7 @@ async function markAllNotificationsRead() {
       },
       body: JSON.stringify({ markAll: true })
     });
+    _parentDbNotifUnread = 0;
   } catch (e) { /* ignore */ }
 }
 
@@ -728,6 +743,8 @@ function renderParentBellAlerts() {
   const empty = document.getElementById('alertEmpty');
   const badge = document.getElementById('alertBadge');
   const meta = document.getElementById('alertPanelMeta');
+  const more = document.getElementById('alertLoadMore');
+  const footer = document.getElementById('alertPanelFooter');
   if (!list) return;
 
   const alerts = _parentDbNotifications;
@@ -739,11 +756,19 @@ function renderParentBellAlerts() {
   _lastBellCount = count;
 
   if (badge) {
-    badge.textContent = count > 9 ? '9+' : count;
-    badge.hidden = count === 0 || _parentBellRead;
+    const unread = Math.max(_parentDbNotifUnread, 0);
+    badge.textContent = unread > 9 ? '9+' : unread;
+    badge.hidden = unread === 0 || _parentBellRead;
   }
-  if (meta) meta.textContent = count > 0 ? `${count} alert${count !== 1 ? 's' : ''}` : '';
+  if (meta) {
+    meta.textContent = _parentDbNotifTotal > 0
+      ? `${count} of ${_parentDbNotifTotal}`
+      : (count > 0 ? `${count} alert${count !== 1 ? 's' : ''}` : '');
+  }
   if (empty) empty.hidden = count > 0;
+  const hasMore = count > 0 && _parentDbNotifTotal > count;
+  if (more) more.hidden = !hasMore;
+  if (footer) footer.hidden = !hasMore;
   list.innerHTML = alerts.map(a => {
     const page = NOTIF_PAGES[a.type] || 'dashboard';
     const icon = NOTIF_ICONS[a.type] || '🔔';
@@ -763,6 +788,22 @@ function renderParentBellAlerts() {
 window._notifMarkRead = async function(id) {
   await markNotificationsRead([id]);
   _parentDbNotifications = _parentDbNotifications.filter(n => n.id !== id);
+  _parentDbNotifTotal = Math.max(_parentDbNotifTotal - 1, 0);
+  renderParentBellAlerts();
+};
+
+window._loadOlderNotifs = async function() {
+  const more = document.getElementById('alertLoadMore');
+  if (more) { more.disabled = true; more.textContent = 'Loading…'; }
+  const page = await fetchParentNotificationsPage(_parentDbNotifications.length);
+  const existing = new Set(_parentDbNotifications.map(n => n.id));
+  const fresh = (page.notifications || []).filter(n => !existing.has(n.id));
+  if (fresh.length) {
+    _parentDbNotifications = _parentDbNotifications.concat(fresh);
+  }
+  if (page.total > 0) _parentDbNotifTotal = page.total;
+  if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
+  if (more) { more.disabled = false; more.textContent = 'Show older notifications'; }
   renderParentBellAlerts();
 };
 
@@ -785,9 +826,17 @@ async function initParentAlerts() {
 
   // Load notifications from DB (skip in demo mode — already set by loadStats)
   if (!isDemoMode) {
-    _parentDbNotifications = await fetchParentNotifications();
+    const page = await fetchParentNotificationsPage(0);
+    if (page.notifications.length || page.total > 0) {
+      _parentDbNotifications = page.notifications || [];
+      _parentDbNotifTotal = page.total;
+      if (typeof page.unread_count === 'number') _parentDbNotifUnread = page.unread_count;
+    }
   }
   renderParentBellAlerts();
+
+  const moreBtn = document.getElementById('alertLoadMore');
+  if (moreBtn) moreBtn.addEventListener('click', () => window._loadOlderNotifs());
 
   bell.addEventListener('click', (e) => {
     e.stopPropagation();
