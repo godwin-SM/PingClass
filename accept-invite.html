@@ -6,10 +6,9 @@
   <meta name="description" content="Accept your invite and join your institute's PingClass workspace." />
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>Accept Invite — PingClass</title>
+  <title>Accept Invite â€” PingClass</title>
   <link rel="icon" type="image/png" href="logo-64.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="fonts.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -150,7 +149,7 @@
     .invite-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 32px var(--primary-glow); }
     .invite-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* ── OTP Input ── */
+    /* â”€â”€ OTP Input â”€â”€ */
     .otp-input {
       width: 100%; padding: 16px;
       background: rgba(255,255,255,0.04); border: 1px solid var(--border);
@@ -164,7 +163,7 @@
     .otp-input:focus { border-color: var(--primary); }
     .otp-input::placeholder { color: var(--text-muted); font-size: 0.9375rem; font-weight: 400; letter-spacing: normal; }
 
-    /* ── Password Strength ── */
+    /* â”€â”€ Password Strength â”€â”€ */
     .pw-hint {
       font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;
     }
@@ -175,13 +174,13 @@
     .pw-match.ok { color: var(--success); display: block; }
     .pw-match.no { color: var(--error); display: block; }
 
-    /* ── Consent ── */
+    /* â”€â”€ Consent â”€â”€ */
     .invite-consent-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
     .invite-consent-label input { margin-top: 3px; accent-color: var(--primary); }
     .invite-consent-label a { color: var(--secondary); text-decoration: underline; }
     .invite-consent-hint { display: block; margin-top: 6px; color: var(--text-muted); line-height: 1.5; }
 
-    /* ── Resend Link ── */
+    /* â”€â”€ Resend Link â”€â”€ */
     .resend-row {
       text-align: center; margin-top: 16px; font-size: 0.8125rem; color: var(--text-muted);
     }
@@ -194,7 +193,7 @@
     .resend-row a:hover { color: var(--text); text-decoration: underline; }
     .resend-row a.disabled { opacity: 0.4; pointer-events: none; }
 
-    /* ── States ── */
+    /* â”€â”€ States â”€â”€ */
     .invite-state { display: none; }
     .invite-state.active { display: block; }
 
@@ -316,7 +315,7 @@
           </div>
           <div>
             <div class="invite-detail-label">Email</div>
-            <div class="invite-detail-value" id="otpEmailDisplay">—</div>
+            <div class="invite-detail-value" id="otpEmailDisplay">â€”</div>
           </div>
         </div>
 
@@ -328,7 +327,7 @@
           </div>
           <div>
             <div class="invite-detail-label">Role</div>
-            <div class="invite-detail-value" id="otpRoleDisplay">—</div>
+            <div class="invite-detail-value" id="otpRoleDisplay">â€”</div>
           </div>
         </div>
 
@@ -353,7 +352,7 @@
         </div>
 
         <h1>Verify Email</h1>
-        <p>Enter the 6-digit code sent to<br/><strong id="otpVerifyEmail" style="color:var(--text)">—</strong></p>
+        <p>Enter the 6-digit code sent to<br/><strong id="otpVerifyEmail" style="color:var(--text)">â€”</strong></p>
 
         <div class="invite-form-group">
           <input type="text" id="otpInput" class="otp-input" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" />
@@ -421,7 +420,7 @@
             <input type="checkbox" id="inviteConsent" />
             <span style="font-size:0.8125rem;color:var(--text-secondary);line-height:1.55;">
               I have read and agree to the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>, and I consent to the processing of my personal data as described there, under the Digital Personal Data Protection Act, 2023.
-              <span class="invite-consent-hint">मैंने Privacy Policy और Terms of Service पढ़ ली हैं और इनसे सहमत हूँ। डिजिटल पर्सनल डेटा प्रोटेक्शन अधिनियम, 2023 के अनुसार मेरे व्यक्तिगत डेटा के प्रोसेसिंग के लिए यह सहमति देता/देती हूँ।</span>
+              <span class="invite-consent-hint">à¤®à¥ˆà¤‚à¤¨à¥‡ Privacy Policy à¤”à¤° Terms of Service à¤ªà¤¢à¤¼ à¤²à¥€ à¤¹à¥ˆà¤‚ à¤”à¤° à¤‡à¤¨à¤¸à¥‡ à¤¸à¤¹à¤®à¤¤ à¤¹à¥‚à¤à¥¤ à¤¡à¤¿à¤œà¤¿à¤Ÿà¤² à¤ªà¤°à¥à¤¸à¤¨à¤² à¤¡à¥‡à¤Ÿà¤¾ à¤ªà¥à¤°à¥‹à¤Ÿà¥‡à¤•à¥à¤¶à¤¨ à¤…à¤§à¤¿à¤¨à¤¿à¤¯à¤®, 2023 à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤° à¤®à¥‡à¤°à¥‡ à¤µà¥à¤¯à¤•à¥à¤¤à¤¿à¤—à¤¤ à¤¡à¥‡à¤Ÿà¤¾ à¤•à¥‡ à¤ªà¥à¤°à¥‹à¤¸à¥‡à¤¸à¤¿à¤‚à¤— à¤•à¥‡ à¤²à¤¿à¤ à¤¯à¤¹ à¤¸à¤¹à¤®à¤¤à¤¿ à¤¦à¥‡à¤¤à¤¾/à¤¦à¥‡à¤¤à¥€ à¤¹à¥‚à¤à¥¤</span>
             </span>
           </label>
         </div>
@@ -484,7 +483,7 @@
       document.getElementById(id).classList.remove('visible');
     }
 
-    // ── Validate token on load ──
+    // â”€â”€ Validate token on load â”€â”€
     (async function() {
       if (!tokenId) { showState(stateExpired); return; }
 
@@ -497,7 +496,7 @@
 
       inviteData = row;
 
-      // Fetch institute name (secure RPC — validated against the invite token)
+      // Fetch institute name (secure RPC â€” validated against the invite token)
       let instituteName = 'your institute';
       if (row.id) {
         try {
@@ -519,7 +518,7 @@
       showState(stateOtpRequest);
     })();
 
-    // ── Step 1: Send OTP ──
+    // â”€â”€ Step 1: Send OTP â”€â”€
     async function sendOtp() {
       const nameInput = document.getElementById('inviteName');
       const name = nameInput.value.trim();
@@ -555,7 +554,7 @@
           }
         }
       } catch (e) {
-        // Edge function might not be deployed yet — continue anyway
+        // Edge function might not be deployed yet â€” continue anyway
         console.warn('check-email unavailable:', e);
       }
 
@@ -584,7 +583,7 @@
       document.getElementById('otpInput').focus();
     }
 
-    // ── Step 2: Verify OTP ──
+    // â”€â”€ Step 2: Verify OTP â”€â”€
     async function verifyOtp() {
       const otp = document.getElementById('otpInput').value.replace(/\s/g, '');
       const btn = document.getElementById('verifyOtpBtn');
@@ -618,13 +617,13 @@
       btn.disabled = false;
       btn.textContent = 'Verify OTP';
 
-      // OTP verified — show password step
+      // OTP verified â€” show password step
       if (resendCooldown) { clearInterval(resendCooldown); resendCooldown = null; }
       showState(statePassword);
       document.getElementById('newPassword').focus();
     }
 
-    // ── Resend OTP ──
+    // â”€â”€ Resend OTP â”€â”€
     async function resendOtp() {
       const link = document.getElementById('resendLink');
       if (link.classList.contains('disabled')) return;
@@ -671,7 +670,7 @@
       }, 1000);
     }
 
-    // ── Step 3: Create Account ──
+    // â”€â”€ Step 3: Create Account â”€â”€
     async function createAccount() {
       const password = document.getElementById('newPassword').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
@@ -786,12 +785,12 @@
         });
       }
 
-      // 6) Show success → auto-redirect
+      // 6) Show success â†’ auto-redirect
       inviteRole = inviteData.role;
       showSuccessRedirect();
     }
 
-    // ── Password toggle helpers ──
+    // â”€â”€ Password toggle helpers â”€â”€
     function setupPwToggle(toggleId, inputId, eyeId, eyeOffId) {
       const toggle = document.getElementById(toggleId);
       const input = document.getElementById(inputId);
@@ -819,7 +818,7 @@
     setupPwToggle('toggleNewPw', 'newPassword', 'eyeIconNew', 'eyeOffIconNew');
     setupPwToggle('toggleConfirmPw', 'confirmPassword', 'eyeIconConfirm', 'eyeOffIconConfirm');
 
-    // ── Password match indicator ──
+    // â”€â”€ Password match indicator â”€â”€
     document.getElementById('confirmPassword').addEventListener('input', function() {
       const pw = document.getElementById('newPassword').value;
       const confirm = this.value;
@@ -839,12 +838,12 @@
       }
     });
 
-    // ── OTP input auto-advance (paste support) ──
+    // â”€â”€ OTP input auto-advance (paste support) â”€â”€
     document.getElementById('otpInput').addEventListener('input', function(e) {
       this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
     });
 
-    // ── Keyboard: Enter to submit on each step ──
+    // â”€â”€ Keyboard: Enter to submit on each step â”€â”€
     document.getElementById('inviteName').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') { e.preventDefault(); sendOtp(); }
     });
@@ -857,7 +856,7 @@
       if (e.key === 'Enter') { e.preventDefault(); createAccount(); }
     });
 
-    // ── Success redirect ──
+    // â”€â”€ Success redirect â”€â”€
     function showSuccessRedirect() {
       const dashUrl = getDashboardUrl(inviteRole);
       document.getElementById('goToDashboardBtn').href = dashUrl;

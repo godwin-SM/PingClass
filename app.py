@@ -92,8 +92,8 @@ def security_headers(response):
     csp = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline' https://*.razorpay.com; "
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.razorpay.com; "
-        "font-src 'self' https://fonts.gstatic.com https://*.razorpay.com; "
+        "style-src 'self' 'unsafe-inline' https://*.razorpay.com; "
+        "font-src 'self' https://*.razorpay.com; "
         "img-src 'self' data: https://*.razorpay.com; "
         "connect-src 'self' https://evrqzgjksmidqhzvckhq.supabase.co wss://evrqzgjksmidqhzvckhq.supabase.co https://*.razorpay.com; "
     )

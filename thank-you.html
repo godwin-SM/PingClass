@@ -11,14 +11,14 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Thanks for signing up for PingClass. Your account is ready — here's what happens next, and the promise behind our 24-hour response time.">
+  <meta name="description" content="Thanks for signing up for PingClass. Your account is ready â€” here's what happens next, and the promise behind our 24-hour response time.">
   <meta name="robots" content="noindex,follow">
   <link rel="icon" type="image/png" href="logo-64.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <title>You're all set — Welcome to PingClass</title>
+  <title>You're all set â€” Welcome to PingClass</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="PingClass">
-  <meta property="og:title" content="You're all set — Welcome to PingClass">
+  <meta property="og:title" content="You're all set â€” Welcome to PingClass">
   <meta property="og:description" content="Your account is ready. Here's what happens next, and why every request gets a reply within 24 hours.">
   <meta property="og:url" content="https://pingclass.vercel.app/thank-you">
   <meta property="og:image" content="https://pingclass.vercel.app/og-image.jpg">
@@ -29,7 +29,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="en_IN">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="You're all set — Welcome to PingClass">
+  <meta name="twitter:title" content="You're all set â€” Welcome to PingClass">
   <meta name="twitter:description" content="Your account is ready. Here's what happens next, and why every request gets a reply within 24 hours.">
   <meta name="twitter:image" content="https://pingclass.vercel.app/og-image.jpg">
   <script type="application/ld+json">
@@ -43,9 +43,7 @@
     "email": "pingclassoff@gmail.com"
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="styles.css?v=17">
   <link rel="stylesheet" href="landing.css?v=39">
   <style>
@@ -121,7 +119,7 @@
         </div>
         <span class="thanks-kicker">Account ready</span>
         <h1>You're all set<span>.</span></h1>
-        <p class="thanks-sub">Thanks for signing up for PingClass. Your account is created — here's what happens next.</p>
+        <p class="thanks-sub">Thanks for signing up for PingClass. Your account is created â€” here's what happens next.</p>
 
         <div class="thanks-steps">
           <div class="thanks-step">
@@ -135,7 +133,7 @@
             <div class="thanks-step-num">2</div>
             <div>
               <h3>Step into your dashboard</h3>
-              <p>Add your students, batches and fee structure. Start with up to 20 students free — no credit card.</p>
+              <p>Add your students, batches and fee structure. Start with up to 20 students free â€” no credit card.</p>
             </div>
           </div>
           <div class="thanks-step">
@@ -149,11 +147,11 @@
 
         <div class="thanks-promise">
           <h3>Our 24-hour response promise</h3>
-          <p>We're a small team, and every request goes to a real person — no bots, no ticket queues. When you email us or ask us a question, you'll hear back within <strong>24 hours</strong>, usually much sooner. If we can't fully solve your problem that fast, we'll tell you exactly when you'll hear from us next.</p>
+          <p>We're a small team, and every request goes to a real person â€” no bots, no ticket queues. When you email us or ask us a question, you'll hear back within <strong>24 hours</strong>, usually much sooner. If we can't fully solve your problem that fast, we'll tell you exactly when you'll hear from us next.</p>
         </div>
 
         <div class="thanks-actions">
-          <a href="#" id="dashCta" class="btn-primary">Continue to your dashboard <span>→</span></a>
+          <a href="#" id="dashCta" class="btn-primary">Continue to your dashboard <span>â†’</span></a>
           <a href="index.html" class="btn-ghost">Back to home</a>
         </div>
       </div>
@@ -191,7 +189,7 @@
         try{ var safe=new URL(next, window.location.origin).pathname; dashCta.setAttribute('href', safe); }
         catch(e){ dashCta.setAttribute('href', 'index.html'); }
       } else {
-        // No ?next landed here — self-heal the profile on click (idempotent)
+        // No ?next landed here â€” self-heal the profile on click (idempotent)
         // and continue straight into the right dashboard.
         dashCta.addEventListener('click', continueNoNext);
       }
@@ -199,7 +197,7 @@
 
     function continueNoNext(e){
       e.preventDefault();
-      dashCta.textContent='Setting up your dashboard…';
+      dashCta.textContent='Setting up your dashboardâ€¦';
       var cfg=(typeof CONFIG!=='undefined'&&CONFIG)?CONFIG:null;
       if(!cfg || !window.supabase){ window.location.href='index.html'; return; }
       var client;
