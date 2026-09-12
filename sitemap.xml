@@ -56,6 +56,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://pingclass.vercel.app/blog/pingclass-vs-classplus</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pingclass.vercel.app/blog/free-tuition-management-software</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pingclass.vercel.app/blog/why-tally-erp-overkill-tuition-center</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pingclass.vercel.app/blog/choosing-tuition-management-software</loc>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
