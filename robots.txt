@@ -101,4 +101,4 @@ Disallow: /teacher-dashboard
 Disallow: /parent-dashboard
 Disallow: /fintech-dashboard
 
-Sitemap: https://pingclass.vercel.app/sitemap.xml
+Sitemap: https://pingclass.in/sitemap.xml
