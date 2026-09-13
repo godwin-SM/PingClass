@@ -2,7 +2,7 @@
 // Supabase init
 const SUPABASE_URL = 'https://evrqzgjksmidqhzvckhq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2cnF6Z2prc21pZHFoenZja2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTE4MzksImV4cCI6MjEwMDEyNzgzOX0.UV4YLbfJwszr-zzzkpJgbLbQ4ZZhiGVYzlAHpst45mE';
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.__pingclassClient || (window.__pingclassClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY));
 
 // If a password reset was started (OTP verified) but never completed, don't
 // leave the user logged in — clear the session.

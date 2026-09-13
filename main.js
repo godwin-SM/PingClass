@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://evrqzgjksmidqhzvckhq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2cnF6Z2prc21pZHFoenZja2hxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1NTE4MzksImV4cCI6MjEwMDEyNzgzOX0.UV4YLbfJwszr-zzzkpJgbLbQ4ZZhiGVYzlAHpst45mE';
 let db = null;
 try {
-  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+db = window.__pingclassClient || (window.__pingclassClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY));
 } catch (e) {
   console.warn('Supabase failed to load:', e);
 }

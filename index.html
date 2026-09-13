@@ -640,8 +640,8 @@
   if(typeof CONFIG === 'undefined' || !CONFIG || !CONFIG.SUPABASE_URL) return;
   var slots = document.querySelectorAll('.testimonial-card.t-empty');
   if(!slots.length) return;
-  var db;
-  try { db = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY); } catch(e){ return; }
+var db;
+try { db = window.__pingclassClient || (window.__pingclassClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY)); } catch(e){ return; }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
   function initials(name){
     return String(name || '?').trim().split(/\s+/).map(function(w){ return w ? w[0] : ''; }).slice(0,2).join('').toUpperCase();
