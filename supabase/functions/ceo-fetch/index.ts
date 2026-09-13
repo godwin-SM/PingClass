@@ -155,7 +155,7 @@ Deno.serve(async (req) => {
         if (p in subsPlan) subsPlan[p as keyof typeof subsPlan] += 1;
       }
 
-      const mrr = (subsAll.data ?? []).reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
+      const mrr = (activeSubs.data ?? []).reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
       const collected = (paid.data ?? []).reduce((sum, p) => sum + Number(p.amount ?? 0), 0);
 
       const audit = [];
