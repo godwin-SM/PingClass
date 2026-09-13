@@ -12,7 +12,7 @@ Write-Host "Timestamp: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundCol
 # 1. Check site availability
 Write-Host "`n1. Site Health Check" -ForegroundColor Yellow
 try {
-    $response = Invoke-WebRequest -Uri "https://pingclass.in" -Method Head -TimeoutSec 10 -UseBasicParsing
+    $response = Invoke-WebRequest -Uri "https://www.pingclass.in" -Method Head -TimeoutSec 10 -UseBasicParsing
     Write-Host "   Status: UP (HTTP $($response.StatusCode))" -ForegroundColor Green
 } catch {
     Write-Host "   Status: DOWN ($($_.Exception.Message))" -ForegroundColor Red
