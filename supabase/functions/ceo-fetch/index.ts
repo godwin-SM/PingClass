@@ -104,7 +104,6 @@ Deno.serve(async (req) => {
         users,
         activeSubs,
         subsAll,
-        paid,
         reviewsRows,
         bugRows,
         waitlist,
@@ -117,7 +116,6 @@ Deno.serve(async (req) => {
         admin.from("users").select("role").is("deleted_at", null).limit(2000),
         admin.from("subscriptions").select("amount").eq("status", "active"),
         admin.from("subscriptions").select("plan_id").eq("status", "active"),
-        admin.from("payments").select("amount").eq("status", "paid").limit(5000),
         admin.from("reviews").select("status").limit(5000),
         admin.from("bug_reports").select("status").limit(5000),
         admin.from("waitlist").select("id"),
@@ -156,7 +154,6 @@ Deno.serve(async (req) => {
       }
 
       const mrr = (activeSubs.data ?? []).reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
-      const collected = (paid.data ?? []).reduce((sum, p) => sum + Number(p.amount ?? 0), 0);
 
       const audit = [];
       for (const a of recentAudit.data ?? []) {
@@ -182,8 +179,6 @@ Deno.serve(async (req) => {
           activeSubs: countFor(activeSubs.data),
           subsPlan,
           mrr,
-          collected,
-          collectedCount: countFor(paid.data),
           reviews: countFor(reviewsRows.data),
           reviewsMeta,
           bugs: countFor(bugRows.data),
@@ -317,72 +312,40 @@ Deno.serve(async (req) => {
 
     if (action === "revenue") {
       const { data, error } = await admin
-        .from("payments")
-        .select("id, amount, status, paid_at, student_id, institute_id, batch_id, created_at")
-        .in("status", ["paid"])
-        .order("paid_at", { ascending: false })
-        .limit(3000);
+        .from("subscriptions")
+        .select("id, user_id, plan_id, amount, status, created_at, expires_at")
+        .order("created_at", { ascending: false })
+        .limit(500);
       if (error) throw error;
 
       const rows = data ?? [];
-
-      const months: { key: string; label: string; sum: number; count: number }[] = [];
-      const now = new Date();
-      for (let i = 7; i >= 0; i--) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
-        months.push({ key, label: d.toLocaleDateString("en-IN", { month: "short", year: "numeric" }), sum: 0, count: 0 });
+      const active = rows.filter((s) => s.status === "active");
+      const mrr = active.reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
+      const lifetime = rows.reduce((sum, s) => sum + Number(s.amount ?? 0), 0);
+      const planMix = { free: 0, basic: 0, pro: 0, other: 0 };
+      for (const s of active) {
+        const p = String(s.plan_id || "");
+        if (p in planMix) planMix[p as keyof typeof planMix] += 1;
+        else planMix.other += 1;
       }
-      const monthMap: Record<string, { sum: number; count: number }> = {};
-      for (const m of months) monthMap[m.key] = m;
 
-      let total = 0;
-      let last30d = 0;
-      let last90d = 0;
-      const thirtyAgo = Date.now() - 30 * 24 * 3600 * 1000;
-      const ninetyAgo = Date.now() - 90 * 24 * 3600 * 1000;
-
-      for (const p of rows) {
-        const amt = Number(p.amount ?? 0);
-        total += amt;
-        if (!p.paid_at) continue;
-        const ts = new Date(p.paid_at + "T00:00:00Z").getTime();
-        if (isNaN(ts)) continue;
-        const key = String(p.paid_at).slice(0, 7);
-        if (monthMap[key]) { monthMap[key].sum += amt; monthMap[key].count += 1; }
-        if (ts >= thirtyAgo) last30d += amt;
-        if (ts >= ninetyAgo) last90d += amt;
+      const userIds = Array.from(new Set(rows.map((s) => s.user_id).filter(Boolean)));
+      const emails: Record<string, string> = {};
+      if (userIds.length) {
+        const { data: uRows } = await admin.from("users").select("id, email").in("id", userIds);
+        for (const u of uRows ?? []) emails[u.id] = u.email || "";
       }
-      for (const m of months) { const b = monthMap[m.key]; m.sum = b.sum; m.count = b.count; }
-
-      const recent = rows.slice(0, 60);
-      const studentIds = Array.from(new Set(recent.map((p) => p.student_id).filter(Boolean)));
-      const instIds = Array.from(new Set(recent.map((p) => p.institute_id).filter(Boolean)));
-      const batchIds = Array.from(new Set(recent.map((p) => p.batch_id).filter(Boolean)));
-
-      const [sRows, iRows, bRows] = await Promise.all([
-        studentIds.length ? admin.from("students").select("id, full_name, deleted_at").in("id", studentIds) : Promise.resolve({ data: null }),
-        instIds.length ? admin.from("institutes").select("id, name").in("id", instIds) : Promise.resolve({ data: null }),
-        batchIds.length ? admin.from("batches").select("id, name, deleted_at").in("id", batchIds) : Promise.resolve({ data: null }),
-      ]);
-      const students: Record<string, string> = {};
-      for (const s of sRows.data ?? []) students[s.id] = s.deleted_at ? (s.full_name || "") + " (deleted)" : s.full_name;
-      const insts: Record<string, string> = {};
-      for (const i of iRows.data ?? []) insts[i.id] = i.name;
-      const blist: Record<string, string> = {};
-      for (const b of bRows.data ?? []) blist[b.id] = b.deleted_at ? b.name + " (deleted)" : b.name;
 
       return json({
-        revenue: { months, total, last30d, last90d, count: rows.length },
-        payments: recent.map((p) => ({
-          id: p.id,
-          amount: Number(p.amount ?? 0),
-          status: p.status,
-          student: students[p.student_id] ?? "",
-          institute: insts[p.institute_id] ?? "",
-          batch: blist[p.batch_id] ?? "",
-          paid_at: p.paid_at,
-          created_at: p.created_at,
+        revenue: { mrr, lifetime, activeCount: active.length, planMix },
+        customers: rows.map((s) => ({
+          id: s.id,
+          email: emails[s.user_id] ?? "",
+          plan_id: s.plan_id,
+          amount: Number(s.amount ?? 0),
+          status: s.status,
+          created_at: s.created_at,
+          expires_at: s.expires_at,
         })),
       });
     }
