@@ -1,6 +1,14 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "pingclass.vercel.app" }],
+      "destination": "https://www.pingclass.in/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
