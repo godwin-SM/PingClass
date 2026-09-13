@@ -30,3 +30,4 @@ setup-monitor.ps1
 
 # Local-only owner console (never commit or deploy)
 reviews-dashboard.html
+ceo-pingclass.html

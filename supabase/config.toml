@@ -465,3 +465,13 @@ entrypoint = "./functions/moderate-reviews/index.ts"
 enabled = true
 verify_jwt = true
 entrypoint = "./functions/submit-bug-report/index.ts"
+
+[functions.ceo-fetch]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/ceo-fetch/index.ts"
+
+[functions.ceo-admin]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/ceo-admin/index.ts"
