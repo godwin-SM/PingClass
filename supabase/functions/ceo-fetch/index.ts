@@ -315,6 +315,108 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (action === "revenue") {
+      const { data, error } = await admin
+        .from("payments")
+        .select("id, amount, status, paid_at, student_id, institute_id, batch_id, created_at")
+        .in("status", ["paid"])
+        .order("paid_at", { ascending: false })
+        .limit(3000);
+      if (error) throw error;
+
+      const rows = data ?? [];
+
+      const months: { key: string; label: string; sum: number; count: number }[] = [];
+      const now = new Date();
+      for (let i = 7; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+        months.push({ key, label: d.toLocaleDateString("en-IN", { month: "short", year: "numeric" }), sum: 0, count: 0 });
+      }
+      const monthMap: Record<string, { sum: number; count: number }> = {};
+      for (const m of months) monthMap[m.key] = m;
+
+      let total = 0;
+      let last30d = 0;
+      let last90d = 0;
+      const thirtyAgo = Date.now() - 30 * 24 * 3600 * 1000;
+      const ninetyAgo = Date.now() - 90 * 24 * 3600 * 1000;
+
+      for (const p of rows) {
+        const amt = Number(p.amount ?? 0);
+        total += amt;
+        if (!p.paid_at) continue;
+        const ts = new Date(p.paid_at + "T00:00:00Z").getTime();
+        if (isNaN(ts)) continue;
+        const key = String(p.paid_at).slice(0, 7);
+        if (monthMap[key]) { monthMap[key].sum += amt; monthMap[key].count += 1; }
+        if (ts >= thirtyAgo) last30d += amt;
+        if (ts >= ninetyAgo) last90d += amt;
+      }
+      for (const m of months) { const b = monthMap[m.key]; m.sum = b.sum; m.count = b.count; }
+
+      const recent = rows.slice(0, 60);
+      const studentIds = Array.from(new Set(recent.map((p) => p.student_id).filter(Boolean)));
+      const instIds = Array.from(new Set(recent.map((p) => p.institute_id).filter(Boolean)));
+      const batchIds = Array.from(new Set(recent.map((p) => p.batch_id).filter(Boolean)));
+
+      const [sRows, iRows, bRows] = await Promise.all([
+        studentIds.length ? admin.from("students").select("id, full_name, deleted_at").in("id", studentIds) : Promise.resolve({ data: null }),
+        instIds.length ? admin.from("institutes").select("id, name").in("id", instIds) : Promise.resolve({ data: null }),
+        batchIds.length ? admin.from("batches").select("id, name, deleted_at").in("id", batchIds) : Promise.resolve({ data: null }),
+      ]);
+      const students: Record<string, string> = {};
+      for (const s of sRows.data ?? []) students[s.id] = s.deleted_at ? (s.full_name || "") + " (deleted)" : s.full_name;
+      const insts: Record<string, string> = {};
+      for (const i of iRows.data ?? []) insts[i.id] = i.name;
+      const blist: Record<string, string> = {};
+      for (const b of bRows.data ?? []) blist[b.id] = b.deleted_at ? b.name + " (deleted)" : b.name;
+
+      return json({
+        revenue: { months, total, last30d, last90d, count: rows.length },
+        payments: recent.map((p) => ({
+          id: p.id,
+          amount: Number(p.amount ?? 0),
+          status: p.status,
+          student: students[p.student_id] ?? "",
+          institute: insts[p.institute_id] ?? "",
+          batch: blist[p.batch_id] ?? "",
+          paid_at: p.paid_at,
+          created_at: p.created_at,
+        })),
+      });
+    }
+
+    if (action === "audit") {
+      const { data, error } = await admin
+        .from("audit_log")
+        .select("id, user_id, action, table_name, record_id, old_data, new_data, created_at")
+        .order("created_at", { ascending: false })
+        .limit(250);
+      if (error) throw error;
+
+      const userIds = Array.from(new Set((data ?? []).map((a) => a.user_id).filter(Boolean)));
+      const emails: Record<string, string> = {};
+      if (userIds.length) {
+        const { data: userRows } = await admin.from("users").select("id, email").in("id", userIds);
+        for (const u of userRows ?? []) emails[u.id] = u.email || "";
+      }
+
+      return json({
+        audit: (data ?? []).map((a) => ({
+          id: a.id,
+          user_id: a.user_id,
+          email: emails[a.user_id] ?? "",
+          action: a.action,
+          table_name: a.table_name,
+          record_id: a.record_id,
+          old_data: a.old_data,
+          new_data: a.new_data,
+          created_at: a.created_at,
+        })),
+      });
+    }
+
     return json({ error: "Unknown action." }, 400);
   } catch {
     return json({ error: "Internal server error" }, 500);
