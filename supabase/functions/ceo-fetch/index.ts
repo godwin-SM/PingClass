@@ -284,6 +284,37 @@ Deno.serve(async (req) => {
       return json({ waitlist: data ?? [] });
     }
 
+    if (action === "leads") {
+      const [{ data: waitlist }, { data: invites }] = await Promise.all([
+        admin.from("waitlist").select("id, email, source, created_at").order("created_at", { ascending: false }).limit(200),
+        admin
+          .from("invite_tokens")
+          .select("id, email, role, institute_id, used, expires_at, created_at")
+          .order("created_at", { ascending: false })
+          .limit(200),
+      ]);
+
+      const instIds = Array.from(new Set((invites ?? []).map((i) => i.institute_id).filter(Boolean)));
+      const instNames: Record<string, string> = {};
+      if (instIds.length) {
+        const { data: instRows } = await admin.from("institutes").select("id, name").in("id", instIds);
+        for (const i of instRows ?? []) instNames[i.id] = i.name;
+      }
+
+      return json({
+        waitlist: waitlist ?? [],
+        invites: (invites ?? []).map((i) => ({
+          id: i.id,
+          email: i.email,
+          role: i.role,
+          institute: instNames[i.institute_id] ?? "",
+          used: i.used,
+          expires_at: i.expires_at,
+          created_at: i.created_at,
+        })),
+      });
+    }
+
     return json({ error: "Unknown action." }, 400);
   } catch {
     return json({ error: "Internal server error" }, 500);
