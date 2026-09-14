@@ -76,6 +76,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.pingclass.in/about</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.pingclass.in/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

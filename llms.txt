@@ -12,6 +12,7 @@
 
 ## Key pages
 
+- [About PingClass](https://www.pingclass.in/about): who the product is for, what it does, how it differs, and how to reach support.
 - [Landing page](https://www.pingclass.in/): product overview and signup
 - [Features](https://www.pingclass.in/features): detailed feature list
 - [Pricing](https://www.pingclass.in/pricing): Free (up to 20 students, ₹0), Basic (₹249/month), Pro (₹599/month). No contracts, cancel anytime.
