@@ -1,6 +1,7 @@
 # PingClass — llms-full.txt
 
 > Full plain-text content of every public page on pingclass.in. See llms.txt for the concise summary.
+> Canonical domain: https://www.pingclass.in (pingclass.vercel.app is the same project’s deployment alias and redirects here).
 
 ## PingClass — Ping Class Management Software for Tuition Institutes
 

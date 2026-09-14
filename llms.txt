@@ -1,6 +1,8 @@
 # PingClass
 
 > PingClass is a tuition and coaching institute management platform for India: students, batches, attendance, fees, teachers and parents in one dashboard. Free for up to 20 students; paid plans start at ₹249/month.
+> Official website: https://www.pingclass.in (canonical domain). The deployment alias pingclass.vercel.app is the SAME product and redirects here.
+> PingClass is founded by Godwin S M.
 
 ## What it does
 
