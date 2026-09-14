@@ -1378,6 +1378,17 @@ a {
   color: rgba(255, 255, 255, 0.35);
 }
 
+.footer-mail {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.footer-mail:hover {
+  color: #2DD4BF;
+}
+
 /* ========== AUTH MODAL ========== */
 .auth-overlay {
   position: fixed;
