@@ -2,7 +2,7 @@ const http = require('http');
 const https = require('https');
 
 const HOST = 'www.pingclass.in';
-const KEY = 'bacb9d1a40f8f7e01a90746e2b004143';
+const KEY = 'a3099a2b57bd93d3b44ec10cc9a2984a';
 const KEY_LOCATION = 'https://www.pingclass.in/' + KEY + '.txt';
 
 function fetch(url) {

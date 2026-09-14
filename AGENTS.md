@@ -64,3 +64,12 @@ node scripts/ping-indexnow.js
 IndexNow re-notifies Bing/Yandex/Naver of every live URL so search engines
 re-index immediately instead of waiting on organic crawl. Google is NOT covered
 by IndexNow — use Google Search Console separately for Google indexing.
+
+IndexNow key file gotchas:
+- The key file (`<key>.txt` at site root) MUST be plain UTF-8 WITHOUT BOM.
+  PowerShell `Set-Content -Encoding UTF8` adds a BOM, and IndexNow then
+  rejects the key with 403 `UserForbiddedToAccessSite` on later verifications.
+  Use `[System.IO.File]::WriteAllText(path, key, (New-Object System.Text.UTF8Encoding($false)))`.
+- If IndexNow starts 403-ing after working, rotate the key: generate a new 32-hex
+  key, host its `.txt` (BOM-free) at the root, update `scripts/ping-indexnow.js`.
+- The old key file: delete it at the same time.

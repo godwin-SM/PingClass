@@ -19,6 +19,11 @@
       ]
     },
     {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "pingclass.vercel.app" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
       "source": "/(admin-dashboard|teacher-dashboard|parent-dashboard)(\\.html)?",
       "headers": [
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
