@@ -53,3 +53,14 @@ Functions that must be reachable ONLY from cron/other functions are NOT secured 
   send-push-notifications, send-overdue-email) as `verify_jwt = true` in config.toml
   and on deploy; precedence applies on top of the secret check.
 - The 24h rate-limit pattern (`check-email`) is the default for money/invite paths.
+
+## Deploy
+
+### After every Vercel deploy, run IndexNow
+```
+npx vercel deploy --prod --yes --scope godwin-sms-projects
+node scripts/ping-indexnow.js
+```
+IndexNow re-notifies Bing/Yandex/Naver of every live URL so search engines
+re-index immediately instead of waiting on organic crawl. Google is NOT covered
+by IndexNow — use Google Search Console separately for Google indexing.
