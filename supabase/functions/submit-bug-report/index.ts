@@ -77,7 +77,7 @@ async function notifyMaker(reporterEmail: string, role: string, page: string, me
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "PingClass <notifications@onresend.com>",
+      from: "PingClass <notifications@pingclass.in>",
       to: [MAKER_EMAIL],
       subject: `[Bug report] ${page || "unknown page"} · ${reporterEmail}`,
       html,

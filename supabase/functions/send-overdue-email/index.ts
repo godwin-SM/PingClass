@@ -121,7 +121,7 @@ Deno.serve(async (req) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        from: "PingClass <notifications@onresend.com>",
+        from: "PingClass <notifications@pingclass.in>",
         to: [to],
         subject: `Overdue fee alert — ₹${amount.toLocaleString("en-IN")} for ${childName}`,
         html
