@@ -102,3 +102,5 @@ Disallow: /parent-dashboard
 Disallow: /fintech-dashboard
 
 Sitemap: https://www.pingclass.in/sitemap.xml
+
+# llms.txt: LLM-readable site summary at https://www.pingclass.in/llms.txt

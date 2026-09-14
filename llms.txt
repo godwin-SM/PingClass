@@ -1,0 +1,40 @@
+# PingClass
+
+> PingClass is a tuition and coaching institute management platform for India: students, batches, attendance, fees, teachers and parents in one dashboard. Free for up to 20 students; paid plans start at ₹249/month.
+
+## What it does
+
+- Batch-wise attendance with at-risk visibility for admin and teachers.
+- Fee tracking and collection with automatic reminders and parent payment history.
+- Role-based dashboards for admin, teacher and parent.
+- Parent notifications for attendance and fees (replacing WhatsApp chaos and daily phone calls).
+- Built specifically for tuition/coaching institutes and small centres, not generic ERP accounting software.
+
+## Key pages
+
+- [Landing page](https://www.pingclass.in/): product overview and signup
+- [Features](https://www.pingclass.in/features): detailed feature list
+- [Pricing](https://www.pingclass.in/pricing): Free (up to 20 students, ₹0), Basic (₹249/month), Pro (₹599/month). No contracts, cancel anytime.
+- [Demo dashboard](https://www.pingclass.in/demo-dashboard): interactive product preview
+- [Blog](https://www.pingclass.in/blog): guides for running a tuition institute
+
+## Blog
+
+- [PingClass vs Spreadsheets and WhatsApp for Tuition Centers](https://www.pingclass.in/blog/spreadsheets-vs-tuition-management-software): when spreadsheets and WhatsApp stop being enough, what to keep and what to replace.
+- [How to Manage Fees for a Tuition Center Without the Chaos](https://www.pingclass.in/blog/manage-fees-tuition-center): tracking paid, pending and overdue fees with timely reminders instead of spreadsheets.
+- [Attendance Tracking for Coaching Institutes: Why Paper Registers Fail](https://www.pingclass.in/blog/attendance-tracking-coaching-institute): why paper and spreadsheet registers fail, and how to keep attendance accurate with less admin.
+- [Keeping Parents Informed: A System That Ends WhatsApp Chaos](https://www.pingclass.in/blog/parent-communication-tuition-center): a system for sharing attendance, fees and progress with parents.
+- [How to Structure Batches for a Tuition or Coaching Institute](https://www.pingclass.in/blog/structuring-batches-tuition-center): batch sizing, per-batch attendance and fees, and avoiding scheduling conflicts.
+- [Tuition Fees: Monthly Subscription vs Course Fee, Which is Better](https://www.pingclass.in/blog/tuition-fees-subscription-vs-course): comparing monthly subscriptions, term fees and course-based pricing.
+- [PingClass vs Classplus: Which Tuition Management Software Fits Your Size?](https://www.pingclass.in/blog/pingclass-vs-classplus): direct comparison of features, pricing and fit.
+- [Free Tuition Management Software in 2026: What You Actually Get](https://www.pingclass.in/blog/free-tuition-management-software): what free tools really cover and when free stops being enough.
+- [Why Tally and Full ERPs Are Overkill for a Tuition Center](https://www.pingclass.in/blog/why-tally-erp-overkill-tuition-center): comparing general ERPs against dedicated tuition management software.
+- [Choosing Tuition Management Software: 7 Things to Check Before You Pay](https://www.pingclass.in/blog/choosing-tuition-management-software): attendance, fees, parent access, data ownership and cost.
+
+## Legal & contact
+
+- [Privacy Policy](https://www.pingclass.in/privacy): data collection and protection in line with India's DPDP Act.
+- [Terms of Service](https://www.pingclass.in/terms)
+- Support: support@pingclass.in (or via https://www.pingclass.in/)
+
+<!-- PingClass — llms.txt v1. Contact: support@pingclass.in -->
